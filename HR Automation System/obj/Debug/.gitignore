@@ -1,2 +1,13 @@
 *.exe
 /HR Automation System.csproj.CoreCompileInputs.cache
+/App.g.cs
+/HR Automation System.csproj.FileListAbsolute.txt
+/HR Automation System.csproj.GenerateResource.cache
+/HR Automation System.csprojAssemblyReference.cache
+/HR Automation System.g.resources
+/HR Automation System.pdb
+/HR Automation System_MarkupCompile.cache
+/HR Automation System_MarkupCompile.lref
+/HR_Automation_System.Properties.Resources.resources
+/MainWindow.baml
+/MainWindow.g.cs
