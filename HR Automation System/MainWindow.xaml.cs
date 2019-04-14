@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HR_Automation_System.Classes;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -12,6 +13,8 @@ namespace HR_Automation_System
         public MainWindow()
         {
             InitializeComponent();
+            DatabaseUtility db = new DatabaseUtility();
+            db.Disconnect();
         }
     }
 }
