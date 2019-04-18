@@ -15,6 +15,7 @@ namespace HR_Automation_System
             InitializeComponent();
             DatabaseUtility db = new DatabaseUtility();
             db.AddFamilyStatus("Тест");
+            db.GetFamilyStatusName(0);
             db.Disconnect();
         }
     }

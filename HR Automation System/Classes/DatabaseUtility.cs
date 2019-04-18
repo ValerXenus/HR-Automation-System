@@ -10,6 +10,7 @@ namespace HR_Automation_System.Classes
     {
         private OleDbConnection _connection;
         private OleDbCommand _command;
+        private OleDbDataReader _dataReader;
 
         public DatabaseUtility()
         {
@@ -32,12 +33,13 @@ namespace HR_Automation_System.Classes
 
         public void Disconnect()
         {
-            _connection.Close(); // Завершение подключения с БД
+            _dataReader.Close();
+            _connection.Close(); // Завершение подключения с БД            
         }
 
         public void AddFamilyStatus(string status)
         {
-            int idx = getLastIndex("family_statuses", "status_id"); // Получаем индекс последней записи в таблице и прибавляем 1
+            int idx = getLastIndex("family_statuses", "status_id") + 1; // Получаем индекс последней записи в таблице и прибавляем 1
 
             _command.CommandType = CommandType.Text;
             _command.CommandText = "INSERT INTO family_statuses VALUES ([Status_Index], [Status_Name])";
@@ -53,25 +55,40 @@ namespace HR_Automation_System.Classes
             }            
         }
 
+        public void GetFamilyStatusName(int idx)
+        {
+            string temp = string.Empty;
+
+            _command.CommandText = string.Format("SELECT status_name FROM family_statuses WHERE status_id = {0}", idx);
+            _dataReader = _command.ExecuteReader();
+
+            while (_dataReader.Read())
+            {
+                temp = _dataReader["status_name"].ToString();
+            }
+            _dataReader.Close();
+        }
+
         // Получить индекс последней добавленной записи в таблице
         private int getLastIndex(string tableName, string fieldName)
         {
             _command.CommandText = string.Format("SELECT LAST({0}) AS return_value FROM {1}", fieldName, tableName);
-            OleDbDataReader dr = _command.ExecuteReader();
+            _dataReader = _command.ExecuteReader();
 
-            int idx = 0;
+            int idx = -1;
 
             try
             {
-                while (dr.Read())
+                while (_dataReader.Read())
                 {
-                    idx = int.Parse(dr["return_value"].ToString());
+                    idx = int.Parse(_dataReader["return_value"].ToString());
                 }
             }
             catch
             {
-                // Если записей нет в таблице, то вернется 0
+                // Если записей нет в таблице, то вернется -1
             }
+            _dataReader.Close();
 
             return idx;
         }
