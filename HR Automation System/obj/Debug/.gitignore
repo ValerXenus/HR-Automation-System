@@ -18,3 +18,5 @@
 /HR Automation System_MarkupCompile.i.cache
 *.g.i.cs
 /HR Automation System_MarkupCompile.i.lref
+/App.baml
+/GeneratedInternalTypeHelper.g.cs

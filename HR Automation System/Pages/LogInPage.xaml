@@ -12,89 +12,115 @@
         Height="500"
         Width="600">
     <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="120"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="32"/>
-                <RowDefinition Height="32"/>
-            </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="70"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+        <TabControl
+            Grid.Row="1"
+            Grid.Column="1">
+            
+            <TabItem 
+                Header="По сертификату"
+                Style="{StaticResource TabItemStyle}">
+                
+            </TabItem>
+            <TabItem 
+                Header="По логину"
+                Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="32"/>
+                    </Grid.RowDefinitions>
 
-            <Label 
-                x:Uid="lp_Login"
-                Content="Login"
-                FontSize="16"
-                Grid.Row="2" 
-                VerticalAlignment="Center"
-                Foreground="#FF078CD3"
-                HorizontalAlignment="Center"
-                FontFamily="/I2P-Project;component/Fonts/#Panton"
-                Height="30"
-                Width="180"/>
-            <TextBox 
-                VerticalContentAlignment="Center"
-                FontSize="14"
-                Grid.Row="3"
-                HorizontalAlignment="Center"
-                TextWrapping="Wrap"
-                VerticalAlignment="Center"
-                Width="180"
-                Name="LoginTB" 
-                Height="30"
-                BorderBrush="#FF078CD3" 
-                FontFamily="/I2P-Project;component/Fonts/#Panton"
-                BorderThickness="2"
-                FontWeight="Bold"/>
-            <Label 
-                x:Uid="lp_password"
-                Content="Password"
-                FontSize="16"
-                Grid.Row="4"
-                VerticalAlignment="Center" 
-                Foreground="#FF078CD1"
-                HorizontalAlignment="Center"
-                FontFamily="/I2P-Project;component/Fonts/#Panton"
-                Width="180"/>
-            <PasswordBox 
-                VerticalContentAlignment="Center"
-                Height="30" 
-                FontSize="14"
-                Grid.Row="5"
-                HorizontalAlignment="Center" 
-                Width="180" 
-                Name="PasswordTB"
-                BorderBrush="#FF078CD3"
-                BorderThickness="2"
-                ClipToBounds="True"/>
-            <Button 
-                x:Uid="lp_btn_logIn"
-                Content="Log In"
-                Grid.Row="7"
-                Width="125"
-                Height="27"
-                HorizontalAlignment="Center" 
-                FontFamily="/I2P-Project;component/Fonts/#Panton"
-                Background="#FF078CD1"
-                Foreground="White" 
-                FontWeight="Bold"
-                FontSize="14"/>
-            <Button 
-                x:Uid="lp_btn_Register"
-                Content="Sign Up"
-                Grid.Row="8"
-                Width="125"
-                Height="27"
-                HorizontalAlignment="Center"
-                FontFamily="/I2P-Project;component/Fonts/#Panton"
-                Background="#FF078CD1"
-                Foreground="White"
-                FontWeight="Bold"
-                FontSize="14"/>
-        </Grid>
+                    <Label 
+                        x:Uid="lp_Login"
+                        Content="Login"
+                        FontSize="16"
+                        Grid.Row="2" 
+                        VerticalAlignment="Center"
+                        Foreground="#FF078CD3"
+                        HorizontalAlignment="Center"
+                        FontFamily="/I2P-Project;component/Fonts/#Panton"
+                        Height="30"
+                        Width="180"/>
+                    <TextBox 
+                        VerticalContentAlignment="Center"
+                        FontSize="14"
+                        Grid.Row="3"
+                        HorizontalAlignment="Center"
+                        TextWrapping="Wrap"
+                        VerticalAlignment="Center"
+                        Width="180"
+                        Name="LoginTB" 
+                        Height="30"
+                        BorderBrush="#FF078CD3" 
+                        FontFamily="/I2P-Project;component/Fonts/#Panton"
+                        BorderThickness="2"
+                        FontWeight="Bold"/>
+                    <Label 
+                        x:Uid="lp_password"
+                        Content="Password"
+                        FontSize="16"
+                        Grid.Row="4"
+                        VerticalAlignment="Center" 
+                        Foreground="#FF078CD1"
+                        HorizontalAlignment="Center"
+                        FontFamily="/I2P-Project;component/Fonts/#Panton"
+                        Width="180"/>
+                    <PasswordBox 
+                        VerticalContentAlignment="Center"
+                        Height="30" 
+                        FontSize="14"
+                        Grid.Row="5"
+                        HorizontalAlignment="Center" 
+                        Width="180" 
+                        Name="PasswordTB"
+                        BorderBrush="#FF078CD3"
+                        BorderThickness="2"
+                        ClipToBounds="True"/>
+                    <Button 
+                        x:Uid="lp_btn_logIn"
+                        Content="Log In"
+                        Grid.Row="7"
+                        Width="125"
+                        Height="27"
+                        HorizontalAlignment="Center" 
+                        FontFamily="/I2P-Project;component/Fonts/#Panton"
+                        Background="#FF078CD1"
+                        Foreground="White" 
+                        FontWeight="Bold"
+                        FontSize="14"
+                        Style="{StaticResource ButtonDefaultStyle}"/>
+                    <Button 
+                        x:Uid="lp_btn_Register"
+                        Content="Sign Up"
+                        Grid.Row="8"
+                        Width="125"
+                        Height="27"
+                        HorizontalAlignment="Center"
+                        FontFamily="/I2P-Project;component/Fonts/#Panton"
+                        Background="#FF078CD1"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="14"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
     </Grid>
 </Window>
