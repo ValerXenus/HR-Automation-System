@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HR_Automation_System.Classes;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -9,9 +10,11 @@ namespace HR_Automation_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        // Конструктор окна
+        public MainWindow(DatabaseUtility db, int userId)
         {
             InitializeComponent();
+            db.Disconnect();
         }
     }
 }
