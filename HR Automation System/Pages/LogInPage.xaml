@@ -25,11 +25,15 @@
         <TabControl
             Grid.Row="1"
             Grid.Column="1">
-            
+
             <TabItem 
                 Header="По сертификату"
-                Style="{StaticResource TabItemStyle}">
-                
+                Style="{StaticResource TabItemStyle}" 
+                Height="30"
+                Margin="0,-1,0,-2">
+                <Grid>
+
+                </Grid>
             </TabItem>
             <TabItem 
                 Header="По логину"
@@ -121,6 +125,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        
+
     </Grid>
 </Window>
