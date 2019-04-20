@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HR_Automation_System.Pages"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Авторизация"
         WindowStartupLocation="CenterScreen"
@@ -53,7 +54,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="25"/>
                         <RowDefinition Height="25"/>
-                        <RowDefinition />                        
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Label
                         Content="Вход в личный кабинет"
@@ -133,7 +134,7 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>                    
+                    </Grid.RowDefinitions>
                     <TextBox
                         VerticalContentAlignment="Center"
                         FontSize="14"
@@ -142,11 +143,23 @@
                         TextWrapping="Wrap"
                         VerticalAlignment="Center"
                         Width="250"
-                        Name="LoginTB" 
+                        Name="LoginTextBox" 
                         Height="30"
                         BorderBrush="#FFB1B1B1" 
                         BorderThickness="2"
-                        FontWeight="Bold"/>
+                        FontWeight="Bold"
+                        KeyDown="LoginTextBox_KeyDown"
+                        KeyUp="LoginTextBox_KeyDown"/>
+                    <TextBlock
+                        x:Name="LoginWatermark"
+                        IsHitTestVisible="False"
+                        Text="Логин"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Row="1"                        
+                        Foreground="Gray"
+                        Margin="110,0,300,0" 
+                        Width="39"/>
                     <PasswordBox
                         VerticalContentAlignment="Center"
                         Height="30" 
@@ -154,10 +167,22 @@
                         Grid.Row="2"
                         HorizontalAlignment="Center" 
                         Width="250" 
-                        Name="PasswordTB"
+                        Name="PasswordTextBox"
                         BorderBrush="#FFB1B1B1"
                         BorderThickness="2"
+                        KeyDown="PasswordTextBox_KeyDown"
+                        KeyUp="PasswordTextBox_KeyDown"
                         ClipToBounds="True"/>
+                    <TextBlock
+                        x:Name="PasswordWatermark"
+                        IsHitTestVisible="False"
+                        Text="Пароль"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Row="2"                        
+                        Foreground="Gray"
+                        Margin="110,0,290,0"
+                        Width="48"/>
                     <Button 
                         x:Uid="lp_btn_logIn"
                         Content="Войти"
