@@ -10,12 +10,10 @@ namespace HR_Automation_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        // Конструктор окна
+        public MainWindow(DatabaseUtility db, int userId)
         {
             InitializeComponent();
-            DatabaseUtility db = new DatabaseUtility();
-            db.AddFamilyStatus("Тест");
-            db.GetFamilyStatusName(0);
             db.Disconnect();
         }
     }

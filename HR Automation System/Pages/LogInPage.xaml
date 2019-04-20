@@ -184,7 +184,8 @@
                         Margin="110,0,290,0"
                         Width="48"/>
                     <Button 
-                        x:Uid="lp_btn_logIn"
+                        x:Uid="LoginButton"
+                        Click="LoginButton_Click"
                         Content="Войти"
                         Grid.Row="3"
                         Width="250"

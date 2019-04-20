@@ -37,6 +37,25 @@ namespace HR_Automation_System.Classes
             _connection.Close(); // Завершение подключения с БД            
         }
 
+        // Проверка логина и пароля пользователя
+        // Если вернется -1, то авторизация пройдена
+        public int CheckUserAuth(string loginString, string passwordString)
+        {
+            _command.CommandText = string.Format("SELECT user_id FROM users WHERE login = '{0}' AND pass = '{1}'", loginString, passwordString);
+            _dataReader = _command.ExecuteReader();
+
+            int idx = -1;
+            if (_dataReader.HasRows) // Если результат запроса пуст
+            {
+                while (_dataReader.Read())
+                {
+                    idx = int.Parse(_dataReader["user_id"].ToString());
+                }
+            }
+            _dataReader.Close();
+            return idx;
+        }
+
         public void AddFamilyStatus(string status)
         {
             int idx = getLastIndex("family_statuses", "status_id") + 1; // Получаем индекс последней записи в таблице и прибавляем 1
