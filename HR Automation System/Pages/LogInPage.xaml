@@ -26,13 +26,14 @@
         <TabControl
             Grid.Row="1"
             Grid.Column="1"
-            Style="{DynamicResource TabControlDefaultStyle}">
+            Style="{StaticResource TabControlDefaultStyle}">
 
             <TabItem 
                 Header="По сертификату"
                 Width="227"
                 Margin="0,-1,0,-1"
-                Height="30">
+                Height="30" 
+                Style="{StaticResource TabItemDefaultStyle}">
                 <Grid>
 
                 </Grid>
@@ -41,7 +42,8 @@
                 Header="По логину"
                 Width="227"
                 Margin="0,-1,0,-1"
-                Height="30">
+                Height="30"
+                Style="{StaticResource TabItemDefaultStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
