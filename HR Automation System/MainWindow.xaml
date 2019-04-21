@@ -24,7 +24,7 @@
 
         <!--Панель для левого меню-->
         <StackPanel 
-            x:Name="lst_Menu"
+            x:Name="LeftHandMenu"
             Focusable="False"
             Grid.Row="1"            
             ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
@@ -85,14 +85,15 @@
             Grid.Column="0" 
             x:Name="MenuButton" 
             FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
-            Width="35" 
+            Width="42" 
             Height="30" 
             Content="≡"
             HorizontalAlignment="Left" 
             VerticalAlignment="Top"
             BorderBrush="{x:Null}" 
             FontSize="19"
-            Style="{DynamicResource HamburgerButtonStyle}"/>
+            Style="{DynamicResource HamburgerButtonStyle}"
+            Click="MenuButton_Click"/>
         <StackPanel 
             Grid.Row="0" 
             HorizontalAlignment="Right" 
