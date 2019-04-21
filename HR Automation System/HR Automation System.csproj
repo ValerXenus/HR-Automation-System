@@ -98,6 +98,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <Resource Include="Fonts\Panton-Regular.otf" />
+    <Resource Include="Fonts\seguisym.ttf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
