@@ -5,11 +5,117 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HR_Automation_System"
         mc:Ignorable="d"
-        Title="MainWindow"
-        Height="450"
-        Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="Автоматизация учета кадров в ЗАО «ТаксНет»"
+        MinHeight="540"
+        MinWidth="960"
+        Height="540"
+        Width="960"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="/HR Automation System;component/Fonts/#Panton">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="menu_Column" Width="auto"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!--Панель для левого меню-->
+        <StackPanel 
+            x:Name="LeftHandMenu"
+            Focusable="False"
+            Grid.Row="1"            
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+            Background="#FF272828"
+            Margin="-2,-2,0,-2"
+            Orientation="Vertical">
+            <!--Кнопки левого меню-->
+            <RadioButton 
+                x:Name="EmployeesButton"
+                Content="&#xE125;  Сотрудники"                
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"                
+                Height="50"
+                GroupName="menuButton"
+                Width="200"
+                FontSize="16"
+                Style="{DynamicResource MenuButtonStyle}"
+                ToolTip="Список сотрудников"
+                Foreground="White"/>
+            <RadioButton 
+                x:Name="DocumentsButton"
+                Content="&#xE1A5;  Документы"
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"
+                Height="50"
+                GroupName="menuButton"
+                Width="200"
+                FontSize="16"
+                Style="{DynamicResource MenuButtonStyle}"
+                ToolTip="Кадровые документы"
+                Foreground="White"/>
+            <RadioButton 
+                x:Name="GraduationButton"
+                Content="&#xE1CE;  Аттестация"
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"
+                Height="50"
+                GroupName="menuButton"
+                Width="200"
+                FontSize="16"
+                Style="{DynamicResource MenuButtonStyle}"
+                ToolTip="Аттестация сотрудников"
+                Foreground="White"/>
+            <RadioButton 
+                x:Name="EmployeesMovingsButton"
+                Content="&#xE143;  Карьерный рост"
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"
+                Height="50"
+                GroupName="menuButton"
+                Width="200"
+                FontSize="16"
+                Style="{DynamicResource MenuButtonStyle}"
+                ToolTip="Карьерный рост/перемещения сотрудников"
+                Foreground="White"/>
+        </StackPanel>
+        <Rectangle 
+            Grid.Row="0"
+            Fill="#FF078CD3"
+            Grid.ColumnSpan="2"/>
+        <Button
+            Grid.Column="0" 
+            x:Name="MenuButton" 
+            FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
+            Width="42" 
+            Height="30" 
+            Content="≡"
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Top"
+            BorderBrush="{x:Null}" 
+            FontSize="19"
+            Style="{DynamicResource HamburgerButtonStyle}"
+            Click="MenuButton_Click"/>
+        <StackPanel 
+            Grid.Row="0" 
+            HorizontalAlignment="Right" 
+            Orientation="Horizontal" 
+            VerticalAlignment="Center" 
+            Grid.Column="1"
+            Height="30">
+            <Button 
+                x:Name="LogOutButton" 
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
+                Width="30" 
+                Content="&#xE07D;"
+                BorderBrush="{x:Null}"
+                FontSize="20"
+                ToolTip="Выйти из личного кабинета"
+                Style="{DynamicResource HamburgerButtonStyle}"/>
+        </StackPanel>
+        <Frame 
+            x:Name="PageViewer"
+            Grid.Row="1"
+            Grid.Column="1"
+            NavigationUIVisibility="Hidden"
+            Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

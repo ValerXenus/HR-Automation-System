@@ -148,6 +148,7 @@
                         BorderBrush="#FFB1B1B1" 
                         BorderThickness="2"
                         FontWeight="Bold"
+                        Padding="6,0,0,0"
                         KeyDown="LoginTextBox_KeyDown"
                         KeyUp="LoginTextBox_KeyDown"/>
                     <TextBlock
@@ -166,10 +167,11 @@
                         FontSize="14"
                         Grid.Row="2"
                         HorizontalAlignment="Center" 
-                        Width="250" 
+                        Width="250"
                         Name="PasswordTextBox"
                         BorderBrush="#FFB1B1B1"
                         BorderThickness="2"
+                        Padding="6,0,0,0"
                         KeyDown="PasswordTextBox_KeyDown"
                         KeyUp="PasswordTextBox_KeyDown"
                         ClipToBounds="True"/>
