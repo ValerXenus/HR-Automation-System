@@ -62,5 +62,18 @@ namespace HR_Automation_System
             anim_menu.Duration = TimeSpan.FromSeconds(0.2);
             LeftHandMenu.BeginAnimation(WidthProperty, anim_menu);
         }
+
+        // Смена страницы в главном окне
+        private void ChangePage(string page_name)  // Changes page on page viewer
+        {
+            string link = "/HR Automation System;component/Pages/" + page_name + ".xaml";
+            PageViewer.Source = new Uri(link, UriKind.Relative);
+        }
+
+        // Кнопка меню "Сотрудники"
+        private void EmployeesPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage("EmployeesListPage");
+        }
     }
 }
