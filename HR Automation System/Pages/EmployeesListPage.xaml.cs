@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HR_Automation_System.Pages
 {
@@ -22,6 +12,26 @@ namespace HR_Automation_System.Pages
         public EmployeesListPage()
         {
             InitializeComponent();
+
+            var employees = new ObservableCollection<Employee>
+            {
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"}
+            };
+
+            EmployeesList.ItemsSource = employees;
+        }
+
+        public class Employee
+        {
+            // ФИО сотрудника
+            public string EmployeeName { get; set; }
+
+            // Должность
+            public string Position { get; set; }
+
+            // Отдел
+            public string Department { get; set; }
         }
     }
 }

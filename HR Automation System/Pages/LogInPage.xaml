@@ -147,7 +147,6 @@
                         Height="30"
                         BorderBrush="#FFB1B1B1" 
                         BorderThickness="2"
-                        FontWeight="Bold"
                         Padding="6,0,0,0"
                         KeyDown="LoginTextBox_KeyDown"
                         KeyUp="LoginTextBox_KeyDown"/>

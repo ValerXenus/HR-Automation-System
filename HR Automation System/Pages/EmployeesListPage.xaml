@@ -51,11 +51,49 @@
             CanUserDeleteRows="False"
             CanUserResizeColumns="False"
             IsReadOnly="True"
+            ColumnHeaderHeight="40"
+            VerticalGridLinesBrush="Transparent"
+            HorizontalGridLinesBrush="LightGray"
             SelectionMode="Single"
+            CanUserResizeRows="False"
             Background="White"
             BorderBrush="Gray"
+            RowHeight="45"
+            AutoGenerateColumns="False"
             FontSize="13">
-            
-         </DataGrid>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="FontWeight" Value="Bold"/>                   
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="DataGridRowHeader">
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn                    
+                    Header="Сотрудник"                    
+                    Binding="{Binding EmployeeName}"                    
+                    Width="300"/>
+                <DataGridTextColumn 
+                    Header="Должность"                    
+                    Binding="{Binding Position}"
+                    Width="200"/>
+                <DataGridTextColumn 
+                    Header="Отдел"                    
+                    Binding="{Binding Department}"
+                    Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>
