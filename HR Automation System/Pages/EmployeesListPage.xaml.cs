@@ -16,6 +16,20 @@ namespace HR_Automation_System.Pages
             var employees = new ObservableCollection<Employee>
             {
                 new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
+                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
+                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
                 new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"}
             };
 
