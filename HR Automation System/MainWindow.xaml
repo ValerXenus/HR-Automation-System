@@ -11,6 +11,7 @@
         Height="540"
         Width="960"
         WindowStartupLocation="CenterScreen"
+        Closing="Application_Closing"
         FontFamily="/HR Automation System;component/Fonts/#Panton">
     <Grid>
         <Grid.ColumnDefinitions>

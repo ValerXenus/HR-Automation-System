@@ -1,6 +1,5 @@
 ﻿using HR_Automation_System.Classes;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media.Animation;
 
@@ -14,11 +13,10 @@ namespace HR_Automation_System
         private static bool isMenuOpen; // Признак, открыто ли меню или свернуто
 
         // Конструктор окна
-        public MainWindow(DatabaseUtility db, int userId)
+        public MainWindow()
         {
             InitializeComponent();
             LoadUiElements();
-            db.Disconnect();            
         }
 
         // Открыть/свернуть левое меню
@@ -74,6 +72,12 @@ namespace HR_Automation_System
         private void EmployeesPageButton_Click(object sender, RoutedEventArgs e)
         {
             ChangePage("EmployeesListPage");
+        }
+
+        // Событие при закрытии главного окна приложения
+        private void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            GlobalStaticParameters.Database.Disconnect(); // Отключаем соединение с базой даннхы
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
 namespace HR_Automation_System.Pages
@@ -46,6 +45,13 @@ namespace HR_Automation_System.Pages
 
             // Отдел
             public string Department { get; set; }
+        }
+
+        // Добавление нового сотрудника
+        private void AddNewEmployee_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var window = new EmployeeProfileWindow();
+            window.ShowDialog();
         }
     }
 }

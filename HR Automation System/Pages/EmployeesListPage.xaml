@@ -32,6 +32,7 @@
                 Content="&#xE1E2;  Добавить"
                 Style="{StaticResource ButtonDefaultStyle}"
                 Margin="0,0,5,0"
+                Click="AddNewEmployee_Click"
                 FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"/>
             <Button
                 Width="25"
