@@ -30,8 +30,7 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition Height="20"/>
-                    </Grid.RowDefinitions>
-
+                    </Grid.RowDefinitions>                    
                     <StackPanel
                         Orientation="Vertical"
                         Grid.Column="1"
@@ -41,13 +40,156 @@
                             Height="150"
                             Width="150"/>
                         <Button
+                            Margin="0, 10, 0, 0"
                             Width="150"
                             Height="25"
                             FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"
                             Content="&#xE109; Загрузить"
                             Style="{StaticResource ButtonDefaultStyle}"/>
                     </StackPanel>
-                    
+                    <Grid
+                        Grid.Column="2"
+                        Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="4"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            HorizontalAlignment="Right"
+                            Content="ФИО"/>
+                        <TextBox
+                            Grid.Column="2"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Template="{DynamicResource TextBoxBaseControlTemplate}"
+                            Style="{StaticResource TextBoxDefaultStyle}"
+                            Height="23"
+                            x:Name="NameTextBox"/>
+                        <Label 
+                            Grid.Column="0"
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"
+                            Content="Пол"/>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Grid.Column="2"
+                            Grid.Row="2">
+                            <RadioButton
+                                Margin="0, 0, 20, 0"
+                                VerticalAlignment="Center"
+                                Content="Мужской"/>
+                            <RadioButton
+                                VerticalAlignment="Center"
+                                Content="Женский"/>
+                        </StackPanel>
+                        <Label 
+                            Grid.Column="0"
+                            Grid.Row="3"
+                            HorizontalAlignment="Right"
+                            Content="Дата рождения"/>
+                        <DatePicker
+                            Grid.Column="2"
+                            Grid.Row="3"
+                            Height="23"
+                            x:Name="BirthDatePicker"/>
+                        <Label 
+                            Grid.Column="0"
+                            Grid.Row="4"
+                            HorizontalAlignment="Right"
+                            Content="Адрес"/>
+                        <TextBox
+                            Grid.Column="2"
+                            Grid.Row="4"
+                            Grid.ColumnSpan="2"
+                            Template="{DynamicResource TextBoxBaseControlTemplate}"
+                            Style="{StaticResource TextBoxDefaultStyle}"
+                            Height="23"
+                            x:Name="AddressTextBox"/>
+                        <Label 
+                            Grid.Column="0"
+                            Grid.Row="5"
+                            HorizontalAlignment="Right"
+                            Content="ИНН"/>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Grid.Row="5"
+                            Grid.Column="2">
+                            <TextBox
+                                x:Name="InnTextBox"
+                                Width="150"
+                                Template="{DynamicResource TextBoxBaseControlTemplate}"
+                                Style="{StaticResource TextBoxDefaultStyle}"
+                                Height="23"/>
+                            <Label 
+                                Grid.Column="0"
+                                Grid.Row="6"
+                                Margin="8, 0, 0, 0"
+                                Content="СНИЛС"/>
+                        </StackPanel>
+                        <TextBox
+                            x:Name="SnilsTextBox"
+                            Grid.Row="5"
+                            Grid.Column="3"
+                            Template="{DynamicResource TextBoxBaseControlTemplate}"
+                            Style="{StaticResource TextBoxDefaultStyle}"
+                            Height="23"/>
+                        <Label 
+                            Grid.Column="0"
+                            Grid.Row="6"
+                            HorizontalAlignment="Right"
+                            Content="Номер трудовой книжки"/>
+                        <TextBox
+                            Grid.Column="2"
+                            Grid.Row="6"
+                            Grid.ColumnSpan="2"
+                            Template="{DynamicResource TextBoxBaseControlTemplate}"
+                            Style="{StaticResource TextBoxDefaultStyle}"
+                            Height="23"
+                            x:Name="EmplHistoryTextBox"/>
+                        <Label 
+                            Grid.Column="0"
+                            Grid.Row="7"
+                            HorizontalAlignment="Right"
+                            Content="Телефон"/>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Grid.Row="7"
+                            Grid.Column="2">
+                            <TextBox
+                                x:Name="PhoneTextBox"
+                                Width="150"
+                                Template="{DynamicResource TextBoxBaseControlTemplate}"
+                                Style="{StaticResource TextBoxDefaultStyle}"
+                                Height="23"/>
+                            <Label 
+                                Grid.Column="0"
+                                Grid.Row="6"
+                                Margin="15, 0, 0, 0"
+                                Content="E-mail"/>
+                        </StackPanel>
+                        <TextBox
+                            x:Name="EmailTextBox"
+                            Grid.Row="7"
+                            Grid.Column="3"
+                            Template="{DynamicResource TextBoxBaseControlTemplate}"
+                            Style="{StaticResource TextBoxDefaultStyle}"
+                            Height="23"/>                        
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem                
@@ -55,14 +197,123 @@
                 Height="30"
                 Width="199"
                 Style="{StaticResource TabItemDefaultStyle}">
-                
+                <Grid>
+                    <StackPanel                        
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <StackPanel
+                            Height="40"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalAlignment="Center"
+                                Content="Семейное положение"/>
+                            <ComboBox
+                                x:Name="FamilyStatusesComboBox"
+                                SelectedIndex="0"
+                                Height="23"
+                                Margin="5, 0, 0, 0"
+                                Width="200"/>
+                        </StackPanel>
+                        <StackPanel
+                            Height="40"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalAlignment="Center"
+                                Margin="35, 0, 0, 0"
+                                Content="Вид документа"/>
+                            <ComboBox
+                                x:Name="DocumentTypesComboBox"
+                                SelectedIndex="0"
+                                Height="23"
+                                Margin="5, 0, 0, 0"
+                                Width="200"/>
+                        </StackPanel>
+                        <StackPanel
+                            Height="40"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalAlignment="Center"
+                                Margin="22, 0, 0, 0"
+                                Content="Номер документа"/>
+                            <TextBox
+                                Margin="5, 0, 0, 0"
+                                Width="200"
+                                Template="{DynamicResource TextBoxBaseControlTemplate}"
+                                Style="{StaticResource TextBoxDefaultStyle}"
+                                Height="23"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
             </TabItem>
             <TabItem                
                 Header="Профессия"
                 Height="30"
                 Width="198"
                 Style="{StaticResource TabItemDefaultStyle}">
-
+                <Grid>
+                    <StackPanel                        
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <StackPanel
+                            Height="40"
+                            Orientation="Horizontal">
+                            <Label
+                                Margin="85, 0, 0, 0"
+                                VerticalAlignment="Center"
+                                Content="Отдел"/>
+                            <ComboBox
+                                x:Name="DepartmentsComboBox"
+                                SelectedIndex="0"
+                                Height="23"
+                                Margin="5, 0, 0, 0"
+                                Width="200"/>
+                        </StackPanel>
+                        <StackPanel
+                            Height="40"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalAlignment="Center"
+                                Margin="57, 0, 0, 0"
+                                Content="Должность"/>
+                            <TextBox
+                                Margin="5, 0, 0, 0"
+                                Width="200"
+                                Template="{DynamicResource TextBoxBaseControlTemplate}"
+                                Style="{StaticResource TextBoxDefaultStyle}"
+                                Height="23"/>
+                        </StackPanel>
+                        <StackPanel
+                            Height="40"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalAlignment="Center"
+                                Margin="84, 0, 0, 0"
+                                Content="Оклад"/>
+                            <TextBox
+                                Margin="5, 0, 0, 0"
+                                Width="200"
+                                Template="{DynamicResource TextBoxBaseControlTemplate}"
+                                Style="{StaticResource TextBoxDefaultStyle}"
+                                Height="23"/>
+                        </StackPanel>
+                        <StackPanel
+                            Height="40"
+                            Orientation="Horizontal">
+                            <Label
+                                Margin="20, 0, 0, 0"
+                                VerticalAlignment="Center"
+                                Content="Трудовой договор"/>
+                            <ComboBox
+                                x:Name="ContractsComboBox"
+                                SelectedIndex="0"
+                                Height="23"
+                                Margin="5, 0, 0, 0"
+                                Width="200"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
             </TabItem>
             <TabItem                
                 Header="Отпуски"

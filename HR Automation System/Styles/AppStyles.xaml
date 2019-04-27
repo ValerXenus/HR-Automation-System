@@ -14,7 +14,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>   
 
     <!--Стандартный стиль кнопки-->
     <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
@@ -399,4 +399,32 @@
         </Setter>
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
+
+    <!--Стиль и шаблон для TextBox-->
+    <Style x:Key="TextBoxDefaultStyle" TargetType="TextBox">
+        <Setter Property="Padding" Value="6, 0, 0, 0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>        
+    </Style>
+
+    <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
+        <Border x:Name="border"
+                BorderBrush="#FFB1B1B1"
+                BorderThickness="2"
+                Background="White"
+                SnapsToDevicePixels="True">
+            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF7EB4EA"/>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF569DE5"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>
