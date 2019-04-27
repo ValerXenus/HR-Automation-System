@@ -41,12 +41,14 @@
                             Height="150"
                             Width="150"/>
                         <Button
+                            x:Name="ProfilePhotograph"
                             Margin="0, 10, 0, 0"
                             Width="150"
-                            Height="25"
+                            Height="25"                            
                             FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"
                             Content="&#xE109; Загрузить"
-                            Style="{StaticResource ButtonDefaultStyle}"/>
+                            Style="{StaticResource ButtonDefaultStyle}"
+                            Click="LoadPhotograph_Click"/>
                     </StackPanel>
                     <Grid
                         Grid.Column="2"
@@ -208,7 +210,27 @@
                             Grid.Column="2"
                             Template="{DynamicResource TextBoxBaseControlTemplate}"
                             Style="{StaticResource TextBoxDefaultStyle}"
-                            Height="23"/>                        
+                            Height="23"/>
+                        <StackPanel
+                            Grid.Row="11"
+                            Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            Width="310"
+                            Orientation="Horizontal">
+                            <Button
+                                Width="150"
+                                Height="25"
+                                Content="Отмена"
+                                Style="{StaticResource ButtonDefaultStyle}"
+                                />
+                            <Button
+                                Margin="10, 0, 0, 0"
+                                Width="150"
+                                Height="25"
+                                Content="Сохранить"
+                                Style="{StaticResource ButtonDefaultStyle}"
+                                Click="SaveEmployee_Click"/>
+                        </StackPanel>                        
                     </Grid>
                 </Grid>
             </TabItem>
@@ -230,7 +252,7 @@
                                 Content="Семейное положение"/>
                             <ComboBox
                                 x:Name="FamilyStatusesComboBox"
-                                SelectedIndex="1"
+                                SelectedIndex="0"
                                 Height="23"
                                 Margin="5, 0, 0, 0"
                                 Width="200"
@@ -246,7 +268,7 @@
                                 Content="Вид документа"/>
                             <ComboBox
                                 x:Name="DocumentTypesComboBox"
-                                SelectedIndex="1"
+                                SelectedIndex="0"
                                 Height="23"
                                 Margin="5, 0, 0, 0"
                                 Width="200"
@@ -302,7 +324,7 @@
                                 Content="Отдел"/>
                             <ComboBox
                                 x:Name="DepartmentsComboBox"
-                                SelectedIndex="1"
+                                SelectedIndex="0"
                                 Height="23"
                                 Margin="5, 0, 0, 0"
                                 Width="200"
@@ -347,6 +369,7 @@
                             <ComboBox
                                 x:Name="ContractsComboBox"
                                 Height="23"
+                                SelectedIndex="-1"
                                 Margin="5, 0, 0, 0"
                                 Width="200"/>
                         </StackPanel>
