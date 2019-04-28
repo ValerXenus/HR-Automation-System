@@ -1,6 +1,7 @@
 ﻿using HR_Automation_System.Properties;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Windows;
@@ -105,7 +106,7 @@ namespace HR_Automation_System.Classes
             _command.Parameters.AddWithValue("@Leaving_Reason", "-"); // И не заполняем причину увольнения
             try
             {
-                _command.ExecuteNonQuery();                 
+                _command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -130,7 +131,7 @@ namespace HR_Automation_System.Classes
                 " VALUES ([Employee_Name], [Gender], [Birth_Date], [Inn], [Snils]," +
                 " [Document_Type], [Document_Number], [Address], [Phone_Number], [Email], [Photograph_Link]," +
                 " [Empl_Book], [Family_Status], [Contract_Id], [Ml_Id], [Sl_Id], [Vacation_Id]);";
-            _command.Parameters.AddWithValue("@Employee_Name", employeeName);            
+            _command.Parameters.AddWithValue("@Employee_Name", employeeName);
             _command.Parameters.AddWithValue("@Gender", gender);
             _command.Parameters.AddWithValue("@Birth_Date", birthDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@Inn", inn);
@@ -168,7 +169,8 @@ namespace HR_Automation_System.Classes
             _command.Parameters.AddWithValue("@Department_Id", departmentId);
             _command.Parameters.AddWithValue("@Employee_Id", employeeId);
             _command.Parameters.AddWithValue("@Position", position);
-            _command.Parameters.AddWithValue("@Salary", salary);
+            _command.Parameters.Add(@"Salary", OleDbType.Double).Value = salary;
+            //_command.Parameters.AddWithValue("@Salary", salary);
             _command.Parameters.AddWithValue("@Contract_Id", contractId);
             try
             {
@@ -299,6 +301,42 @@ namespace HR_Automation_System.Classes
                 return null;
             }
         }
+        #endregion
+
+        #region Запросы на заполнение DataGrid
+
+        // Получение сотрудников для DataGrid на EmployeeListPage
+        public ObservableCollection<BookClasses.EmployeeRow> GetEmployeesRows()
+        {
+            _command.CommandText = "SELECT [employees].[employee_id], [employees].[employee_name], [employees_in_departments].[position], [departments].[department_name]" +
+                " FROM [departments] INNER JOIN ([employees] INNER JOIN [employees_in_departments] ON [employees].[employee_id] = [employees_in_departments].[employee_id])" +
+                " ON [departments].[department_id] = [employees_in_departments].[department_id]";
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var rows = new ObservableCollection<BookClasses.EmployeeRow>();
+                while (_dataReader.Read())
+                {
+                    rows.Add(new BookClasses.EmployeeRow
+                    {
+                        EmployeeId = int.Parse(_dataReader["employee_id"].ToString()),
+                        EmployeeName = _dataReader["employee_name"].ToString(),
+                        Department = _dataReader["department_name"].ToString(),
+                        Position = _dataReader["position"].ToString()
+                    });
+                }
+                _dataReader.Close();
+
+                return rows;
+            }
+            catch (Exception ex)
+            {
+                return null; // Если таблица пустая
+            }
+
+        }
+
         #endregion
 
         // Получить индекс последней добавленной записи в таблице

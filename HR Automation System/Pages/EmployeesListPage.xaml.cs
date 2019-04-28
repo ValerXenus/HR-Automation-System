@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using HR_Automation_System.Classes;
 using System.Windows.Controls;
 
 namespace HR_Automation_System.Pages
@@ -11,40 +11,7 @@ namespace HR_Automation_System.Pages
         public EmployeesListPage()
         {
             InitializeComponent();
-
-            var employees = new ObservableCollection<Employee>
-            {
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"},
-                new Employee { EmployeeName = "Иванов Иван Иванович", Position = "Уборщик", Department = "Завхоз"},
-                new Employee { EmployeeName = "Долгов Герман Борисович", Position = "Системный администратор", Department = "ИТ отдел"}
-            };
-
-            EmployeesList.ItemsSource = employees;
-        }
-
-        public class Employee
-        {
-            // ФИО сотрудника
-            public string EmployeeName { get; set; }
-
-            // Должность
-            public string Position { get; set; }
-
-            // Отдел
-            public string Department { get; set; }
+            LoadDataGrid();
         }
 
         // Добавление нового сотрудника
@@ -52,6 +19,14 @@ namespace HR_Automation_System.Pages
         {
             var window = new EmployeeProfileWindow();
             window.ShowDialog();
+            LoadDataGrid();
+        }
+
+        // Обновление списка в таблице
+        private void LoadDataGrid()
+        {
+            var employees = GlobalStaticParameters.Database.GetEmployeesRows();
+            EmployeesList.ItemsSource = employees;
         }
     }
 }

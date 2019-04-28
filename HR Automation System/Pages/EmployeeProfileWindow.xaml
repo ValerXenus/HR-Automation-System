@@ -98,7 +98,7 @@
                             Grid.Row="2">
                             <RadioButton
                                 x:Name="MaleRadioButton"
-                                Margin="0, 5, 0, 0"
+                                Margin="0, 10, 0, 0"
                                 VerticalAlignment="Center"
                                 Content="Мужской"
                                 IsChecked="True"/>
@@ -307,7 +307,7 @@
                             Height="40"
                             Orientation="Horizontal">
                             <Label
-                                Margin="85, 0, 0, 0"
+                                Margin="65, 0, 0, 0"
                                 VerticalAlignment="Center"
                                 Content="Отдел"/>
                             <ComboBox
@@ -324,7 +324,7 @@
                             Orientation="Horizontal">
                             <Label
                                 VerticalAlignment="Center"
-                                Margin="57, 0, 0, 0"
+                                Margin="37, 0, 0, 0"
                                 Content="Должность"/>
                             <TextBox
                                 x:Name="PositionTextBox"
@@ -339,7 +339,7 @@
                             Orientation="Horizontal">
                             <Label
                                 VerticalAlignment="Center"
-                                Margin="84, 0, 0, 0"
+                                Margin="64, 0, 0, 0"
                                 Content="Оклад"/>
                             <TextBox
                                 x:Name="SalaryTextBox"
@@ -353,7 +353,6 @@
                             Height="40"
                             Orientation="Horizontal">
                             <Label
-                                Margin="20, 0, 0, 0"
                                 VerticalAlignment="Center"
                                 Content="Трудовой договор"/>
                             <ComboBox
@@ -370,7 +369,7 @@
                     </StackPanel>
                     <Button
                         x:Name="AddNewContract"                        
-                        Margin="450, 120, 0, 0"
+                        Margin="430, 120, 0, 0"
                         Width="100"
                         Height="25"
                         FontSize="13"

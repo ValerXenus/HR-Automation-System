@@ -42,5 +42,20 @@
             // Номер трудового договора
             public string ContractNumber { get; set; }
         }
+
+        // Класс для отображения сотрудников в таблице
+        public class EmployeeRow
+        {
+            public int EmployeeId { get; set; }
+
+            // ФИО сотрудника
+            public string EmployeeName { get; set; }
+
+            // Должность
+            public string Position { get; set; }
+
+            // Отдел
+            public string Department { get; set; }
+        }
     }
 }

@@ -14,15 +14,17 @@ namespace HR_Automation_System.Pages
     /// </summary>
     public partial class EmployeeProfileWindow : Window
     {
+        private bool _isExistEmployee; // Признак, это редактирование существующего сотрудника
         private byte[] _imageBytes; // Байты фотографии сотрудника
         private string _imagePath;
         private string _imageExtension;
-        
+
         // Конструктор без параметра Employee (добавление нового сотрудника)
         public EmployeeProfileWindow()
         {
             InitializeComponent();
-            LoadFormData(false);
+            _isExistEmployee = false;
+            LoadFormData();
         }
 
         #region Методы Click
@@ -44,7 +46,7 @@ namespace HR_Automation_System.Pages
             _imageExtension = Path.GetExtension(_imagePath); // Получение расширения картинки
             _imageBytes = File.ReadAllBytes(_imagePath); // Считываем данные файла
             LoadProfileImage();
-        }       
+        }
 
         // Метод сохранения сотрудника
         private void SaveEmployee_Click(object sender, RoutedEventArgs e)
@@ -57,11 +59,19 @@ namespace HR_Automation_System.Pages
             int departmentId = (int)DepartmentsComboBox.SelectedValue;
             int contractId = (int)ContractsComboBox.SelectedValue;
 
+            double salary = Convert.ToDouble(SalaryTextBox.Text);
+
             int gender = 0;
             if (FemaleRadioButton.IsChecked == true)
                 gender = 1;
+            if (_isExistEmployee)
+            {
 
-            SaveNewEmployee(gender, documentType, contractId, familyStatusId, departmentId);
+            }
+            else
+            {
+                SaveNewEmployee(gender, documentType, contractId, familyStatusId, departmentId, salary);
+            }
         }
 
         // Добавление нового трудового договора
@@ -88,11 +98,11 @@ namespace HR_Automation_System.Pages
 
         #endregion
 
-        private void SaveNewEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId)
+        private void SaveNewEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId, double salary)
         {
             string currecntDirectory = Directory.GetCurrentDirectory();
 
-            if (!Directory.Exists(Path.Combine(currecntDirectory, "Images"))) // Проверяем существование папки Contracts
+            if (!Directory.Exists(Path.Combine(currecntDirectory, "Images"))) // Проверяем существование папки Images
             {
                 // Если ее нет, то создаем
                 Directory.CreateDirectory(Path.Combine(currecntDirectory, "Images"));
@@ -102,7 +112,7 @@ namespace HR_Automation_System.Pages
 
             var result = GlobalStaticParameters.Database.AddNewEmployee(NameTextBox.Text, gender, BirthDatePicker.DisplayDate, InnTextBox.Text,
                 SnilsTextBox.Text, documentType, DocumentNumberTextBox.Text, AddressTextBox.Text, PhoneTextBox.Text, EmailTextBox.Text,
-                EmplHistoryTextBox.Text, familyStatusId, contractId, departmentId, PositionTextBox.Text, double.Parse(SalaryTextBox.Text), guid);
+                EmplHistoryTextBox.Text, familyStatusId, contractId, departmentId, PositionTextBox.Text, salary, guid);
             if (!result) // Если запрос не выполнился, то не сохраняем картинку
                 return;
 
@@ -111,14 +121,14 @@ namespace HR_Automation_System.Pages
         }
 
         // Метод загрузки всех данных на форме
-        private void LoadFormData(bool isNewEmployee)
+        private void LoadFormData()
         {
-            if (isNewEmployee)
+            if (_isExistEmployee)
             {
                 LoadDataFromDatabase();
             }
 
-            LoadComboBoxData();           
+            LoadComboBoxData();
 
             BirthDatePicker.Text = DateTime.Now.ToString();
         }
@@ -209,9 +219,9 @@ namespace HR_Automation_System.Pages
             }
             else
             {
-                if (!Regex.IsMatch(SnilsTextBox.Text, @"[+-]?([0-9]*[.])?[0-9]+"))
+                if (!Regex.IsMatch(SalaryTextBox.Text, @"^(0|([1-9][0-9]*))(,[0-9]+)?$"))
                 {
-                    errorText += "- Поле \"Оклад\" может содержать только числовое значение\n";
+                    errorText += "- Поле \"Оклад\" не соответствует десятичному формату числа\n";
                 }
             }
 
@@ -263,6 +273,6 @@ namespace HR_Automation_System.Pages
             bitmap.StreamSource = memoryStream;
             bitmap.EndInit();
             AvatarImage.Source = bitmap;
-        }        
+        }
     }
 }

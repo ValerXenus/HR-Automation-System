@@ -85,17 +85,22 @@
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn                    
+                    Header="Id"     
+                    Visibility="Collapsed"
+                    Binding="{Binding EmployeeId}"                    
+                    Width="300"/>
+                <DataGridTextColumn           
                     Header="Сотрудник"                    
                     Binding="{Binding EmployeeName}"                    
-                    Width="300"/>
+                    Width="240"/>
                 <DataGridTextColumn 
                     Header="Должность"                    
                     Binding="{Binding Position}"
-                    Width="200"/>
+                    Width="150"/>
                 <DataGridTextColumn                    
                     Header="Отдел"                    
                     Binding="{Binding Department}"
-                    Width="100"/>
+                    Width="250"/>
                 <DataGridTemplateColumn CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
