@@ -34,6 +34,7 @@
             Orientation="Vertical">
             <!--Кнопки левого меню-->
             <RadioButton 
+                IsChecked="True"
                 x:Name="EmployeesButton"
                 Content="&#xE125;  Сотрудники"                
                 FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"                

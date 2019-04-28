@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace HR_Automation_System.AdditionalWindows
@@ -62,7 +63,10 @@ namespace HR_Automation_System.AdditionalWindows
             }
 
             var guid = Guid.NewGuid().ToString() + extention; // Создаем новый уникальный идентификатор для имени файла
-            GlobalStaticParameters.Database.AddNewContract(ContractNumberTextBox.Text, guid, ContractDatePicker.DisplayDate); // Добавляем трудовой договор в БД
+            var result = GlobalStaticParameters.Database.AddNewContract(ContractNumberTextBox.Text, guid, ContractDatePicker.DisplayDate); // Добавляем трудовой договор в БД
+            if (!result) // Если запрос не выполнился, то не сохраняем документ
+                return;
+
             File.Copy(FilenameTextBox.Text, Path.Combine(currecntDirectory, "Contracts", guid));
 
             this.DialogResult = true; // Указываем, что результат успешен
@@ -77,6 +81,13 @@ namespace HR_Automation_System.AdditionalWindows
             if (string.IsNullOrEmpty(ContractNumberTextBox.Text))
             {
                 errorText += "- Необходима указать номер трудового договора";
+            }
+            else
+            {
+                if (Regex.IsMatch(ContractNumberTextBox.Text, @"/^\d+$/"))
+                {
+                    errorText += "- Поле \"Номер трудового договора\" может содержать только цифры\n";
+                }
             }
 
             if (string.IsNullOrEmpty(FilenameTextBox.Text))

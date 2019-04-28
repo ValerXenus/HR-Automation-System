@@ -45,6 +45,7 @@
             VerticalAlignment="Center"
             Content="Файл"/>
         <TextBox
+            IsReadOnly="True"
             Grid.Row="2"
             Grid.Column="1"
             HorizontalAlignment="Left"

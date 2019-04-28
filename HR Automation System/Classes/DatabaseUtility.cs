@@ -62,6 +62,7 @@ namespace HR_Automation_System.Classes
         {
             int idx = getLastIndex("family_statuses", "status_id") + 1; // Получаем индекс последней записи в таблице и прибавляем 1
 
+            _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
             _command.CommandText = "INSERT INTO family_statuses VALUES ([Status_Index], [Status_Name])";
             _command.Parameters.AddWithValue("@Status_Index", idx);
@@ -73,7 +74,7 @@ namespace HR_Automation_System.Classes
             catch (Exception ex)
             {
                 MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
-            }            
+            }
         }
 
         public void GetFamilyStatusName(int idx)
@@ -91,16 +92,61 @@ namespace HR_Automation_System.Classes
         }
 
         // Добавление нового трудового договора
-        public void AddNewContract(string contractNumber, string filename, DateTime date)
+        public bool AddNewContract(string contractNumber, string filename, DateTime date)
         {
+            _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
-            _command.CommandText = "INSERT INTO employment_contracts VALUES ([Contract_Id], [Employee_Id], [Start_Date], [Document_Name], [End_Date], [Leaving_Reason])";
-            _command.Parameters.AddWithValue("@Contract_Id", contractNumber);
-            _command.Parameters.AddWithValue("@Employee_Id", -1); // Т.к. сотрудник пока не выбран
+            _command.CommandText = "INSERT INTO employment_contracts (contract_number, start_date, document_name, end_date, leaving_reason) " +
+                "VALUES ([Contract_Number], [Start_Date], [Document_Name], [End_Date], [Leaving_Reason])";
+            _command.Parameters.AddWithValue("@Contract_Number", contractNumber);
             _command.Parameters.AddWithValue("@Start_Date", date.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@Document_Name", filename);
             _command.Parameters.AddWithValue("@End_Date", DateTime.MaxValue.ToString("dd/MM/yyyy")); // Т.к. сотрудник не увольняется, ставим максимальную дату
             _command.Parameters.AddWithValue("@Leaving_Reason", "-"); // И не заполняем причину увольнения
+            try
+            {
+                _command.ExecuteNonQuery();                 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        // Добавление нового сотрудника
+        public bool AddNewEmployee(string employeeName, int gender, DateTime birthDate, string inn, string snils,
+            int documentType, string documentNumber, string address, string phone, string email, string emplBookNumber,
+            int familyStatus, int contractId, int departmentId, string position, double salary, string imageLink)
+        {
+            // Сперва добавляем сотрудника в таблицу "Сотрудники"
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO [employees] ([employee_name], [gender], [birth_date], [inn], [snils]," +
+                " [document_type], [document_number], [address], [phone_number], [email], [photograph_link]," +
+                " [empl_book_number], [family_status], [contract_id], [ml_id], [sl_id], [vacation_id])" +
+                " VALUES ([Employee_Name], [Gender], [Birth_Date], [Inn], [Snils]," +
+                " [Document_Type], [Document_Number], [Address], [Phone_Number], [Email], [Photograph_Link]," +
+                " [Empl_Book], [Family_Status], [Contract_Id], [Ml_Id], [Sl_Id], [Vacation_Id]);";
+            _command.Parameters.AddWithValue("@Employee_Name", employeeName);            
+            _command.Parameters.AddWithValue("@Gender", gender);
+            _command.Parameters.AddWithValue("@Birth_Date", birthDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@Inn", inn);
+            _command.Parameters.AddWithValue("@Snils", snils);
+            _command.Parameters.AddWithValue("@Document_Type", documentType);
+            _command.Parameters.AddWithValue("@Document_Number", documentNumber);
+            _command.Parameters.AddWithValue("@Address", address);
+            _command.Parameters.AddWithValue("@Phone_Number", phone);
+            _command.Parameters.AddWithValue("@Email", email);
+            _command.Parameters.AddWithValue("@Photograph_Link", imageLink);
+            _command.Parameters.AddWithValue("@Empl_Book", emplBookNumber);
+            _command.Parameters.AddWithValue("@Family_Status", familyStatus);
+            _command.Parameters.AddWithValue("@Contract_Id", contractId);
+            _command.Parameters.AddWithValue("@Ml_Id", -1); // Отпусков пока нет, их не заполняем
+            _command.Parameters.AddWithValue("@Sl_Id", -1);
+            _command.Parameters.AddWithValue("@Vacation_Id", -1);
             try
             {
                 _command.ExecuteNonQuery();
@@ -108,7 +154,33 @@ namespace HR_Automation_System.Classes
             catch (Exception ex)
             {
                 MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
             }
+
+            // Затем получаем Id добавленного сотрудника,
+            // и создаем запись в таблице "Сотрудники в департаментах"
+            var employeeId = getEmployeeByContractId(contractId);
+
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO [employees_in_departments] ([department_id], [employee_id], [position], [salary], [contract_id])" +
+                " VALUES ([Department_Id], [Employee_Id], [Position], [Salary], [Contract_Id])";
+            _command.Parameters.AddWithValue("@Department_Id", departmentId);
+            _command.Parameters.AddWithValue("@Employee_Id", employeeId);
+            _command.Parameters.AddWithValue("@Position", position);
+            _command.Parameters.AddWithValue("@Salary", salary);
+            _command.Parameters.AddWithValue("@Contract_Id", contractId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+
+            return true;
         }
 
         #region Запросы на заполнение ComboBox
@@ -121,11 +193,13 @@ namespace HR_Automation_System.Classes
             try
             {
                 var falimyStatuses = new List<BookClasses.FamilyStatuses>();
-                while(_dataReader.Read())
+                while (_dataReader.Read())
                 {
-                    falimyStatuses.Add(new BookClasses.FamilyStatuses {
-                        StatusId = int.Parse(_dataReader["status_id"].ToString()),                        
-                        StatusName = _dataReader["status_name"].ToString()});
+                    falimyStatuses.Add(new BookClasses.FamilyStatuses
+                    {
+                        StatusId = int.Parse(_dataReader["status_id"].ToString()),
+                        StatusName = _dataReader["status_name"].ToString()
+                    });
                 }
                 _dataReader.Close();
 
@@ -196,6 +270,35 @@ namespace HR_Automation_System.Classes
                 return null;
             }
         }
+
+        // Получение списка трудовых договоров
+        public List<BookClasses.Contract> GetContractsList()
+        {
+            _command.CommandText = "SELECT * FROM employment_contracts";
+            _dataReader = _command.ExecuteReader();
+
+            try
+            {
+                var contracts = new List<BookClasses.Contract>();
+                while (_dataReader.Read())
+                {
+                    contracts.Add(new BookClasses.Contract
+                    {
+                        ContractId = int.Parse(_dataReader["contract_id"].ToString()),
+                        ContractNumber = _dataReader["contract_number"].ToString()
+                    });
+                }
+                _dataReader.Close();
+
+                return contracts;
+            }
+            catch
+            {
+                MessageBox.Show("Справочник \"Трудовые договора\" пуст");
+                _dataReader.Close();
+                return null;
+            }
+        }
         #endregion
 
         // Получить индекс последней добавленной записи в таблице
@@ -220,6 +323,23 @@ namespace HR_Automation_System.Classes
             _dataReader.Close();
 
             return idx;
-        }        
+        }
+
+        // Получить сотрудника по Id трудового договора
+        private int getEmployeeByContractId(int contractId)
+        {
+            int idx = -1;
+
+            _command.CommandText = string.Format("SELECT employee_id FROM employees WHERE contract_id = {0}", contractId);
+            _dataReader = _command.ExecuteReader();
+
+            while (_dataReader.Read())
+            {
+                idx = int.Parse(_dataReader["employee_id"].ToString());
+            }
+            _dataReader.Close();
+
+            return idx;
+        }
     }
 }

@@ -32,5 +32,15 @@
             // Название отдела
             public string DepartmentName { get; set; }
         }
+
+        // Класс "Трудовой договор"
+        public class Contract
+        {
+            // Код трудового договора
+            public int ContractId { get; set; }
+
+            // Номер трудового договора
+            public string ContractNumber { get; set; }
+        }
     }
 }

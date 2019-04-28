@@ -39,6 +39,7 @@ namespace HR_Automation_System
         private void LoadUiElements()
         {
             isMenuOpen = true;
+            ChangePage("EmployeesListPage");
         }
 
         // Открыть левое меню

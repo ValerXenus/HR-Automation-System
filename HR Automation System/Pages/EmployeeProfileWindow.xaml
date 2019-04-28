@@ -222,7 +222,7 @@
                                 Height="25"
                                 Content="Отмена"
                                 Style="{StaticResource ButtonDefaultStyle}"
-                                />
+                                Click="CancelButton_Click"/>
                             <Button
                                 Margin="10, 0, 0, 0"
                                 Width="150"
@@ -283,6 +283,7 @@
                                 Margin="22, 0, 0, 0"
                                 Content="Номер документа"/>
                             <TextBox
+                                x:Name="DocumentNumberTextBox"
                                 Margin="5, 0, 0, 0"
                                 Width="200"
                                 Template="{DynamicResource TextBoxBaseControlTemplate}"
@@ -302,19 +303,6 @@
                         Orientation="Vertical"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                        <StackPanel
-                            Height="40"
-                            Orientation="Horizontal">
-                            <Label
-                                VerticalAlignment="Center"
-                                Margin="57, 0, 0, 0"
-                                Content="Дата найма"/>
-                            <DatePicker
-                                x:Name="HiringDatePicker"
-                                Margin="5, 0, 0, 0"
-                                Width="200"
-                                Height="23"/>
-                        </StackPanel>
                         <StackPanel
                             Height="40"
                             Orientation="Horizontal">
@@ -339,6 +327,7 @@
                                 Margin="57, 0, 0, 0"
                                 Content="Должность"/>
                             <TextBox
+                                x:Name="PositionTextBox"
                                 Margin="5, 0, 0, 0"
                                 Width="200"
                                 Template="{DynamicResource TextBoxBaseControlTemplate}"
@@ -353,6 +342,7 @@
                                 Margin="84, 0, 0, 0"
                                 Content="Оклад"/>
                             <TextBox
+                                x:Name="SalaryTextBox"
                                 Margin="5, 0, 0, 0"
                                 Width="200"
                                 Template="{DynamicResource TextBoxBaseControlTemplate}"
@@ -368,15 +358,19 @@
                                 Content="Трудовой договор"/>
                             <ComboBox
                                 x:Name="ContractsComboBox"
+                                IsTextSearchEnabled="True"
                                 Height="23"
                                 SelectedIndex="-1"
                                 Margin="5, 0, 0, 0"
-                                Width="200"/>
+                                Width="200"
+                                DisplayMemberPath="ContractNumber"
+                                SelectedValuePath="ContractId"
+                                MaxDropDownHeight="150"/>
                         </StackPanel>
                     </StackPanel>
                     <Button
-                        x:Name="AddNewContract"
-                        Margin="450, 159, 0, 0"
+                        x:Name="AddNewContract"                        
+                        Margin="450, 120, 0, 0"
                         Width="100"
                         Height="25"
                         FontSize="13"
