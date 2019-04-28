@@ -1,4 +1,5 @@
-﻿using HR_Automation_System.Classes;
+﻿using HR_Automation_System.AdditionalWindows;
+using HR_Automation_System.Classes;
 using Microsoft.Win32;
 using System;
 using System.IO;
@@ -38,6 +39,24 @@ namespace HR_Automation_System.Pages
 
             _imageBytes = File.ReadAllBytes(result.FileName); // Считываем данные файла
             LoadProfileImage();
+        }       
+
+        // Метод сохранения сотрудника
+        private void SaveEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ValidateFields()) // Если валидация не пройдена
+                return;
+
+            int familyStatusId = (int)FamilyStatusesComboBox.SelectedValue;
+        }
+
+        // Добавление нового трудового договора
+        private void AddNewContract_Click(object sender, RoutedEventArgs e)
+        {
+            var newContractWindow = new AddNewContract();
+            newContractWindow.ShowDialog();
+
+            LoadComboBoxData();
         }
 
         // Метод загрузки всех данных на форме
@@ -48,28 +67,24 @@ namespace HR_Automation_System.Pages
                 LoadDataFromDatabase();
             }
 
-            // Заполнение ComboBox
-            FamilyStatusesComboBox.ItemsSource = GlobalStaticParameters.Database.GetFamilyStatuses();
-            DocumentTypesComboBox.ItemsSource = GlobalStaticParameters.Database.GetDocumentTypes();
-            DepartmentsComboBox.ItemsSource = GlobalStaticParameters.Database.GetDepartmentsList();
+            LoadComboBoxData();           
 
             BirthDatePicker.Text =
             HiringDatePicker.Text = DateTime.Now.ToString();
+        }
+
+        // Заполнение ComboBox
+        private void LoadComboBoxData()
+        {
+            FamilyStatusesComboBox.ItemsSource = GlobalStaticParameters.Database.GetFamilyStatuses();
+            DocumentTypesComboBox.ItemsSource = GlobalStaticParameters.Database.GetDocumentTypes();
+            DepartmentsComboBox.ItemsSource = GlobalStaticParameters.Database.GetDepartmentsList();
         }
 
         // Автозаполнение данных сотрудника из базы
         private void LoadDataFromDatabase()
         {
             VacationsPanel.Visibility = Visibility.Visible; // Отображаем панель отпусков/больничных
-        }
-
-        // Метод сохранения сотрудника
-        private void SaveEmployee_Click(object sender, RoutedEventArgs e)
-        {
-            if (!ValidateFields()) // Если валидация не пройдена
-                return;
-
-            int familyStatusId = (int)FamilyStatusesComboBox.SelectedValue;
         }
 
         // Метод для валидации правильности заполнения полей
@@ -133,7 +148,10 @@ namespace HR_Automation_System.Pages
 
             if (!string.IsNullOrEmpty(errorText))
             {
-                MessageBox.Show(string.Format("Во время проверки правильности заполнения полей возникли ошибки: \n{0}", errorText), "Ошибка при валидации полей");
+                MessageBox.Show(string.Format("Во время проверки правильности заполнения полей возникли ошибки: \n{0}", errorText),
+                    "Ошибка при валидации полей",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
                 return false;
             }
 

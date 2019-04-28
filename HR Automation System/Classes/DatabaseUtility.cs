@@ -32,6 +32,7 @@ namespace HR_Automation_System.Classes
             _command.Connection = _connection;
         }
 
+        // Отключение от БД
         public void Disconnect()
         {
             _dataReader.Close();
@@ -89,7 +90,29 @@ namespace HR_Automation_System.Classes
             _dataReader.Close();
         }
 
+        // Добавление нового трудового договора
+        public void AddNewContract(string contractNumber, string filename, DateTime date)
+        {
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO employment_contracts VALUES ([Contract_Id], [Employee_Id], [Start_Date], [Document_Name], [End_Date], [Leaving_Reason])";
+            _command.Parameters.AddWithValue("@Contract_Id", contractNumber);
+            _command.Parameters.AddWithValue("@Employee_Id", -1); // Т.к. сотрудник пока не выбран
+            _command.Parameters.AddWithValue("@Start_Date", date.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@Document_Name", filename);
+            _command.Parameters.AddWithValue("@End_Date", DateTime.MaxValue.ToString("dd/MM/yyyy")); // Т.к. сотрудник не увольняется, ставим максимальную дату
+            _command.Parameters.AddWithValue("@Leaving_Reason", "-"); // И не заполняем причину увольнения
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+            }
+        }
+
         #region Запросы на заполнение ComboBox
+        // Получение списка семеных положений
         public List<BookClasses.FamilyStatuses> GetFamilyStatuses()
         {
             _command.CommandText = "SELECT * FROM family_statuses";
@@ -116,6 +139,7 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        // Получение типов удостоверений личности
         public List<BookClasses.DocumentType> GetDocumentTypes()
         {
             _command.CommandText = "SELECT * FROM document_types";
@@ -144,6 +168,7 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        // Получение списка отделов
         public List<BookClasses.Department> GetDepartmentsList()
         {
             _command.CommandText = "SELECT * FROM departments";
@@ -172,8 +197,6 @@ namespace HR_Automation_System.Classes
             }
         }
         #endregion
-
-
 
         // Получить индекс последней добавленной записи в таблице
         private int getLastIndex(string tableName, string fieldName)

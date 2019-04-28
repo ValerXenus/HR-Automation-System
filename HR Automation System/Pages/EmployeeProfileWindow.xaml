@@ -382,6 +382,7 @@
                         FontSize="13"
                         Content="&#xE1E2;  Добавить"
                         Style="{StaticResource ButtonDefaultStyle}"
+                        Click="AddNewContract_Click"
                         FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"/>
                 </Grid>
             </TabItem>
