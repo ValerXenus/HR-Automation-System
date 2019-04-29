@@ -57,7 +57,7 @@
             CanUserResizeRows="False"
             Background="White"
             BorderBrush="Gray"
-            RowHeight="45"
+            RowHeight="45"            
             AutoGenerateColumns="False"
             FontSize="13">
             <DataGrid.CellStyle>
@@ -90,7 +90,7 @@
                     Binding="{Binding EmployeeId}"                    
                     Width="300"/>
                 <DataGridTextColumn           
-                    Header="Сотрудник"                    
+                    Header="    Сотрудник"                    
                     Binding="{Binding EmployeeName}"                    
                     Width="240"/>
                 <DataGridTextColumn 
@@ -113,6 +113,7 @@
                                     BorderBrush="{x:Null}"
                                     Foreground="Black"
                                     FontSize="17"
+                                    Click="EditEmployee_Click"
                                     Style="{DynamicResource ButtonWhiteStyle}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

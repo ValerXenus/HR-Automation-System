@@ -15,6 +15,7 @@ namespace HR_Automation_System.Pages
     public partial class EmployeeProfileWindow : Window
     {
         private bool _isExistEmployee; // Признак, это редактирование существующего сотрудника
+        private int _currentEmployeeId; // Код получаемого сотрудника
         private byte[] _imageBytes; // Байты фотографии сотрудника
         private string _imagePath;
         private string _imageExtension;
@@ -25,6 +26,15 @@ namespace HR_Automation_System.Pages
             InitializeComponent();
             _isExistEmployee = false;
             LoadFormData();
+        }
+
+        // Конструктор с параметром EmployeeId (редактирование существующего сотрудника)
+        public EmployeeProfileWindow(int employeeId)
+        {
+            InitializeComponent();
+            _isExistEmployee = true;
+            _currentEmployeeId = employeeId;
+            LoadFormData();                       
         }
 
         #region Методы Click
@@ -110,9 +120,28 @@ namespace HR_Automation_System.Pages
 
             var guid = Guid.NewGuid().ToString() + _imageExtension; // Создаем новый уникальный идентификатор для имени файла
 
-            var result = GlobalStaticParameters.Database.AddNewEmployee(NameTextBox.Text, gender, BirthDatePicker.DisplayDate, InnTextBox.Text,
-                SnilsTextBox.Text, documentType, DocumentNumberTextBox.Text, AddressTextBox.Text, PhoneTextBox.Text, EmailTextBox.Text,
-                EmplHistoryTextBox.Text, familyStatusId, contractId, departmentId, PositionTextBox.Text, salary, guid);
+            var employeeInfo = new EmployeeInfo // Создадим объект, чтобы не передавать в запрос кучу параметров
+            {
+                Name = NameTextBox.Text,
+                Gender = gender,
+                BirthDate = BirthDatePicker.DisplayDate,
+                Inn = InnTextBox.Text,
+                Snils = SnilsTextBox.Text,
+                DocumentType = documentType,
+                DocumentNumber = DocumentNumberTextBox.Text,
+                Address = AddressTextBox.Text,
+                Phone = PhoneTextBox.Text,
+                Email = EmailTextBox.Text,
+                EmployeeBook = EmplHistoryTextBox.Text,
+                FamilyStatus = familyStatusId,
+                Contract = contractId,
+                Department = departmentId,
+                Position = PositionTextBox.Text,
+                Salary = salary,
+                ImageName = guid
+            };
+
+            var result = GlobalStaticParameters.Database.AddNewEmployee(employeeInfo);
             if (!result) // Если запрос не выполнился, то не сохраняем картинку
                 return;
 
@@ -123,14 +152,13 @@ namespace HR_Automation_System.Pages
         // Метод загрузки всех данных на форме
         private void LoadFormData()
         {
+            LoadComboBoxData();
+            BirthDatePicker.Text = DateTime.Now.ToString();
+
             if (_isExistEmployee)
             {
                 LoadDataFromDatabase();
-            }
-
-            LoadComboBoxData();
-
-            BirthDatePicker.Text = DateTime.Now.ToString();
+            }            
         }
 
         // Заполнение ComboBox
@@ -146,6 +174,8 @@ namespace HR_Automation_System.Pages
         private void LoadDataFromDatabase()
         {
             VacationsPanel.Visibility = Visibility.Visible; // Отображаем панель отпусков/больничных
+            var employeeInfo = GlobalStaticParameters.Database.GetEmployeeData(_currentEmployeeId);
+
         }
 
         #region Валидация

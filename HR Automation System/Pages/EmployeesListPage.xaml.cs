@@ -28,5 +28,16 @@ namespace HR_Automation_System.Pages
             var employees = GlobalStaticParameters.Database.GetEmployeesRows();
             EmployeesList.ItemsSource = employees;
         }
+
+        // Кнопка "Редактировать сотрудника"
+        private void EditEmployee_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (EmployeesList.SelectedIndex == -1) // Если не было выделено ни одной строки
+                return;
+
+            var employee = EmployeesList.SelectedItem as BookClasses.EmployeeRow;
+            var window = new EmployeeProfileWindow(employee.EmployeeId);
+            window.ShowDialog();
+        }
     }
 }

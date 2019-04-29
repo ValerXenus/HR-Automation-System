@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Classes\BookClasses.cs" />
     <Compile Include="Classes\DatabaseUtility.cs" />
+    <Compile Include="Classes\EmployeeInfo.cs" />
     <Compile Include="Classes\GlobalStaticParameters.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

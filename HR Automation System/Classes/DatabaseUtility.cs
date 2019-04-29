@@ -59,38 +59,7 @@ namespace HR_Automation_System.Classes
             return idx;
         }
 
-        public void AddFamilyStatus(string status)
-        {
-            int idx = getLastIndex("family_statuses", "status_id") + 1; // Получаем индекс последней записи в таблице и прибавляем 1
-
-            _command.Parameters.Clear();
-            _command.CommandType = CommandType.Text;
-            _command.CommandText = "INSERT INTO family_statuses VALUES ([Status_Index], [Status_Name])";
-            _command.Parameters.AddWithValue("@Status_Index", idx);
-            _command.Parameters.AddWithValue("@Status_Name", status);
-            try
-            {
-                _command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
-            }
-        }
-
-        public void GetFamilyStatusName(int idx)
-        {
-            string temp = string.Empty;
-
-            _command.CommandText = string.Format("SELECT status_name FROM family_statuses WHERE status_id = {0}", idx);
-            _dataReader = _command.ExecuteReader();
-
-            while (_dataReader.Read())
-            {
-                temp = _dataReader["status_name"].ToString();
-            }
-            _dataReader.Close();
-        }
+        #region Запросы на добавление
 
         // Добавление нового трудового договора
         public bool AddNewContract(string contractNumber, string filename, DateTime date)
@@ -118,9 +87,7 @@ namespace HR_Automation_System.Classes
         }
 
         // Добавление нового сотрудника
-        public bool AddNewEmployee(string employeeName, int gender, DateTime birthDate, string inn, string snils,
-            int documentType, string documentNumber, string address, string phone, string email, string emplBookNumber,
-            int familyStatus, int contractId, int departmentId, string position, double salary, string imageLink)
+        public bool AddNewEmployee(EmployeeInfo employeeInfo)
         {
             // Сперва добавляем сотрудника в таблицу "Сотрудники"
             _command.Parameters.Clear();
@@ -131,20 +98,20 @@ namespace HR_Automation_System.Classes
                 " VALUES ([Employee_Name], [Gender], [Birth_Date], [Inn], [Snils]," +
                 " [Document_Type], [Document_Number], [Address], [Phone_Number], [Email], [Photograph_Link]," +
                 " [Empl_Book], [Family_Status], [Contract_Id], [Ml_Id], [Sl_Id], [Vacation_Id]);";
-            _command.Parameters.AddWithValue("@Employee_Name", employeeName);
-            _command.Parameters.AddWithValue("@Gender", gender);
-            _command.Parameters.AddWithValue("@Birth_Date", birthDate.ToString("dd/MM/yyyy"));
-            _command.Parameters.AddWithValue("@Inn", inn);
-            _command.Parameters.AddWithValue("@Snils", snils);
-            _command.Parameters.AddWithValue("@Document_Type", documentType);
-            _command.Parameters.AddWithValue("@Document_Number", documentNumber);
-            _command.Parameters.AddWithValue("@Address", address);
-            _command.Parameters.AddWithValue("@Phone_Number", phone);
-            _command.Parameters.AddWithValue("@Email", email);
-            _command.Parameters.AddWithValue("@Photograph_Link", imageLink);
-            _command.Parameters.AddWithValue("@Empl_Book", emplBookNumber);
-            _command.Parameters.AddWithValue("@Family_Status", familyStatus);
-            _command.Parameters.AddWithValue("@Contract_Id", contractId);
+            _command.Parameters.AddWithValue("@Employee_Name", employeeInfo.Name);
+            _command.Parameters.AddWithValue("@Gender", employeeInfo.Gender);
+            _command.Parameters.AddWithValue("@Birth_Date", employeeInfo.BirthDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@Inn", employeeInfo.Inn);
+            _command.Parameters.AddWithValue("@Snils", employeeInfo.Snils);
+            _command.Parameters.AddWithValue("@Document_Type", employeeInfo.DocumentType);
+            _command.Parameters.AddWithValue("@Document_Number", employeeInfo.DocumentNumber);
+            _command.Parameters.AddWithValue("@Address", employeeInfo.Address);
+            _command.Parameters.AddWithValue("@Phone_Number", employeeInfo.Phone);
+            _command.Parameters.AddWithValue("@Email", employeeInfo.Email);
+            _command.Parameters.AddWithValue("@Photograph_Link", employeeInfo.ImageName);
+            _command.Parameters.AddWithValue("@Empl_Book", employeeInfo.EmployeeBook);
+            _command.Parameters.AddWithValue("@Family_Status", employeeInfo.FamilyStatus);
+            _command.Parameters.AddWithValue("@Contract_Id", employeeInfo.Contract);
             _command.Parameters.AddWithValue("@Ml_Id", -1); // Отпусков пока нет, их не заполняем
             _command.Parameters.AddWithValue("@Sl_Id", -1);
             _command.Parameters.AddWithValue("@Vacation_Id", -1);
@@ -160,18 +127,18 @@ namespace HR_Automation_System.Classes
 
             // Затем получаем Id добавленного сотрудника,
             // и создаем запись в таблице "Сотрудники в департаментах"
-            var employeeId = getEmployeeByContractId(contractId);
+            var employeeId = getEmployeeByContractId(employeeInfo.Contract);
 
             _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
             _command.CommandText = "INSERT INTO [employees_in_departments] ([department_id], [employee_id], [position], [salary], [contract_id])" +
                 " VALUES ([Department_Id], [Employee_Id], [Position], [Salary], [Contract_Id])";
-            _command.Parameters.AddWithValue("@Department_Id", departmentId);
+            _command.Parameters.AddWithValue("@Department_Id", employeeInfo.Department);
             _command.Parameters.AddWithValue("@Employee_Id", employeeId);
-            _command.Parameters.AddWithValue("@Position", position);
-            _command.Parameters.Add(@"Salary", OleDbType.Double).Value = salary;
+            _command.Parameters.AddWithValue("@Position", employeeInfo.Position);
+            _command.Parameters.Add(@"Salary", OleDbType.Double).Value = employeeInfo.Salary;
             //_command.Parameters.AddWithValue("@Salary", salary);
-            _command.Parameters.AddWithValue("@Contract_Id", contractId);
+            _command.Parameters.AddWithValue("@Contract_Id", employeeInfo.Contract);
             try
             {
                 _command.ExecuteNonQuery();
@@ -184,6 +151,8 @@ namespace HR_Automation_System.Classes
 
             return true;
         }
+
+        #endregion        
 
         #region Запросы на заполнение ComboBox
         // Получение списка семеных положений
@@ -330,7 +299,7 @@ namespace HR_Automation_System.Classes
 
                 return rows;
             }
-            catch (Exception ex)
+            catch
             {
                 return null; // Если таблица пустая
             }
@@ -338,6 +307,8 @@ namespace HR_Automation_System.Classes
         }
 
         #endregion
+
+        #region Запросы на получение
 
         // Получить индекс последней добавленной записи в таблице
         private int getLastIndex(string tableName, string fieldName)
@@ -379,5 +350,60 @@ namespace HR_Automation_System.Classes
 
             return idx;
         }
+
+        // Получение данных сотрудника по его Id
+        public EmployeeInfo GetEmployeeData(int employeeId)
+        {
+            _command.CommandText = "SELECT [employees].[employee_name], [employees].[gender]," +
+                " [employees].[birth_date], [employees].[inn], [employees].[snils]," +
+                " [employees].[document_type], [employees].[document_number], [employees].[address]," +
+                " [employees].[phone_number], [employees].[email], [employees].[photograph_link]," +
+                " [employees].[empl_book_number], [employees].[family_status]," +
+                " [employees].[contract_id], [employees_in_departments].[department_id]," +
+                " [employees_in_departments].[position], [employees_in_departments].[salary]" +
+                " FROM [employees]" +
+                " INNER JOIN [employees_in_departments] ON [employees].[employee_id] = [employees_in_departments].[employee_id]" +
+                " WHERE [employees].[employee_id] = [EmployeeId]";
+            _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                EmployeeInfo employeeInfo = new EmployeeInfo();
+                while (_dataReader.Read())
+                {
+                    employeeInfo = new EmployeeInfo
+                    {
+                        Name = _dataReader["employee_name"].ToString(),
+                        Gender = int.Parse(_dataReader["gender"].ToString()),
+                        BirthDate = DateTime.Parse(_dataReader["birth_date"].ToString()),
+                        Inn = _dataReader["inn"].ToString(),
+                        Snils = _dataReader["snils"].ToString(),
+                        DocumentType = int.Parse(_dataReader["document_type"].ToString()),
+                        DocumentNumber = _dataReader["document_number"].ToString(),
+                        Address = _dataReader["address"].ToString(),
+                        Phone = _dataReader["phone_number"].ToString(),
+                        Email = _dataReader["email"].ToString(),
+                        EmployeeBook = _dataReader["empl_book_number"].ToString(),
+                        FamilyStatus = int.Parse(_dataReader["family_status"].ToString()),
+                        Contract = int.Parse(_dataReader["contract_id"].ToString()),
+                        Department = int.Parse(_dataReader["department_id"].ToString()),
+                        Position = _dataReader["position"].ToString(),
+                        Salary = double.Parse(_dataReader["salary"].ToString()),
+                        ImageName = _dataReader["photograph_link"].ToString()
+                    };
+                }
+                _dataReader.Close();
+
+                return employeeInfo;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
