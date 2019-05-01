@@ -199,6 +199,24 @@ namespace HR_Automation_System.Pages
             _imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", employeeInfo.ImageName); // Получаем директорию хранения картинки
             _imageBytes = File.ReadAllBytes(_imagePath); // Считываем данные файла
             LoadProfileImage();
+            LoadVacationsInfo();
+        }
+
+        // Метод загрузки картинки в элемент Image
+        private void LoadProfileImage()
+        {
+            var memoryStream = new MemoryStream(_imageBytes);
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.StreamSource = memoryStream;
+            bitmap.EndInit();
+            AvatarImage.Source = bitmap;
+        }
+
+        // Метод загрузки данных об отпусках сотрудника
+        private void LoadVacationsInfo()
+        {
+
         }
 
         #region Валидация
@@ -315,17 +333,6 @@ namespace HR_Automation_System.Pages
             return true;
         }
 
-        #endregion
-
-        // Метод загрузки картинки в элемент Image
-        private void LoadProfileImage()
-        {
-            var memoryStream = new MemoryStream(_imageBytes);
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.StreamSource = memoryStream;
-            bitmap.EndInit();
-            AvatarImage.Source = bitmap;
-        }
+        #endregion        
     }
 }

@@ -16,9 +16,8 @@
             <TabItem
                 IsSelected="True"
                 Header="Основное"
-                Height="30"
                 Width="199"
-                Style="{StaticResource TabItemDefaultStyle}">
+                Style="{StaticResource TabItemDefaultStyle}" Margin="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"/>
@@ -31,7 +30,7 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition Height="20"/>
-                    </Grid.RowDefinitions>                    
+                    </Grid.RowDefinitions>
                     <StackPanel
                         Orientation="Vertical"
                         Grid.Column="1"
@@ -210,15 +209,14 @@
                             Grid.Column="2"
                             Template="{DynamicResource TextBoxBaseControlTemplate}"
                             Style="{StaticResource TextBoxDefaultStyle}"
-                            Height="23"/>                                               
+                            Height="23"/>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem                
                 Header="Личные данные"
-                Height="30"
                 Width="199"
-                Style="{StaticResource TabItemDefaultStyle}">
+                Style="{StaticResource TabItemDefaultStyle}" Margin="0">
                 <Grid>
                     <StackPanel                        
                         Orientation="Vertical"
@@ -275,9 +273,9 @@
             </TabItem>
             <TabItem                
                 Header="Профессия"
-                Height="30"
                 Width="198"
-                Style="{StaticResource TabItemDefaultStyle}">
+                Height="30"
+                Style="{StaticResource TabItemDefaultStyle}" Margin="0,-1,0,0">
                 <Grid>
                     <StackPanel                        
                         Orientation="Vertical"
@@ -361,10 +359,9 @@
             </TabItem>
             <TabItem                
                 Header="Отпуски"
-                Height="30"
                 Width="198"
                 x:Name="VacationsPanel"
-                Style="{StaticResource TabItemDefaultStyle}">
+                Style="{StaticResource TabItemDefaultStyle}" Margin="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"/>
@@ -379,27 +376,211 @@
                     <Grid
                         Grid.Row="1"
                         Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="24"/>
-                            <RowDefinition />
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="24"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="24"/>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Label
-                            Grid.Row="0"
-                            Content="Отпуск"
-                            HorizontalAlignment="Center"/>
-                        
+                        <TabControl
+                            Style="{StaticResource TabControlDefaultStyle}">
+                            <TabItem
+                                IsSelected="True"
+                                Header="Отпуск"
+                                Width="150"
+                                Background="White"
+                                Style="{StaticResource TabItemDefaultStyle}" Margin="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition />
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <DataGrid
+                                        x:Name="VacationsDataGrid"
+                                        Grid.Row="1"
+                                        Style="{StaticResource DataGridDefaultSyle}"
+                                        CellStyle="{StaticResource DataGridCellDefaultStyle}"
+                                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}"
+                                        ColumnHeaderHeight="30"
+                                        Margin="-3,0,-3,0">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn                    
+                                                Header="Id"     
+                                                Visibility="Collapsed"
+                                                Binding="{Binding EmployeeId}"                    
+                                                Width="300"/>
+                                            <DataGridTextColumn           
+                                                Header="    Тип"                    
+                                                Binding="{Binding EmployeeName}"                    
+                                                Width="240"/>
+                                            <DataGridTextColumn 
+                                                Header="Дата начала"                    
+                                                Binding="{Binding Position}"
+                                                Width="150"/>
+                                            <DataGridTextColumn                    
+                                                Header="Дата окончания"                    
+                                                Binding="{Binding Department}"
+                                                Width="250"/>
+                                            <DataGridTemplateColumn CanUserResize="False">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button Width="30"
+                                                                Cursor="Hand"
+                                                                Height="30"
+                                                                Content="&#xE104;"
+                                                                Background="White"
+                                                                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
+                                                                ToolTip="Редактировать отпуск"
+                                                                BorderBrush="{x:Null}"
+                                                                Foreground="Black"
+                                                                FontSize="17"
+                                                                Style="{DynamicResource ButtonWhiteStyle}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Button
+                                        HorizontalAlignment="Right"
+                                        Grid.Row="2"
+                                        Width="200"
+                                        Height="25"
+                                        Content="Добавить отпуск"
+                                        Style="{StaticResource ButtonDefaultStyle}"/>
+                                </Grid>
+                            </TabItem>
+                            <TabItem
+                                IsSelected="True"
+                                Header="Больничный"
+                                Width="150"
+                                Height="30"
+                                Background="White"
+                                Style="{StaticResource TabItemDefaultStyle}" Margin="0,-1,0,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition />
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <DataGrid
+                                        x:Name="SickLeavesDataGrid"
+                                        Grid.Row="1"
+                                        Style="{StaticResource DataGridDefaultSyle}"
+                                        CellStyle="{StaticResource DataGridCellDefaultStyle}"
+                                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}"
+                                        ColumnHeaderHeight="30"
+                                        Margin="-3,0,-3,0">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn                    
+                                                Header="Id"     
+                                                Visibility="Collapsed"
+                                                Binding="{Binding EmployeeId}"                    
+                                                Width="300"/>
+                                            <DataGridTextColumn 
+                                                Header="    Дата выхода"                    
+                                                Binding="{Binding Position}"
+                                                Width="150"/>
+                                            <DataGridTextColumn                    
+                                                Header="Дата окончания"
+                                                Binding="{Binding Department}"
+                                                Width="250"/>
+                                            <DataGridTemplateColumn CanUserResize="False">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button Width="30"
+                                                                Cursor="Hand"
+                                                                Height="30"
+                                                                Content="&#xE104;"
+                                                                Background="White"
+                                                                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
+                                                                ToolTip="Редактировать отпуск"
+                                                                BorderBrush="{x:Null}"
+                                                                Foreground="Black"
+                                                                FontSize="17"
+                                                                Style="{DynamicResource ButtonWhiteStyle}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Button
+                                        HorizontalAlignment="Right"
+                                        Grid.Row="2"
+                                        Width="200"
+                                        Height="25"
+                                        Content="Добавить больничный"
+                                        Style="{StaticResource ButtonDefaultStyle}"/>
+                                </Grid>
+                            </TabItem>
+                            <TabItem
+                                IsSelected="True"
+                                Header="Декретный отпуск"
+                                Width="150"
+                                Background="White"
+                                Style="{StaticResource TabItemDefaultStyle}" Margin="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition />
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <DataGrid
+                                        x:Name="MaternityLeaveDataGrid"
+                                        Grid.Row="1"
+                                        Style="{StaticResource DataGridDefaultSyle}"
+                                        CellStyle="{StaticResource DataGridCellDefaultStyle}"
+                                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}"
+                                        ColumnHeaderHeight="30"
+                                        Margin="-3,0,-3,0">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn                    
+                                                Header="Id"     
+                                                Visibility="Collapsed"
+                                                Binding="{Binding EmployeeId}"                    
+                                                Width="300"/>
+                                            <DataGridTextColumn           
+                                                Header="    Приказ"                    
+                                                Binding="{Binding EmployeeName}"                    
+                                                Width="240"/>
+                                            <DataGridTextColumn 
+                                                Header="Дата выхода"                    
+                                                Binding="{Binding Position}"
+                                                Width="150"/>
+                                            <DataGridTextColumn                    
+                                                Header="Дата окончания"                    
+                                                Binding="{Binding Department}"
+                                                Width="250"/>
+                                            <DataGridTemplateColumn CanUserResize="False">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button Width="30"
+                                                                Cursor="Hand"
+                                                                Height="30"
+                                                                Content="&#xE104;"
+                                                                Background="White"
+                                                                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
+                                                                ToolTip="Редактировать отпуск"
+                                                                BorderBrush="{x:Null}"
+                                                                Foreground="Black"
+                                                                FontSize="17"
+                                                                Style="{DynamicResource ButtonWhiteStyle}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Button
+                                        HorizontalAlignment="Right"
+                                        Grid.Row="2"
+                                        Width="200"
+                                        Height="25"
+                                        Content="Добавить"
+                                        Style="{StaticResource ButtonDefaultStyle}"/>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                        <Rectangle Fill="Gray" Height="1" Margin="1,108,1,0" VerticalAlignment="Top"/>
                     </Grid>
                 </Grid>
             </TabItem>
         </TabControl>
         <StackPanel
-            Margin="0,400, 20, 0"
+            Margin="0, 420, 20, 0"
             HorizontalAlignment="Right"
             Width="310"
             Orientation="Horizontal">

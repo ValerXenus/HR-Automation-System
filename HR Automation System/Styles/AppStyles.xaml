@@ -14,7 +14,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>   
+    </Style>
 
     <!--Стандартный стиль кнопки-->
     <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
@@ -145,7 +145,7 @@
                             </Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
-                </ControlTemplate>                
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
@@ -180,6 +180,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--Стиль TabItem-->
     <Style x:Key="TabItemDefaultStyle" TargetType="{x:Type TabItem}">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background">
@@ -331,7 +333,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--Стиль для кнопки "Гамбургер на открытие/сворачивание" левого меню-->
     <Style x:Key="HamburgerButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -404,7 +406,7 @@
     <Style x:Key="TextBoxDefaultStyle" TargetType="TextBox">
         <Setter Property="Padding" Value="6, 0, 0, 0"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="TextWrapping" Value="NoWrap"/>        
+        <Setter Property="TextWrapping" Value="NoWrap"/>
     </Style>
 
     <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
@@ -427,7 +429,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+
     <!--Стиль для DataGrid-->
     <Style x:Key="DataGridDefaultSyle" TargetType="DataGrid">
         <Setter Property="CanUserAddRows" Value="False"/>
