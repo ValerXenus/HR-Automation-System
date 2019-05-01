@@ -31,33 +31,7 @@ namespace HR_Automation_System.Classes
 
             _command = new OleDbCommand(); // Инициализация экземпляра для команд
             _command.Connection = _connection;
-        }
-
-        // Отключение от БД
-        public void Disconnect()
-        {
-            _dataReader.Close();
-            _connection.Close(); // Завершение подключения с БД            
-        }
-
-        // Проверка логина и пароля пользователя
-        // Если вернется -1, то авторизация пройдена
-        public int CheckUserAuth(string loginString, string passwordString)
-        {
-            _command.CommandText = string.Format("SELECT user_id FROM users WHERE login = '{0}' AND pass = '{1}'", loginString, passwordString);
-            _dataReader = _command.ExecuteReader();
-
-            int idx = -1;
-            if (_dataReader.HasRows) // Если результат запроса пуст
-            {
-                while (_dataReader.Read())
-                {
-                    idx = int.Parse(_dataReader["user_id"].ToString());
-                }
-            }
-            _dataReader.Close();
-            return idx;
-        }
+        }       
 
         #region Запросы на добавление
 
@@ -149,6 +123,33 @@ namespace HR_Automation_System.Classes
                 return false;
             }
 
+            return true;
+        }
+
+        // Добавление отпуска
+        public bool AddNewVacation(string vacationName, DateTime startDate, DateTime endDate, int employeeId)
+        {
+            // Добавляем отпуск
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO vacation (vacation_name, start_date, end_date, employee_id) " +
+                "VALUES ([Vacation_Name], [Start_Date], [End_Date], [Employee_Id])";
+            _command.Parameters.AddWithValue("@Vacation_Name", vacationName);
+            _command.Parameters.AddWithValue("@Start_Date", startDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@End_Date", endDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@Employee_Id", employeeId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+
+            // Добавляем отпуск к сотруднику, если дата соответствует
+            setEmployeeVacation(employeeId, "vacation", "vacation_id");
             return true;
         }
 
@@ -301,6 +302,7 @@ namespace HR_Automation_System.Classes
             }
             catch
             {
+                _dataReader.Close();
                 return null; // Если таблица пустая
             }
 
@@ -334,6 +336,32 @@ namespace HR_Automation_System.Classes
             return idx;
         }
 
+        // Получить индекс последней добавленной записи по условию в таблице
+        private int getLastIndexWithCondition(string tableName, string fieldName, string conditionField, int value)
+        {
+            _command.CommandText = string.Format("SELECT LAST({0}) AS return_value FROM {1} WHERE {2} = {3}",
+                fieldName, tableName, conditionField, value);
+            _dataReader = _command.ExecuteReader();
+
+            int idx = -1;
+
+            try
+            {
+                while (_dataReader.Read())
+                {
+                    idx = int.Parse(_dataReader["return_value"].ToString());
+                }
+                _dataReader.Close();
+            }
+            catch
+            {
+                // Если записей нет в таблице, то вернется -1
+            }
+            _dataReader.Close();
+
+            return idx;
+        }
+
         // Получить сотрудника по Id трудового договора
         private int getEmployeeByContractId(int contractId)
         {
@@ -349,6 +377,36 @@ namespace HR_Automation_System.Classes
             _dataReader.Close();
 
             return idx;
+        }
+
+        // Запрос на получение дат последнего отпуска сотрудника
+        private BookClasses.VacationDates getVacationDates(string tableName, int employeeId, string primaryKeyColumn)
+        {
+            _command.CommandText = string.Format("SELECT TOP 1 {2}, start_date, end_date FROM {0} WHERE employee_id = {1} ORDER BY {2} DESC",
+                tableName, employeeId, primaryKeyColumn); // Получение последнего отпуска по employeeId
+            _dataReader = _command.ExecuteReader();
+
+            var dates = new BookClasses.VacationDates();
+
+            try
+            {
+                while (_dataReader.Read())
+                {
+                    dates = new BookClasses.VacationDates
+                    {
+                        VacationId = int.Parse(_dataReader[primaryKeyColumn].ToString()),
+                        StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                        EndDate = DateTime.Parse(_dataReader["end_date"].ToString())
+                    };
+                }
+            }
+            catch
+            {
+                // Если записей нет в таблице, то вернется null
+            }
+            _dataReader.Close();
+
+            return dates;
         }
 
         // Получение данных сотрудника по его Id
@@ -394,14 +452,165 @@ namespace HR_Automation_System.Classes
                     };
                 }
                 _dataReader.Close();
-
                 return employeeInfo;
             }
             catch (Exception ex)
             {
+                _dataReader.Close();
                 MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
                 return null;
             }
+        }
+
+        // Запрос на получении информации об отпуске
+        public BookClasses.VacationDates GetVacationInfo(int employeeId)
+        {
+            var vacationInfo = new BookClasses.VacationDates();
+            vacationInfo.EmployeeId = employeeId;
+
+            int vacationId = -1; // Код обычного отпуска
+            int mlId = -1; // Код декретного отпуска
+            int slId = -1; // Код больничного
+
+            _command.CommandText = string.Format("SELECT [ml_id], [sl_id], [vacation_id] FROM [employees] WHERE [employee_id] = {0}", employeeId);
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        mlId = int.Parse(_dataReader["ml_id"].ToString());
+                        slId = int.Parse(_dataReader["sl_id"].ToString());
+                        vacationId = int.Parse(_dataReader["vacation_id"].ToString());
+                    }
+                    _dataReader.Close();
+
+                    if (vacationId != 1) // Обычный отпуск
+                    {
+                        vacationInfo = getVacationDates("vacation", vacationInfo.EmployeeId, "vacation_id");
+                        vacationInfo.VacationType = 0;
+
+                        if (!checkVacation(vacationInfo, "vacation_id")) // Если отпуск закончился или еще не наступил
+                        {
+                            return null;
+                        }
+                    }
+                    else if (mlId != 1) // Декретный отпуск
+                    {
+
+                    }
+                    else if (slId != 1) // Больничный
+                    {
+
+                    }                    
+                }
+            }
+            catch
+            {
+                _dataReader.Close();
+                // Если записей нет в таблице, то вернется null
+                return null;
+            }
+
+            return vacationInfo;
+        }
+
+        #endregion
+
+        #region Запросы на обновление
+
+        // Метод включения/отключения отпусков у сотрудников
+        private void setEmployeeVacation(int employeeId, string tableName, string primaryKey)
+        {
+            int vacationId = getLastIndexWithCondition(tableName, primaryKey, "employee_id", employeeId);
+
+            _command.Parameters.Clear();
+
+            if (vacationId != -1)
+            {
+                _command.CommandType = CommandType.Text;
+                _command.CommandText = string.Format("UPDATE [employees] SET {0} = [Vacation_Id] WHERE [employee_id] = [Employee_Id]", primaryKey);
+                _command.Parameters.AddWithValue("@Vacation_Id", vacationId);
+                _command.Parameters.AddWithValue("@Employee_Id", employeeId);
+                try
+                {
+                    _command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                    return;
+                }
+            }
+        }
+
+        // Завершение отпуска сотрудника
+        private void finishEmployeeVacation(BookClasses.VacationDates vacationInfo, string primaryKey)
+        {
+            _command.Parameters.Clear();
+
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = string.Format("UPDATE [employees] SET {0} = [Vacation_Id] WHERE [employee_id] = [Employee_Id]", primaryKey);
+            _command.Parameters.AddWithValue("@Vacation_Id", -1);
+            _command.Parameters.AddWithValue("@Employee_Id", vacationInfo.VacationId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return;
+            }
+        }
+
+        #endregion
+
+        #region Прочие методы
+
+        // Отключение от БД
+        public void Disconnect()
+        {
+            _dataReader.Close();
+            _connection.Close(); // Завершение подключения с БД            
+        }
+
+        // Проверка логина и пароля пользователя
+        // Если вернется -1, то авторизация пройдена
+        public int CheckUserAuth(string loginString, string passwordString)
+        {
+            _command.CommandText = string.Format("SELECT user_id FROM users WHERE login = '{0}' AND pass = '{1}'", loginString, passwordString);
+            _dataReader = _command.ExecuteReader();
+
+            int idx = -1;
+            if (_dataReader.HasRows) // Если результат запроса пуст
+            {
+                while (_dataReader.Read())
+                {
+                    idx = int.Parse(_dataReader["user_id"].ToString());
+                }
+            }
+            _dataReader.Close();
+            return idx;
+        }
+
+        // Проверка дат отпуска
+        private bool checkVacation(BookClasses.VacationDates vacationInfo, string primaryKey)
+        {
+            if (vacationInfo.StartDate > DateTime.Now)
+            {
+                return false; // Отпуск еще не наступил
+            }
+
+            if (vacationInfo.EndDate < DateTime.Now)
+            {
+                finishEmployeeVacation(vacationInfo, primaryKey);
+                return false; // Отпуск завершился, обновляем данные сотрудника
+            }
+
+            return true;
         }
 
         #endregion

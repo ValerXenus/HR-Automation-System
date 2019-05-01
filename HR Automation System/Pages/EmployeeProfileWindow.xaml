@@ -27,11 +27,12 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
-                        <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition Height="74*" />
+                        <RowDefinition Height="57*" />
                         <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
                     <StackPanel
+                        Margin="0, 25, 0, 0"
                         Orientation="Vertical"
                         Grid.Column="1"
                         Grid.Row="1">
@@ -60,7 +61,7 @@
                             <ColumnDefinition Width="10"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="20"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="60"/>
                             <RowDefinition Height="30"/>
@@ -357,7 +358,8 @@
                         FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"/>
                 </Grid>
             </TabItem>
-            <TabItem                
+            <TabItem      
+                Visibility="Collapsed"
                 Header="Отпуски"
                 Width="198"
                 x:Name="VacationsPanel"
@@ -441,7 +443,8 @@
                                         Width="200"
                                         Height="25"
                                         Content="Добавить отпуск"
-                                        Style="{StaticResource ButtonDefaultStyle}"/>
+                                        Style="{StaticResource ButtonDefaultStyle}"
+                                        Click="AddNewVacation_Click"/>
                                 </Grid>
                             </TabItem>
                             <TabItem
@@ -574,11 +577,23 @@
                                 </Grid>
                             </TabItem>
                         </TabControl>
-                        <Rectangle Fill="Gray" Height="1" Margin="1,108,1,0" VerticalAlignment="Top"/>
+                        <Rectangle 
+                            Fill="Gray"
+                            Height="1"
+                            Margin="1,108,1,0"
+                            VerticalAlignment="Top"/>
                     </Grid>
                 </Grid>
             </TabItem>
         </TabControl>
+        <Label
+            x:Name="VacationLabel"
+            FontSize="13"
+            Foreground="Gray"
+            HorizontalAlignment="Right"
+            Margin="0, 40, 10, 0"
+            Visibility="Hidden"
+            Content="В отпуске с 22.02.2019 по 22.03.2019"/>
         <StackPanel
             Margin="0, 420, 20, 0"
             HorizontalAlignment="Right"

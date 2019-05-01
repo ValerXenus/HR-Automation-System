@@ -34,7 +34,7 @@ namespace HR_Automation_System.Pages
             InitializeComponent();
             _isExistEmployee = true;
             _currentEmployeeId = employeeId;
-            LoadFormData();                       
+            LoadFormData();              
         }
 
         #region Методы Click
@@ -104,6 +104,16 @@ namespace HR_Automation_System.Pages
             {
                 this.Close(); // Закрываем текущее окно
             }
+        }
+
+        // Добавление нового отпуска
+        private void AddNewVacation_Click(object sender, RoutedEventArgs e)
+        {
+            var vacationWindow = new AddNewVacation(_currentEmployeeId);
+            vacationWindow.ShowDialog();
+
+            // Отображаем отпуск в личной карточке, если он действует с текущего дня
+            LoadVacationsInfo();
         }
 
         #endregion
@@ -216,7 +226,34 @@ namespace HR_Automation_System.Pages
         // Метод загрузки данных об отпусках сотрудника
         private void LoadVacationsInfo()
         {
+            var vacationInfo = GlobalStaticParameters.Database.GetVacationInfo(_currentEmployeeId);
 
+            if(vacationInfo == null)
+            {
+                return;
+            }
+
+            VacationLabel.Visibility = Visibility.Visible;
+            string message = string.Empty;
+
+            switch (vacationInfo.VacationType)
+            {
+                case 0:
+                    message = string.Format("В отпуске с {0} по {1}",
+                        vacationInfo.StartDate.ToString("dd.MM.yyyy"),
+                        vacationInfo.EndDate.ToString("dd.MM.yyyy"));
+                    break;
+                case 1:
+                    message = string.Format("На больничном с {0} по {1}",
+                        vacationInfo.StartDate.ToString("dd.MM.yyyy"),
+                        vacationInfo.EndDate.ToString("dd.MM.yyyy"));
+                    break;
+                case 2:
+                    message = string.Format("В декретном отпуске с {0} по {1}",
+                        vacationInfo.StartDate.ToString("dd.MM.yyyy"),
+                        vacationInfo.EndDate.ToString("dd.MM.yyyy"));
+                    break;
+            }
         }
 
         #region Валидация
@@ -316,7 +353,7 @@ namespace HR_Automation_System.Pages
                 errorText += "- Не выбран трудовой договор";
             }
 
-            if (string.IsNullOrEmpty(_imageExtension))
+            if (string.IsNullOrEmpty(_imagePath))
             {
                 errorText += "- Не выбрана фотография сотрудника";
             }

@@ -1,4 +1,6 @@
-﻿namespace HR_Automation_System.Classes
+﻿using System;
+
+namespace HR_Automation_System.Classes
 {
     // Класс для справочников
     public class BookClasses
@@ -56,6 +58,28 @@
 
             // Отдел
             public string Department { get; set; }
+        }
+
+        // Класс для получения дат отпуска
+        public class VacationDates
+        {
+            // Код отпуска
+            public int VacationId { get; set; }
+
+            // Дата начала
+            public DateTime StartDate { get; set; }
+
+            // Дата окончания
+            public DateTime EndDate { get; set; }
+
+            // Тип отпуска
+            // 0 - Обычный
+            // 1 - Больничный
+            // 2 - Декретный
+            public int VacationType { get; set; }
+
+            // Код сотрудника
+            public int EmployeeId { get; set; }
         }
     }
 }

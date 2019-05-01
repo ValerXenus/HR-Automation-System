@@ -57,12 +57,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AdditionalWindows\AddNewVacation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="AdditionalWindows\AddNewContract.xaml.cs">
       <DependentUpon>AddNewContract.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\AddNewVacation.xaml.cs">
+      <DependentUpon>AddNewVacation.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
