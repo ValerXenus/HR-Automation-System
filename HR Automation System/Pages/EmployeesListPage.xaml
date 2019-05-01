@@ -43,46 +43,16 @@
                 FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
                 Style="{StaticResource ButtonWhiteStyle}"/>
         </StackPanel>
-        
+
         <DataGrid
             x:Name="EmployeesList"
             Grid.Row="1"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
             IsReadOnly="True"
             ColumnHeaderHeight="40"
-            VerticalGridLinesBrush="Transparent"
-            HorizontalGridLinesBrush="LightGray"
-            SelectionMode="Single"
-            CanUserResizeRows="False"
-            Background="White"
-            BorderBrush="Gray"
-            RowHeight="45"            
-            AutoGenerateColumns="False"
-            FontSize="13">
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                <Grid Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center" />
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.CellStyle>
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                    <Setter Property="BorderBrush" Value="Gray"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
+            RowHeight="45"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}"
+            CellStyle="{StaticResource DataGridCellDefaultStyle}"
+            Style="{StaticResource DataGridDefaultSyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn                    
                     Header="Id"     
@@ -121,5 +91,6 @@
                 <DataGridTemplateColumn Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Rectangle Fill="Gray" Height="1" Margin="0,40.585,0,0" Grid.Row="1" VerticalAlignment="Top"/>
     </Grid>
 </Page>

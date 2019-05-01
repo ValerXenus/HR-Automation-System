@@ -169,13 +169,36 @@ namespace HR_Automation_System.Pages
             DepartmentsComboBox.ItemsSource = GlobalStaticParameters.Database.GetDepartmentsList();
             ContractsComboBox.ItemsSource = GlobalStaticParameters.Database.GetContractsList();
         }
-
+         
         // Автозаполнение данных сотрудника из базы
         private void LoadDataFromDatabase()
         {
             VacationsPanel.Visibility = Visibility.Visible; // Отображаем панель отпусков/больничных
             var employeeInfo = GlobalStaticParameters.Database.GetEmployeeData(_currentEmployeeId);
 
+            // Заполнение всех полей
+            NameTextBox.Text = employeeInfo.Name;
+            BirthDatePicker.Text = employeeInfo.BirthDate.ToString();
+            AddressTextBox.Text = employeeInfo.Address;
+            InnTextBox.Text = employeeInfo.Inn;
+            SnilsTextBox.Text = employeeInfo.Snils;
+            EmplHistoryTextBox.Text = employeeInfo.EmployeeBook;
+            PhoneTextBox.Text = employeeInfo.Phone;
+            EmailTextBox.Text = employeeInfo.Email;
+            DocumentNumberTextBox.Text = employeeInfo.DocumentNumber;
+            PositionTextBox.Text = employeeInfo.Position;
+            SalaryTextBox.Text = employeeInfo.Salary.ToString();
+
+            if (employeeInfo.Gender == 1)
+                FemaleRadioButton.IsChecked = true;
+            FamilyStatusesComboBox.SelectedValue = employeeInfo.FamilyStatus;
+            DocumentTypesComboBox.SelectedValue = employeeInfo.DocumentType;
+            DepartmentsComboBox.SelectedValue = employeeInfo.Department;
+            ContractsComboBox.SelectedValue = employeeInfo.Contract;
+
+            _imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", employeeInfo.ImageName); // Получаем директорию хранения картинки
+            _imageBytes = File.ReadAllBytes(_imagePath); // Считываем данные файла
+            LoadProfileImage();
         }
 
         #region Валидация

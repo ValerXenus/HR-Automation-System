@@ -210,27 +210,7 @@
                             Grid.Column="2"
                             Template="{DynamicResource TextBoxBaseControlTemplate}"
                             Style="{StaticResource TextBoxDefaultStyle}"
-                            Height="23"/>
-                        <StackPanel
-                            Grid.Row="11"
-                            Grid.Column="2"
-                            HorizontalAlignment="Right"
-                            Width="310"
-                            Orientation="Horizontal">
-                            <Button
-                                Width="150"
-                                Height="25"
-                                Content="Отмена"
-                                Style="{StaticResource ButtonDefaultStyle}"
-                                Click="CancelButton_Click"/>
-                            <Button
-                                Margin="10, 0, 0, 0"
-                                Width="150"
-                                Height="25"
-                                Content="Сохранить"
-                                Style="{StaticResource ButtonDefaultStyle}"
-                                Click="SaveEmployee_Click"/>
-                        </StackPanel>                        
+                            Height="23"/>                                               
                     </Grid>
                 </Grid>
             </TabItem>
@@ -383,11 +363,59 @@
                 Header="Отпуски"
                 Height="30"
                 Width="198"
-                Visibility="Collapsed"
                 x:Name="VacationsPanel"
                 Style="{StaticResource TabItemDefaultStyle}">
-                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="45"/>
+                    </Grid.RowDefinitions>
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition />
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Row="0"
+                            Content="Отпуск"
+                            HorizontalAlignment="Center"/>
+                        
+                    </Grid>
+                </Grid>
             </TabItem>
         </TabControl>
+        <StackPanel
+            Margin="0,400, 20, 0"
+            HorizontalAlignment="Right"
+            Width="310"
+            Orientation="Horizontal">
+            <Button
+                Width="150"
+                Height="25"
+                Content="Отмена"
+                Style="{StaticResource ButtonDefaultStyle}"
+                Click="CancelButton_Click"/>
+            <Button
+                Margin="10, 0, 0, 0"
+                Width="150"
+                Height="25"
+                Content="Сохранить"
+                Style="{StaticResource ButtonDefaultStyle}"
+                Click="SaveEmployee_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
