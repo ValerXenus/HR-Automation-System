@@ -466,8 +466,7 @@
     <Style x:Key="DataGridColumnHeaderDefaultStyle" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="White"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Template">
             <Setter.Value>

@@ -57,8 +57,7 @@
                 <DataGridTextColumn                    
                     Header="Id"     
                     Visibility="Collapsed"
-                    Binding="{Binding EmployeeId}"                    
-                    Width="300"/>
+                    Binding="{Binding EmployeeId}"/>
                 <DataGridTextColumn           
                     Header="    Сотрудник"                    
                     Binding="{Binding EmployeeName}"                    
@@ -66,7 +65,7 @@
                 <DataGridTextColumn 
                     Header="Должность"                    
                     Binding="{Binding Position}"
-                    Width="150"/>
+                    Width="200"/>
                 <DataGridTextColumn                    
                     Header="Отдел"                    
                     Binding="{Binding Department}"

@@ -79,6 +79,7 @@
     <Compile Include="Classes\DatabaseUtility.cs" />
     <Compile Include="Classes\EmployeeInfo.cs" />
     <Compile Include="Classes\GlobalStaticParameters.cs" />
+    <Compile Include="Classes\VacationData.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

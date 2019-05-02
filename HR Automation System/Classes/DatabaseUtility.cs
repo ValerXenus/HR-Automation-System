@@ -462,6 +462,43 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        // Запрос на получени данных об отпуске для таблицы
+        public ObservableCollection<VacationData> GetVacationData(int employeeId)
+        {
+            _command.CommandText = "SELECT * FROM [vacation] WHERE [employee_id] = [EmployeeId]";
+            _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var vacationData = new ObservableCollection<VacationData>();
+
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        var vacation = new VacationData
+                        {
+                            Id = int.Parse(_dataReader["vacation_id"].ToString()),
+                            Name = _dataReader["vacation_name"].ToString(),
+                            StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                            EndDate = DateTime.Parse(_dataReader["end_date"].ToString()),
+                        };
+                        vacationData.Add(vacation);
+                    }
+                    _dataReader.Close();
+                }
+
+                return vacationData;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
         // Запрос на получении информации об отпуске
         public BookClasses.VacationDates GetVacationInfo(int employeeId)
         {

@@ -404,37 +404,38 @@
                                             <DataGridTextColumn                    
                                                 Header="Id"     
                                                 Visibility="Collapsed"
-                                                Binding="{Binding EmployeeId}"                    
-                                                Width="300"/>
+                                                Binding="{Binding Id}"/>
                                             <DataGridTextColumn           
                                                 Header="    Тип"                    
-                                                Binding="{Binding EmployeeName}"                    
-                                                Width="240"/>
+                                                Binding="{Binding Name}"
+                                                Width="300"/>
                                             <DataGridTextColumn 
                                                 Header="Дата начала"                    
-                                                Binding="{Binding Position}"
-                                                Width="150"/>
+                                                Binding="{Binding StartDate}"
+                                                Width="300"/>
                                             <DataGridTextColumn                    
                                                 Header="Дата окончания"                    
-                                                Binding="{Binding Department}"
-                                                Width="250"/>
+                                                Binding="{Binding EndDate}"
+                                                Width="300"/>
                                             <DataGridTemplateColumn CanUserResize="False">
                                                 <DataGridTemplateColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Button Width="30"
-                                                                Cursor="Hand"
-                                                                Height="30"
-                                                                Content="&#xE104;"
-                                                                Background="White"
-                                                                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
-                                                                ToolTip="Редактировать отпуск"
-                                                                BorderBrush="{x:Null}"
-                                                                Foreground="Black"
-                                                                FontSize="17"
-                                                                Style="{DynamicResource ButtonWhiteStyle}"/>
+                                                            Cursor="Hand"
+                                                            Height="30"
+                                                            Content="&#xE104;"
+                                                            Background="White"
+                                                            FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
+                                                            ToolTip="Редактировать отпуск"
+                                                            BorderBrush="{x:Null}"
+                                                            Foreground="Black"
+                                                            FontSize="17"
+                                                                
+                                                            Style="{DynamicResource ButtonWhiteStyle}"/>            
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Width="*"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     <Button
@@ -472,16 +473,16 @@
                                             <DataGridTextColumn                    
                                                 Header="Id"     
                                                 Visibility="Collapsed"
-                                                Binding="{Binding EmployeeId}"                    
+                                                Binding="{Binding Id}"
                                                 Width="300"/>
                                             <DataGridTextColumn 
                                                 Header="    Дата выхода"                    
-                                                Binding="{Binding Position}"
-                                                Width="150"/>
+                                                Binding="{Binding StartDate}"
+                                                Width="300"/>
                                             <DataGridTextColumn                    
                                                 Header="Дата окончания"
-                                                Binding="{Binding Department}"
-                                                Width="250"/>
+                                                Binding="{Binding EndDate}"
+                                                Width="300"/>
                                             <DataGridTemplateColumn CanUserResize="False">
                                                 <DataGridTemplateColumn.CellTemplate>
                                                     <DataTemplate>
@@ -491,7 +492,7 @@
                                                                 Content="&#xE104;"
                                                                 Background="White"
                                                                 FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
-                                                                ToolTip="Редактировать отпуск"
+                                                                ToolTip="Редактировать больничный"
                                                                 BorderBrush="{x:Null}"
                                                                 Foreground="Black"
                                                                 FontSize="17"
@@ -499,6 +500,7 @@
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Width="*"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     <Button
@@ -534,20 +536,19 @@
                                             <DataGridTextColumn                    
                                                 Header="Id"     
                                                 Visibility="Collapsed"
-                                                Binding="{Binding EmployeeId}"                    
-                                                Width="300"/>
+                                                Binding="{Binding Id}"/>
                                             <DataGridTextColumn           
                                                 Header="    Приказ"                    
-                                                Binding="{Binding EmployeeName}"                    
-                                                Width="240"/>
-                                            <DataGridTextColumn 
-                                                Header="Дата выхода"                    
-                                                Binding="{Binding Position}"
-                                                Width="150"/>
+                                                Binding="{Binding Order}"
+                                                Width="300"/>
+                                            <DataGridTextColumn
+                                                Header="Дата выхода"
+                                                Binding="{Binding StartDate}"
+                                                Width="300"/>
                                             <DataGridTextColumn                    
-                                                Header="Дата окончания"                    
-                                                Binding="{Binding Department}"
-                                                Width="250"/>
+                                                Header="Дата окончания"            
+                                                Binding="{Binding EndDate}"
+                                                Width="300"/>
                                             <DataGridTemplateColumn CanUserResize="False">
                                                 <DataGridTemplateColumn.CellTemplate>
                                                     <DataTemplate>
@@ -565,6 +566,7 @@
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Width="*"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     <Button
@@ -577,10 +579,10 @@
                                 </Grid>
                             </TabItem>
                         </TabControl>
-                        <Rectangle 
+                        <Rectangle
                             Fill="Gray"
                             Height="1"
-                            Margin="1,108,1,0"
+                            Margin="1,105,1,0"
                             VerticalAlignment="Top"/>
                     </Grid>
                 </Grid>
@@ -591,7 +593,8 @@
             FontSize="13"
             Foreground="Gray"
             HorizontalAlignment="Right"
-            Margin="0, 40, 10, 0"
+            Margin="0, -360, 10, 0"
+            Height="30"
             Visibility="Hidden"
             Content="В отпуске с 22.02.2019 по 22.03.2019"/>
         <StackPanel

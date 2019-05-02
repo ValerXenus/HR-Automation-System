@@ -159,6 +159,8 @@ namespace HR_Automation_System.Pages
             this.Close();
         }
 
+        #region Загрузки
+
         // Метод загрузки всех данных на форме
         private void LoadFormData()
         {
@@ -168,7 +170,7 @@ namespace HR_Automation_System.Pages
             if (_isExistEmployee)
             {
                 LoadDataFromDatabase();
-            }            
+            }
         }
 
         // Заполнение ComboBox
@@ -179,7 +181,7 @@ namespace HR_Automation_System.Pages
             DepartmentsComboBox.ItemsSource = GlobalStaticParameters.Database.GetDepartmentsList();
             ContractsComboBox.ItemsSource = GlobalStaticParameters.Database.GetContractsList();
         }
-         
+
         // Автозаполнение данных сотрудника из базы
         private void LoadDataFromDatabase()
         {
@@ -231,7 +233,7 @@ namespace HR_Automation_System.Pages
         {
             var vacationInfo = GlobalStaticParameters.Database.GetVacationInfo(_currentEmployeeId);
 
-            if(vacationInfo == null)
+            if (vacationInfo == null)
             {
                 return;
             }
@@ -259,7 +261,18 @@ namespace HR_Automation_System.Pages
             }
 
             VacationLabel.Content = message;
+
+            LoadVacationTables();
         }
+
+        // Загрузка таблиц с отпусками
+        private void LoadVacationTables()
+        {
+            VacationsDataGrid.ItemsSource = GlobalStaticParameters.Database.GetVacationData(_currentEmployeeId);
+
+        }
+
+        #endregion     
 
         #region Валидация
         // Метод для валидации правильности заполнения полей
