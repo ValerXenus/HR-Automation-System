@@ -412,6 +412,8 @@ namespace HR_Automation_System.Classes
         // Получение данных сотрудника по его Id
         public EmployeeInfo GetEmployeeData(int employeeId)
         {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
             _command.CommandText = "SELECT [employees].[employee_name], [employees].[gender]," +
                 " [employees].[birth_date], [employees].[inn], [employees].[snils]," +
                 " [employees].[document_type], [employees].[document_number], [employees].[address]," +
@@ -465,6 +467,8 @@ namespace HR_Automation_System.Classes
         // Запрос на получени данных об отпуске для таблицы
         public ObservableCollection<VacationData> GetVacationData(int employeeId)
         {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
             _command.CommandText = "SELECT * FROM [vacation] WHERE [employee_id] = [EmployeeId]";
             _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
 
@@ -485,10 +489,9 @@ namespace HR_Automation_System.Classes
                             EndDate = DateTime.Parse(_dataReader["end_date"].ToString()),
                         };
                         vacationData.Add(vacation);
-                    }
-                    _dataReader.Close();
+                    }     
                 }
-
+                _dataReader.Close();
                 return vacationData;
             }
             catch (Exception ex)
