@@ -10,14 +10,21 @@ namespace HR_Automation_System.AdditionalWindows
     public partial class AddNewVacation : Window
     {
         public int _employeeId;
+        public int _vacationId; // Если это режим редактирования, то код отпуска будетне равен -1
 
-        public AddNewVacation(int employeeId)
+        public AddNewVacation(int employeeId, int vacationId = -1)
         {
             InitializeComponent();
             _employeeId = employeeId;
+            _vacationId = vacationId;
 
             StartDatePicker.Text =
             EndDatePicker.Text = DateTime.Now.ToString();
+
+            if (_vacationId != -1)
+            {
+                LoadWindowFields();
+            }
         }
 
         // Кнопка "Добавить отпуск"
@@ -28,12 +35,21 @@ namespace HR_Automation_System.AdditionalWindows
                 return;
             }
 
-            // Добавляем отпуск
-            var result = GlobalStaticParameters.Database.AddNewVacation(
-                VacationNameTextBox.Text,
-                DateTime.Parse(StartDatePicker.Text),
-                DateTime.Parse(EndDatePicker.Text),
-                _employeeId);
+            bool result;
+
+            if (_vacationId != -1) // Если это режим редактирования отпуска
+            {
+                result = true;
+            }
+            else
+            {
+                // Добавляем отпуск
+                result = GlobalStaticParameters.Database.AddNewVacation(
+                    VacationNameTextBox.Text,
+                    DateTime.Parse(StartDatePicker.Text),
+                    DateTime.Parse(EndDatePicker.Text),
+                    _employeeId);
+            }
 
             if (result)
             {
@@ -51,6 +67,16 @@ namespace HR_Automation_System.AdditionalWindows
             {
                 this.Close(); // Закрываем текущее окно
             }
+        }
+
+        // автозаполнение полей для редактирования
+        private void LoadWindowFields()
+        {
+            var vacation = GlobalStaticParameters.Database.GetVacationRecord(_vacationId);
+
+            VacationNameTextBox.Text = vacation.Name;
+            StartDatePicker.Text = vacation.StartDate.ToString();
+            EndDatePicker.Text = vacation.EndDate.ToString();
         }
 
         // Метод проверки заполненных полей

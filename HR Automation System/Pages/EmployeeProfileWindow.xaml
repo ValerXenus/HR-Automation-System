@@ -430,7 +430,7 @@
                                                             BorderBrush="{x:Null}"
                                                             Foreground="Black"
                                                             FontSize="17"
-                                                                
+                                                            Click="EditVacation_Click"
                                                             Style="{DynamicResource ButtonWhiteStyle}"/>            
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>

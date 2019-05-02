@@ -119,8 +119,8 @@ namespace HR_Automation_System.Pages
         // Добавление нового больничного
         private void AddNewSickLeave_Click(object sender, RoutedEventArgs e)
         {
-            var sickLeaveWindow = new AddNewSickLeave(_currentEmployeeId);
-            sickLeaveWindow.ShowDialog();
+            var vacationWindow = new AddNewSickLeave(_currentEmployeeId);
+            vacationWindow.ShowDialog();
 
             LoadVacationsInfo();
         }
@@ -128,8 +128,18 @@ namespace HR_Automation_System.Pages
         // Добавление нового больничного
         private void AddNewMaternityLeave_Click(object sender, RoutedEventArgs e)
         {
-            var maternityLeaveWindow = new AddNewMaternityLeave(_currentEmployeeId);
-            maternityLeaveWindow.ShowDialog();
+            var vacationWindow = new AddNewMaternityLeave(_currentEmployeeId);
+            vacationWindow.ShowDialog();
+
+            LoadVacationsInfo();
+        }
+
+        // Редактирование отпуска
+        private void EditVacation_Click(object sender, RoutedEventArgs e)
+        {
+            int currentId = (VacationsDataGrid.SelectedItem as VacationData).Id; // Получаем код отпуска из выделенной строки
+            var vacationWindow = new AddNewVacation(_currentEmployeeId, currentId);
+            vacationWindow.ShowDialog();
 
             LoadVacationsInfo();
         }

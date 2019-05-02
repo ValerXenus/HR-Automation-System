@@ -630,6 +630,41 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        #region Запросы на получение данных для редактирования отпусков
+        // Получение записи отпуска на редактирование
+        public VacationData GetVacationRecord(int vacationId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [vacation] WHERE [vacation_id] = [VacationId]";
+            _command.Parameters.Add(@"VacationId", OleDbType.Integer).Value = vacationId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var vacation = new VacationData();
+                while (_dataReader.Read())
+                {
+                    vacation = new VacationData
+                    {
+                        Name = _dataReader["vacation_name"].ToString(),
+                        StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                        EndDate = DateTime.Parse(_dataReader["end_date"].ToString())
+                    };
+                }
+                _dataReader.Close();
+                return vacation;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        #endregion
+
         // Запрос на получении информации об отпуске
         public BookClasses.VacationDates GetVacationInfo(int employeeId)
         {
