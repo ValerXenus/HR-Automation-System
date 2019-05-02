@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HR_Automation_System.AdditionalWindows"
         mc:Ignorable="d"
-        Title="Добавление отпуска"
+        Title="Отпуск"
         WindowStartupLocation="CenterScreen"
         Height="200"
         ResizeMode="NoResize"

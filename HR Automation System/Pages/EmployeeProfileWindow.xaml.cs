@@ -200,7 +200,10 @@ namespace HR_Automation_System.Pages
             SalaryTextBox.Text = employeeInfo.Salary.ToString();
 
             if (employeeInfo.Gender == 1)
+            {
                 FemaleRadioButton.IsChecked = true;
+            }
+
             FamilyStatusesComboBox.SelectedValue = employeeInfo.FamilyStatus;
             DocumentTypesComboBox.SelectedValue = employeeInfo.DocumentType;
             DepartmentsComboBox.SelectedValue = employeeInfo.Department;
@@ -254,6 +257,8 @@ namespace HR_Automation_System.Pages
                         vacationInfo.EndDate.ToString("dd.MM.yyyy"));
                     break;
             }
+
+            VacationLabel.Content = message;
         }
 
         #region Валидация

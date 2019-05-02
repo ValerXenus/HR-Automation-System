@@ -487,7 +487,7 @@ namespace HR_Automation_System.Classes
                     }
                     _dataReader.Close();
 
-                    if (vacationId != 1) // Обычный отпуск
+                    if (vacationId != -1) // Обычный отпуск
                     {
                         vacationInfo = getVacationDates("vacation", vacationInfo.EmployeeId, "vacation_id");
                         vacationInfo.VacationType = 0;
@@ -497,21 +497,24 @@ namespace HR_Automation_System.Classes
                             return null;
                         }
                     }
-                    else if (mlId != 1) // Декретный отпуск
+                    else if (mlId != -1) // Декретный отпуск
                     {
 
                     }
-                    else if (slId != 1) // Больничный
+                    else if (slId != -1) // Больничный
                     {
 
-                    }                    
+                    }      
+                    else
+                    {
+                        vacationInfo = null;
+                    }
                 }
             }
             catch
             {
                 _dataReader.Close();
-                // Если записей нет в таблице, то вернется null
-                return null;
+                vacationInfo = null;
             }
 
             return vacationInfo;
@@ -531,8 +534,8 @@ namespace HR_Automation_System.Classes
             if (vacationId != -1)
             {
                 _command.CommandType = CommandType.Text;
-                _command.CommandText = string.Format("UPDATE [employees] SET {0} = [Vacation_Id] WHERE [employee_id] = [Employee_Id]", primaryKey);
-                _command.Parameters.AddWithValue("@Vacation_Id", vacationId);
+                _command.CommandText = string.Format("UPDATE [employees] SET [{0}] = [Vacation] WHERE [employee_id] = [Employee_Id]", primaryKey);
+                _command.Parameters.AddWithValue("@Vacation", vacationId);
                 _command.Parameters.AddWithValue("@Employee_Id", employeeId);
                 try
                 {
