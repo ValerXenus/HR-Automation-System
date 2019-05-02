@@ -125,7 +125,7 @@ namespace HR_Automation_System.Pages
             LoadVacationsInfo();
         }
 
-        // Добавление нового больничного
+        // Добавление нового декретного отпуска
         private void AddNewMaternityLeave_Click(object sender, RoutedEventArgs e)
         {
             var vacationWindow = new AddNewMaternityLeave(_currentEmployeeId);

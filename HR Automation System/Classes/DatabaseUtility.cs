@@ -739,6 +739,27 @@ namespace HR_Automation_System.Classes
 
         #region Запросы на обновление
 
+        public bool SaveVacation(VacationData vacation)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [vacation] SET [vacation_name] = [VacationName], [start_date] = [StartDate], [end_date] = [EndDate] WHERE [vacation_id] = [VacationId]";
+            _command.Parameters.AddWithValue("@VacationName", vacation.Name);
+            _command.Parameters.AddWithValue("@StartDate", vacation.StartDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@EndDate", vacation.EndDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@VacationId", vacation.Id);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+            return true;
+        }
+
         // Метод включения/отключения отпусков у сотрудников
         private void setEmployeeVacation(int employeeId, string tableName, string primaryKey)
         {

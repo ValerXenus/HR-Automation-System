@@ -39,7 +39,15 @@ namespace HR_Automation_System.AdditionalWindows
 
             if (_vacationId != -1) // Если это режим редактирования отпуска
             {
-                result = true;
+                var vacation = new VacationData
+                {
+                    Id = _vacationId,
+                    Name = VacationNameTextBox.Text,
+                    StartDate = DateTime.Parse(StartDatePicker.Text),
+                    EndDate = DateTime.Parse(EndDatePicker.Text)
+                };
+
+                result = GlobalStaticParameters.Database.SaveVacation(vacation);
             }
             else
             {

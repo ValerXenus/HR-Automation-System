@@ -411,11 +411,11 @@
                                                 Width="300"/>
                                             <DataGridTextColumn 
                                                 Header="Дата начала"                    
-                                                Binding="{Binding StartDate}"
+                                                Binding="{Binding StartDate, StringFormat=dd.MM.yyyy}"
                                                 Width="300"/>
                                             <DataGridTextColumn                    
                                                 Header="Дата окончания"                    
-                                                Binding="{Binding EndDate}"
+                                                Binding="{Binding EndDate, StringFormat=dd.MM.yyyy}"
                                                 Width="300"/>
                                             <DataGridTemplateColumn CanUserResize="False">
                                                 <DataGridTemplateColumn.CellTemplate>
