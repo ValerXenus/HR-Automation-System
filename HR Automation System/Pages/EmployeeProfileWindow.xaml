@@ -539,8 +539,8 @@
                                                 Visibility="Collapsed"
                                                 Binding="{Binding Id}"/>
                                             <DataGridTextColumn           
-                                                Header="    Приказ"                    
-                                                Binding="{Binding Order}"
+                                                Header="    Приказ"
+                                                Binding="{Binding OrderNumber}"
                                                 Width="300"/>
                                             <DataGridTextColumn
                                                 Header="Дата выхода"
@@ -562,7 +562,7 @@
                                                                 ToolTip="Редактировать отпуск"
                                                                 BorderBrush="{x:Null}"
                                                                 Foreground="Black"
-                                                                FontSize="17"
+                                                                FontSize="17"                                                                
                                                                 Style="{DynamicResource ButtonWhiteStyle}"/>
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
@@ -576,6 +576,7 @@
                                         Width="200"
                                         Height="25"
                                         Content="Добавить"
+                                        Click="AddNewMaternityLeave_Click"
                                         Style="{StaticResource ButtonDefaultStyle}"/>
                                 </Grid>
                             </TabItem>

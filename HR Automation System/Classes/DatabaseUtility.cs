@@ -31,7 +31,7 @@ namespace HR_Automation_System.Classes
 
             _command = new OleDbCommand(); // Инициализация экземпляра для команд
             _command.Connection = _connection;
-        }       
+        }
 
         #region Запросы на добавление
 
@@ -179,7 +179,34 @@ namespace HR_Automation_System.Classes
             return true;
         }
 
-        #endregion        
+        // Добавление декретного отпуска
+        public bool AddNewMaternityLeave(string orderNumber, DateTime startDate, DateTime endDate, int employeeId)
+        {
+            // Добавляем отпуск
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO maternity_leave (employee_id, start_date, end_date, order_number) " +
+                "VALUES ([Employee_Id], [Start_Date], [End_Date], [OrderNumber])";
+            _command.Parameters.AddWithValue("@Employee_Id", employeeId);
+            _command.Parameters.AddWithValue("@Start_Date", startDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@End_Date", endDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@OrderNumber", orderNumber);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+
+            // Добавляем отпуск к сотруднику, если дата соответствует
+            setEmployeeVacation(employeeId, "maternity_leave", "ml_id");
+            return true;
+        }
+
+        #endregion
 
         #region Запросы на заполнение ComboBox
         // Получение списка семеных положений
@@ -409,6 +436,44 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        // Запрос на получение списка декретных отпусков по текущему сотруднику
+        public ObservableCollection<MaternityLeaveData> GetMaternityLeaves(int employeeId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [maternity_leave] WHERE [employee_id] = [EmployeeId]";
+            _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var vacationData = new ObservableCollection<MaternityLeaveData>();
+
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        var vacation = new MaternityLeaveData
+                        {
+                            Id = int.Parse(_dataReader["ml_id"].ToString()),
+                            OrderNumber = _dataReader["order_number"].ToString(),
+                            StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                            EndDate = DateTime.Parse(_dataReader["end_date"].ToString()),
+                        };
+                        vacationData.Add(vacation);
+                    }
+                }
+                _dataReader.Close();
+                return vacationData;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
         #endregion
 
         #region Запросы на получение
@@ -563,7 +628,7 @@ namespace HR_Automation_System.Classes
                 MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
                 return null;
             }
-        }        
+        }
 
         // Запрос на получении информации об отпуске
         public BookClasses.VacationDates GetVacationInfo(int employeeId)
@@ -600,10 +665,6 @@ namespace HR_Automation_System.Classes
                             return null;
                         }
                     }
-                    else if (mlId != -1) // Декретный отпуск
-                    {
-                        
-                    }
                     else if (slId != -1) // Больничный
                     {
                         vacationInfo = getVacationDates("sick_leaves", vacationInfo.EmployeeId, "sl_id");
@@ -613,7 +674,17 @@ namespace HR_Automation_System.Classes
                         {
                             return null;
                         }
-                    }      
+                    }
+                    else if (mlId != -1) // Декретный отпуск
+                    {
+                        vacationInfo = getVacationDates("maternity_leave", vacationInfo.EmployeeId, "ml_id");
+                        vacationInfo.VacationType = 2;
+
+                        if (!checkVacation(vacationInfo, "ml_id")) // Если отпуск закончился или еще не наступил
+                        {
+                            return null;
+                        }
+                    }
                     else
                     {
                         vacationInfo = null;
@@ -716,7 +787,7 @@ namespace HR_Automation_System.Classes
                 return false; // Отпуск еще не наступил
             }
 
-            if (vacationInfo.EndDate < DateTime.Now)
+            if (DateTime.Now.Date != vacationInfo.EndDate.Date && vacationInfo.EndDate < DateTime.Now)
             {
                 finishEmployeeVacation(vacationInfo, primaryKey);
                 return false; // Отпуск завершился, обновляем данные сотрудника

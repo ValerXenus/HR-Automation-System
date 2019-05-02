@@ -34,7 +34,7 @@ namespace HR_Automation_System.Pages
             InitializeComponent();
             _isExistEmployee = true;
             _currentEmployeeId = employeeId;
-            LoadFormData();              
+            LoadFormData();
         }
 
         #region Методы Click
@@ -121,6 +121,15 @@ namespace HR_Automation_System.Pages
         {
             var sickLeaveWindow = new AddNewSickLeave(_currentEmployeeId);
             sickLeaveWindow.ShowDialog();
+
+            LoadVacationsInfo();
+        }
+
+        // Добавление нового больничного
+        private void AddNewMaternityLeave_Click(object sender, RoutedEventArgs e)
+        {
+            var maternityLeaveWindow = new AddNewMaternityLeave(_currentEmployeeId);
+            maternityLeaveWindow.ShowDialog();
 
             LoadVacationsInfo();
         }
@@ -279,7 +288,7 @@ namespace HR_Automation_System.Pages
         {
             VacationsDataGrid.ItemsSource = GlobalStaticParameters.Database.GetVacationData(_currentEmployeeId);
             SickLeavesDataGrid.ItemsSource = GlobalStaticParameters.Database.GetSickLeaves(_currentEmployeeId);
-
+            MaternityLeaveDataGrid.ItemsSource = GlobalStaticParameters.Database.GetMaternityLeaves(_currentEmployeeId);
         }
 
         #endregion     
