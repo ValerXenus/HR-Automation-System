@@ -57,6 +57,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AdditionalWindows\AddNewSickLeave.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AdditionalWindows\AddNewVacation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -67,6 +71,9 @@
     </Page>
     <Compile Include="AdditionalWindows\AddNewContract.xaml.cs">
       <DependentUpon>AddNewContract.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\AddNewSickLeave.xaml.cs">
+      <DependentUpon>AddNewSickLeave.xaml</DependentUpon>
     </Compile>
     <Compile Include="AdditionalWindows\AddNewVacation.xaml.cs">
       <DependentUpon>AddNewVacation.xaml</DependentUpon>
@@ -79,6 +86,7 @@
     <Compile Include="Classes\DatabaseUtility.cs" />
     <Compile Include="Classes\EmployeeInfo.cs" />
     <Compile Include="Classes\GlobalStaticParameters.cs" />
+    <Compile Include="Classes\SickLeaveData.cs" />
     <Compile Include="Classes\VacationData.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

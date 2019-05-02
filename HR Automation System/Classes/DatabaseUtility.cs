@@ -153,6 +153,32 @@ namespace HR_Automation_System.Classes
             return true;
         }
 
+        // Добавление больничного
+        public bool AddNewSickLeave(DateTime startDate, DateTime endDate, int employeeId)
+        {
+            // Добавляем отпуск
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO sick_leaves (start_date, end_date, employee_id) " +
+                "VALUES ([Start_Date], [End_Date], [Employee_Id])";
+            _command.Parameters.AddWithValue("@Start_Date", startDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@End_Date", endDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@Employee_Id", employeeId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+
+            // Добавляем отпуск к сотруднику, если дата соответствует
+            setEmployeeVacation(employeeId, "sick_leaves", "sl_id");
+            return true;
+        }
+
         #endregion        
 
         #region Запросы на заполнение ComboBox
@@ -306,6 +332,81 @@ namespace HR_Automation_System.Classes
                 return null; // Если таблица пустая
             }
 
+        }
+
+        // Запрос на получени данных об отпуске для таблицы
+        public ObservableCollection<VacationData> GetVacationData(int employeeId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [vacation] WHERE [employee_id] = [EmployeeId]";
+            _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var vacationData = new ObservableCollection<VacationData>();
+
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        var vacation = new VacationData
+                        {
+                            Id = int.Parse(_dataReader["vacation_id"].ToString()),
+                            Name = _dataReader["vacation_name"].ToString(),
+                            StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                            EndDate = DateTime.Parse(_dataReader["end_date"].ToString()),
+                        };
+                        vacationData.Add(vacation);
+                    }
+                }
+                _dataReader.Close();
+                return vacationData;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        // Запрос на получение списка больничных по текущему сотруднику
+        public ObservableCollection<SickLeaveData> GetSickLeaves(int employeeId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [sick_leaves] WHERE [employee_id] = [EmployeeId]";
+            _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var vacationData = new ObservableCollection<SickLeaveData>();
+
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        var vacation = new SickLeaveData
+                        {
+                            Id = int.Parse(_dataReader["sl_id"].ToString()),
+                            StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                            EndDate = DateTime.Parse(_dataReader["end_date"].ToString()),
+                        };
+                        vacationData.Add(vacation);
+                    }
+                }
+                _dataReader.Close();
+                return vacationData;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
         }
 
         #endregion
@@ -462,45 +563,7 @@ namespace HR_Automation_System.Classes
                 MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
                 return null;
             }
-        }
-
-        // Запрос на получени данных об отпуске для таблицы
-        public ObservableCollection<VacationData> GetVacationData(int employeeId)
-        {
-            _command.Parameters.Clear();
-            _command.CommandType = CommandType.Text;
-            _command.CommandText = "SELECT * FROM [vacation] WHERE [employee_id] = [EmployeeId]";
-            _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
-
-            try
-            {
-                _dataReader = _command.ExecuteReader();
-                var vacationData = new ObservableCollection<VacationData>();
-
-                if (_dataReader.HasRows)
-                {
-                    while (_dataReader.Read())
-                    {
-                        var vacation = new VacationData
-                        {
-                            Id = int.Parse(_dataReader["vacation_id"].ToString()),
-                            Name = _dataReader["vacation_name"].ToString(),
-                            StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
-                            EndDate = DateTime.Parse(_dataReader["end_date"].ToString()),
-                        };
-                        vacationData.Add(vacation);
-                    }     
-                }
-                _dataReader.Close();
-                return vacationData;
-            }
-            catch (Exception ex)
-            {
-                _dataReader.Close();
-                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
-                return null;
-            }
-        }
+        }        
 
         // Запрос на получении информации об отпуске
         public BookClasses.VacationDates GetVacationInfo(int employeeId)
@@ -539,11 +602,17 @@ namespace HR_Automation_System.Classes
                     }
                     else if (mlId != -1) // Декретный отпуск
                     {
-
+                        
                     }
                     else if (slId != -1) // Больничный
                     {
+                        vacationInfo = getVacationDates("sick_leaves", vacationInfo.EmployeeId, "sl_id");
+                        vacationInfo.VacationType = 1;
 
+                        if (!checkVacation(vacationInfo, "sl_id")) // Если отпуск закончился или еще не наступил
+                        {
+                            return null;
+                        }
                     }      
                     else
                     {

@@ -2,23 +2,24 @@
 using System;
 using System.Windows;
 
+
 namespace HR_Automation_System.AdditionalWindows
 {
     /// <summary>
-    /// Interaction logic for AddNewVacation.xaml
+    /// Interaction logic for AddNewSickLeave.xaml
     /// </summary>
-    public partial class AddNewVacation : Window
+    public partial class AddNewSickLeave : Window
     {
         public int _employeeId;
 
-        public AddNewVacation(int employeeId)
+        public AddNewSickLeave(int employeeId)
         {
             InitializeComponent();
             _employeeId = employeeId;
 
             StartDatePicker.Text =
             EndDatePicker.Text = DateTime.Now.ToString();
-        }
+        }              
 
         // Кнопка "Добавить отпуск"
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -29,8 +30,7 @@ namespace HR_Automation_System.AdditionalWindows
             }
 
             // Добавляем отпуск
-            var result = GlobalStaticParameters.Database.AddNewVacation(
-                VacationNameTextBox.Text,
+            var result = GlobalStaticParameters.Database.AddNewSickLeave(
                 DateTime.Parse(StartDatePicker.Text),
                 DateTime.Parse(EndDatePicker.Text),
                 _employeeId);
@@ -58,14 +58,9 @@ namespace HR_Automation_System.AdditionalWindows
         {
             string errorText = string.Empty;
 
-            if (string.IsNullOrEmpty(VacationNameTextBox.Text))
-            {
-                errorText += "- Не заполнено поле \"Тип отпуска\"";
-            }
-
             if (DateTime.Parse(StartDatePicker.Text) > DateTime.Parse(EndDatePicker.Text))
             {
-                errorText += "- Дата начала отпуска не может быть позже даты окончания";
+                errorText += "- Дата начала больничного не может быть позже даты окончания";
             }
 
             if (!string.IsNullOrEmpty(errorText))
@@ -78,6 +73,6 @@ namespace HR_Automation_System.AdditionalWindows
             }
 
             return true;
-        }        
+        }
     }
 }

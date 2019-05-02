@@ -55,7 +55,7 @@
                         Grid.Row="1"
                         Grid.RowSpan="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="4"/>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="10"/>
@@ -509,6 +509,7 @@
                                         Width="200"
                                         Height="25"
                                         Content="Добавить больничный"
+                                        Click="AddNewSickLeave_Click"
                                         Style="{StaticResource ButtonDefaultStyle}"/>
                                 </Grid>
                             </TabItem>

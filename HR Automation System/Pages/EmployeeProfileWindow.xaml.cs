@@ -116,6 +116,15 @@ namespace HR_Automation_System.Pages
             LoadVacationsInfo();
         }
 
+        // Добавление нового больничного
+        private void AddNewSickLeave_Click(object sender, RoutedEventArgs e)
+        {
+            var sickLeaveWindow = new AddNewSickLeave(_currentEmployeeId);
+            sickLeaveWindow.ShowDialog();
+
+            LoadVacationsInfo();
+        }
+
         #endregion
 
         private void SaveNewEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId, double salary)
@@ -269,6 +278,7 @@ namespace HR_Automation_System.Pages
         private void LoadVacationTables()
         {
             VacationsDataGrid.ItemsSource = GlobalStaticParameters.Database.GetVacationData(_currentEmployeeId);
+            SickLeavesDataGrid.ItemsSource = GlobalStaticParameters.Database.GetSickLeaves(_currentEmployeeId);
 
         }
 
