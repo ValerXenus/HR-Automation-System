@@ -144,6 +144,16 @@ namespace HR_Automation_System.Pages
             LoadVacationsInfo();
         }
 
+        // Редактирование больничного
+        private void EditSickLeave_Click(object sender, RoutedEventArgs e)
+        {
+            int currentId = (SickLeavesDataGrid.SelectedItem as SickLeaveData).Id;
+            var vacationWindow = new AddNewSickLeave(_currentEmployeeId, currentId);
+            vacationWindow.ShowDialog();
+
+            LoadVacationsInfo();
+        }
+
         #endregion
 
         private void SaveNewEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId, double salary)

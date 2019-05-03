@@ -628,42 +628,7 @@ namespace HR_Automation_System.Classes
                 MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
                 return null;
             }
-        }
-
-        #region Запросы на получение данных для редактирования отпусков
-        // Получение записи отпуска на редактирование
-        public VacationData GetVacationRecord(int vacationId)
-        {
-            _command.Parameters.Clear();
-            _command.CommandType = CommandType.Text;
-            _command.CommandText = "SELECT * FROM [vacation] WHERE [vacation_id] = [VacationId]";
-            _command.Parameters.Add(@"VacationId", OleDbType.Integer).Value = vacationId;
-
-            try
-            {
-                _dataReader = _command.ExecuteReader();
-                var vacation = new VacationData();
-                while (_dataReader.Read())
-                {
-                    vacation = new VacationData
-                    {
-                        Name = _dataReader["vacation_name"].ToString(),
-                        StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
-                        EndDate = DateTime.Parse(_dataReader["end_date"].ToString())
-                    };
-                }
-                _dataReader.Close();
-                return vacation;
-            }
-            catch (Exception ex)
-            {
-                _dataReader.Close();
-                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
-                return null;
-            }
-        }
-
-        #endregion
+        }        
 
         // Запрос на получении информации об отпуске
         public BookClasses.VacationDates GetVacationInfo(int employeeId)
@@ -735,10 +700,76 @@ namespace HR_Automation_System.Classes
             return vacationInfo;
         }
 
+        #region Запросы на получение данных для редактирования отпусков
+        // Получение записи отпуска на редактирование
+        public VacationData GetVacationRecord(int vacationId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [vacation] WHERE [vacation_id] = [VacationId]";
+            _command.Parameters.Add(@"VacationId", OleDbType.Integer).Value = vacationId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var vacation = new VacationData();
+                while (_dataReader.Read())
+                {
+                    vacation = new VacationData
+                    {
+                        Name = _dataReader["vacation_name"].ToString(),
+                        StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                        EndDate = DateTime.Parse(_dataReader["end_date"].ToString())
+                    };
+                }
+                _dataReader.Close();
+                return vacation;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        public SickLeaveData GetSickLeaveRecord(int sickLeaveId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [sick_leaves] WHERE [sl_id] = [SickLeaveId]";
+            _command.Parameters.Add(@"SickLeaveId", OleDbType.Integer).Value = sickLeaveId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var vacation = new SickLeaveData();
+                while (_dataReader.Read())
+                {
+                    vacation = new SickLeaveData
+                    {
+                        StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                        EndDate = DateTime.Parse(_dataReader["end_date"].ToString())
+                    };
+                }
+                _dataReader.Close();
+                return vacation;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Запросы на обновление
 
+        // Сохранение отредактированного отпуска
         public bool SaveVacation(VacationData vacation)
         {
             _command.Parameters.Clear();
@@ -748,6 +779,27 @@ namespace HR_Automation_System.Classes
             _command.Parameters.AddWithValue("@StartDate", vacation.StartDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@EndDate", vacation.EndDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@VacationId", vacation.Id);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+            return true;
+        }
+
+        // Сохранение отредактированного больничного
+        public bool SaveSickLeave(SickLeaveData sickLeave)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [sick_leaves] SET [start_date] = [StartDate], [end_date] = [EndDate] WHERE [sl_id] = [SickLeaveId]";
+            _command.Parameters.AddWithValue("@StartDate", sickLeave.StartDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@EndDate", sickLeave.EndDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@SickLeaveId", sickLeave.Id);
             try
             {
                 _command.ExecuteNonQuery();

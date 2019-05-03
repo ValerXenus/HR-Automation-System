@@ -11,14 +11,21 @@ namespace HR_Automation_System.AdditionalWindows
     public partial class AddNewSickLeave : Window
     {
         public int _employeeId;
+        public int _sickLeaveId; // Код больничного
 
-        public AddNewSickLeave(int employeeId)
+        public AddNewSickLeave(int employeeId, int sickLeaveId = -1)
         {
             InitializeComponent();
             _employeeId = employeeId;
+            _sickLeaveId = sickLeaveId;
 
             StartDatePicker.Text =
             EndDatePicker.Text = DateTime.Now.ToString();
+
+            if (_sickLeaveId != -1)
+            {
+                LoadWindowFields();
+            }
         }              
 
         // Кнопка "Добавить отпуск"
@@ -29,11 +36,27 @@ namespace HR_Automation_System.AdditionalWindows
                 return;
             }
 
-            // Добавляем отпуск
-            var result = GlobalStaticParameters.Database.AddNewSickLeave(
-                DateTime.Parse(StartDatePicker.Text),
-                DateTime.Parse(EndDatePicker.Text),
-                _employeeId);
+            bool result;
+
+            if (_sickLeaveId != -1)
+            {
+                var sickLeave = new SickLeaveData
+                {
+                    Id = _sickLeaveId,
+                    StartDate = DateTime.Parse(StartDatePicker.Text),
+                    EndDate = DateTime.Parse(EndDatePicker.Text)
+                };
+
+                result = GlobalStaticParameters.Database.SaveSickLeave(sickLeave);
+            }
+            else
+            {
+                // Добавляем отпуск
+                result = GlobalStaticParameters.Database.AddNewSickLeave(
+                    DateTime.Parse(StartDatePicker.Text),
+                    DateTime.Parse(EndDatePicker.Text),
+                    _employeeId);
+            }
 
             if (result)
             {
@@ -51,6 +74,15 @@ namespace HR_Automation_System.AdditionalWindows
             {
                 this.Close(); // Закрываем текущее окно
             }
+        }
+
+        // Автозаполнение полей для редактирования
+        private void LoadWindowFields()
+        {
+            var sickLeave = GlobalStaticParameters.Database.GetSickLeaveRecord(_sickLeaveId);
+
+            StartDatePicker.Text = sickLeave.StartDate.ToString();
+            EndDatePicker.Text = sickLeave.EndDate.ToString();
         }
 
         // Метод проверки заполненных полей

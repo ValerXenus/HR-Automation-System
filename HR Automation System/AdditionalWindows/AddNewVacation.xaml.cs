@@ -77,7 +77,7 @@ namespace HR_Automation_System.AdditionalWindows
             }
         }
 
-        // автозаполнение полей для редактирования
+        // Автозаполнение полей для редактирования
         private void LoadWindowFields()
         {
             var vacation = GlobalStaticParameters.Database.GetVacationRecord(_vacationId);

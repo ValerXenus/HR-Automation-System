@@ -57,7 +57,7 @@
             <Button                       
                 Width="135"
                 Height="25"
-                Content="Добавить"
+                Content="Сохранить"
                 Click="SaveButton_Click"
                 Style="{StaticResource ButtonDefaultStyle}"/>
             <Button
