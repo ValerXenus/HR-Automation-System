@@ -1,7 +1,5 @@
 ﻿using HR_Automation_System.Classes;
-using Microsoft.Win32;
 using System;
-using System.IO;
 using System.Windows;
 
 namespace HR_Automation_System.AdditionalWindows
@@ -12,17 +10,23 @@ namespace HR_Automation_System.AdditionalWindows
     public partial class AddNewMaternityLeave : Window
     {
         private int _employeeId;
+        private int _maternityLeaveId;
 
-        public AddNewMaternityLeave(int employeeId)
+        public AddNewMaternityLeave(int employeeId, int maternityLeaveId = -1)
         {
             InitializeComponent();
             _employeeId = employeeId;
+            _maternityLeaveId = maternityLeaveId;
 
             StartDatePicker.Text =
             EndDatePicker.Text = DateTime.Now.ToString();
+
+            if (_maternityLeaveId != -1)
+            {
+                LoadWindowFields();
+            }
         }
 
-        // Кнопка "Добавить отпуск"
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateFields())
@@ -30,11 +34,28 @@ namespace HR_Automation_System.AdditionalWindows
                 return;
             }
 
-            var result = GlobalStaticParameters.Database.AddNewMaternityLeave(
+            bool result;
+
+            if (_maternityLeaveId != -1)
+            {
+                var maternityLeave = new MaternityLeaveData
+                {
+                    Id = _maternityLeaveId,
+                    OrderNumber = OrderNumberTextBox.Text,
+                    StartDate = DateTime.Parse(StartDatePicker.Text),
+                    EndDate = DateTime.Parse(EndDatePicker.Text)
+                };
+
+                result = GlobalStaticParameters.Database.SaveMaternityLeave(maternityLeave);
+            }
+            else
+            {
+                result = GlobalStaticParameters.Database.AddNewMaternityLeave(
                 OrderNumberTextBox.Text,
                 DateTime.Parse(StartDatePicker.Text),
                 DateTime.Parse(EndDatePicker.Text),
                 _employeeId);
+            }            
 
             if (!result) // Если запрос не выполнился, то не сохраняем документ
                 return;
@@ -54,7 +75,17 @@ namespace HR_Automation_System.AdditionalWindows
                 this.Close(); // Закрываем текущее окно
             }
         }
-        
+
+        // Автозаполнение полей для редактирования
+        private void LoadWindowFields()
+        {
+            var maternityLeave = GlobalStaticParameters.Database.GetMaternityLeaveRecord(_maternityLeaveId);
+
+            OrderNumberTextBox.Text = maternityLeave.OrderNumber;
+            StartDatePicker.Text = maternityLeave.StartDate.ToString();
+            EndDatePicker.Text = maternityLeave.EndDate.ToString();
+        }
+
         // Метод проверки заполненных полей
         private bool ValidateFields()
         {

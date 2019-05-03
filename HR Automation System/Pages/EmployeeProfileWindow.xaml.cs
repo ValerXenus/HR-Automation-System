@@ -154,6 +154,16 @@ namespace HR_Automation_System.Pages
             LoadVacationsInfo();
         }
 
+        // Редактирование декретного отпуска
+        private void EditMaternityLeave_Click(object sender, RoutedEventArgs e)
+        {
+            int currentId = (MaternityLeaveDataGrid.SelectedItem as MaternityLeaveData).Id;
+            var vacationWindow = new AddNewMaternityLeave(_currentEmployeeId, currentId);
+            vacationWindow.ShowDialog();
+
+            LoadVacationsInfo();
+        }
+
         #endregion
 
         private void SaveNewEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId, double salary)

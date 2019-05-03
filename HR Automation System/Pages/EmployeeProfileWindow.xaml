@@ -563,7 +563,8 @@
                                                                 ToolTip="Редактировать отпуск"
                                                                 BorderBrush="{x:Null}"
                                                                 Foreground="Black"
-                                                                FontSize="17"                                                                
+                                                                FontSize="17"
+                                                                Click="EditMaternityLeave_Click"
                                                                 Style="{DynamicResource ButtonWhiteStyle}"/>
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>

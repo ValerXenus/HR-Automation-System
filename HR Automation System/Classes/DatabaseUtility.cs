@@ -763,6 +763,37 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        public MaternityLeaveData GetMaternityLeaveRecord(int maternityLeaveId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [maternity_leave] WHERE [ml_id] = [MaternityLeaveId]";
+            _command.Parameters.Add(@"MaternityLeaveId", OleDbType.Integer).Value = maternityLeaveId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var maternityLeave = new MaternityLeaveData();
+                while (_dataReader.Read())
+                {
+                    maternityLeave = new MaternityLeaveData
+                    {
+                        StartDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                        EndDate = DateTime.Parse(_dataReader["end_date"].ToString()),
+                        OrderNumber = _dataReader["order_number"].ToString()
+                    };
+                }
+                _dataReader.Close();
+                return maternityLeave;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
         #endregion
 
         #endregion
@@ -800,6 +831,28 @@ namespace HR_Automation_System.Classes
             _command.Parameters.AddWithValue("@StartDate", sickLeave.StartDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@EndDate", sickLeave.EndDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@SickLeaveId", sickLeave.Id);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+            return true;
+        }
+
+        // Сохранение отредактированного декретного отпуска
+        public bool SaveMaternityLeave(MaternityLeaveData maternityLeave)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [maternity_leave] SET [start_date] = [StartDate], [end_date] = [EndDate], [order_number] = [OrderNumber] WHERE [ml_id] = [MaternityLeaveId]";            
+            _command.Parameters.AddWithValue("@StartDate", maternityLeave.StartDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@EndDate", maternityLeave.EndDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@OrderNumber", maternityLeave.OrderNumber);
+            _command.Parameters.AddWithValue("@MaternityLeaveId", maternityLeave.Id);
             try
             {
                 _command.ExecuteNonQuery();
