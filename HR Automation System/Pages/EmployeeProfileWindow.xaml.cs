@@ -14,26 +14,16 @@ namespace HR_Automation_System.Pages
     /// </summary>
     public partial class EmployeeProfileWindow : Window
     {
-        private bool _isExistEmployee; // Признак, это редактирование существующего сотрудника
         private int _currentEmployeeId; // Код получаемого сотрудника
         private byte[] _imageBytes; // Байты фотографии сотрудника
         private string _imagePath;
         private string _imageExtension;
+        private string _imageFilename; // Имя файла картинки
 
-        // Конструктор без параметра Employee (добавление нового сотрудника)
-        public EmployeeProfileWindow()
+        public EmployeeProfileWindow(int employeeId = -1)
         {
             InitializeComponent();
-            _isExistEmployee = false;
-            LoadFormData();
-        }
-
-        // Конструктор с параметром EmployeeId (редактирование существующего сотрудника)
-        public EmployeeProfileWindow(int employeeId)
-        {
-            InitializeComponent();
-            _isExistEmployee = true;
-            _currentEmployeeId = employeeId;
+            _currentEmployeeId = employeeId; // Если это режим редактирование сотрудника, то код будет не равен -1
             LoadFormData();
         }
 
@@ -73,12 +63,15 @@ namespace HR_Automation_System.Pages
 
             int gender = 0;
             if (FemaleRadioButton.IsChecked == true)
-                gender = 1;
-            if (_isExistEmployee)
             {
-
+                gender = 1;
             }
-            else
+
+            if (_currentEmployeeId != -1) // Если это режим на сохранение отредактированного сотрудника
+            {
+                UpdateEmployee(gender, documentType, contractId, familyStatusId, departmentId, salary);
+            }
+            else // Если это режим на сохранение нового сотрудника
             {
                 SaveNewEmployee(gender, documentType, contractId, familyStatusId, departmentId, salary);
             }
@@ -168,12 +161,12 @@ namespace HR_Automation_System.Pages
 
         private void SaveNewEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId, double salary)
         {
-            string currecntDirectory = Directory.GetCurrentDirectory();
+            string currentDirectory = Directory.GetCurrentDirectory();
 
-            if (!Directory.Exists(Path.Combine(currecntDirectory, "Images"))) // Проверяем существование папки Images
+            if (!Directory.Exists(Path.Combine(currentDirectory, "Images"))) // Проверяем существование папки Images
             {
                 // Если ее нет, то создаем
-                Directory.CreateDirectory(Path.Combine(currecntDirectory, "Images"));
+                Directory.CreateDirectory(Path.Combine(currentDirectory, "Images"));
             }
 
             var guid = Guid.NewGuid().ToString() + _imageExtension; // Создаем новый уникальный идентификатор для имени файла
@@ -203,7 +196,57 @@ namespace HR_Automation_System.Pages
             if (!result) // Если запрос не выполнился, то не сохраняем картинку
                 return;
 
-            File.Copy(_imagePath, Path.Combine(currecntDirectory, "Images", guid));
+            File.Copy(_imagePath, Path.Combine(currentDirectory, "Images", guid));
+            this.Close();
+        }
+
+        // Обновление данных сотрудника
+        private void UpdateEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId, double salary)
+        {
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string currentImageFilename = Path.GetFileName(_imagePath);
+            string guid = Path.GetFileName(_imagePath);
+
+            if (!string.IsNullOrEmpty(_imageFilename) && !_imageFilename.Equals(currentImageFilename)) // Если картинка была изменена, то удаляем старую и загружаем новую
+            {
+                string oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", _imageFilename);
+                if (File.Exists(oldImagePath))
+                {
+                    File.Delete(oldImagePath);
+                }
+
+                if (!Directory.Exists(Path.Combine(currentDirectory, "Images"))) // Проверяем существование папки Images
+                {
+                    // Если ее нет, то создаем
+                    Directory.CreateDirectory(Path.Combine(currentDirectory, "Images"));
+                }
+
+                guid = Guid.NewGuid().ToString() + _imageExtension; // Создаем новый уникальный идентификатор для имени файла
+                File.Copy(_imagePath, Path.Combine(currentDirectory, "Images", guid));
+            }
+
+            var employeeInfo = new EmployeeInfo
+            {
+                Name = NameTextBox.Text,
+                Gender = gender,
+                BirthDate = BirthDatePicker.DisplayDate,
+                Inn = InnTextBox.Text,
+                Snils = SnilsTextBox.Text,
+                DocumentType = documentType,
+                DocumentNumber = DocumentNumberTextBox.Text,
+                Address = AddressTextBox.Text,
+                Phone = PhoneTextBox.Text,
+                Email = EmailTextBox.Text,
+                EmployeeBook = EmplHistoryTextBox.Text,
+                FamilyStatus = familyStatusId,
+                Contract = contractId,
+                Department = departmentId,
+                Position = PositionTextBox.Text,
+                Salary = salary,
+                ImageName = guid
+            };
+
+            GlobalStaticParameters.Database.UpdateEmployee(employeeInfo, _currentEmployeeId);
             this.Close();
         }
 
@@ -215,7 +258,7 @@ namespace HR_Automation_System.Pages
             LoadComboBoxData();
             BirthDatePicker.Text = DateTime.Now.ToString();
 
-            if (_isExistEmployee)
+            if (_currentEmployeeId != -1)
             {
                 LoadDataFromDatabase();
             }
@@ -260,6 +303,7 @@ namespace HR_Automation_System.Pages
             ContractsComboBox.SelectedValue = employeeInfo.Contract;
 
             _imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", employeeInfo.ImageName); // Получаем директорию хранения картинки
+            _imageFilename = employeeInfo.ImageName;
             _imageBytes = File.ReadAllBytes(_imagePath); // Считываем данные файла
             LoadProfileImage();
             LoadVacationsInfo();

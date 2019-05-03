@@ -601,6 +601,12 @@
             Height="30"
             Visibility="Hidden"
             Content="В отпуске с 22.02.2019 по 22.03.2019"/>
+        <Button
+            Margin="0, 420, 600, 00"
+            Width="150"
+            Height="25"
+            Content="Уволить"
+            Style="{StaticResource ButtonDefaultStyle}"/>
         <StackPanel
             Margin="0, 420, 20, 0"
             HorizontalAlignment="Right"

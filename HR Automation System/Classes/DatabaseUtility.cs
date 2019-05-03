@@ -848,7 +848,8 @@ namespace HR_Automation_System.Classes
         {
             _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
-            _command.CommandText = "UPDATE [maternity_leave] SET [start_date] = [StartDate], [end_date] = [EndDate], [order_number] = [OrderNumber] WHERE [ml_id] = [MaternityLeaveId]";            
+            _command.CommandText = "UPDATE [maternity_leave] SET [start_date] = [StartDate], [end_date] = [EndDate]," +
+                " [order_number] = [OrderNumber] WHERE [ml_id] = [MaternityLeaveId]";            
             _command.Parameters.AddWithValue("@StartDate", maternityLeave.StartDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@EndDate", maternityLeave.EndDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@OrderNumber", maternityLeave.OrderNumber);
@@ -863,6 +864,62 @@ namespace HR_Automation_System.Classes
                 return false;
             }
             return true;
+        }
+
+        // Сохранение отредактированных данных сотрудника
+        public void UpdateEmployee(EmployeeInfo employeeInfo, int employeeId)
+        {
+            // Сперва обновляем таблицу "Сотрудники"
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [employees] SET [employee_name] = [@EmployeeName], [gender] = [@Gender], [birth_date] = [@BirthDate], " +
+                "[inn] = [@InnParam], [snils] = [@SnilsParam], [document_type] = [@DocumentType], [document_number] = [@DocumentNumber], " +
+                "[address] = [@AddressParam], [phone_number] = [@PhoneNumber], [email] = [@EmailParam], [photograph_link] = [@PhotographLink], " +
+                "[empl_book_number] = [@EmplBook], [family_status] = [@FamilyStatus], [contract_id] = [@ContractId] " +
+                "WHERE [employee_id] = [@EmployeeId]";
+            _command.Parameters.AddWithValue("@EmployeeName", employeeInfo.Name);
+            _command.Parameters.AddWithValue("@GenderParam", employeeInfo.Gender);
+            _command.Parameters.AddWithValue("@BirthDate", employeeInfo.BirthDate.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@InnParam", employeeInfo.Inn);
+            _command.Parameters.AddWithValue("@SnilsParam", employeeInfo.Snils);
+            _command.Parameters.AddWithValue("@DocumentType", employeeInfo.DocumentType);
+            _command.Parameters.AddWithValue("@DocumentNumber", employeeInfo.DocumentNumber);
+            _command.Parameters.AddWithValue("@AddressParam", employeeInfo.Address);
+            _command.Parameters.AddWithValue("@PhoneNumber", employeeInfo.Phone);
+            _command.Parameters.AddWithValue("@EmailParam", employeeInfo.Email);
+            _command.Parameters.AddWithValue("@PhotographLink", employeeInfo.ImageName);
+            _command.Parameters.AddWithValue("@EmplBook", employeeInfo.EmployeeBook);
+            _command.Parameters.AddWithValue("@FamilyStatus", employeeInfo.FamilyStatus);
+            _command.Parameters.AddWithValue("@ContractId", employeeInfo.Contract);
+            _command.Parameters.AddWithValue("@EmployeeId", employeeId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+            }
+
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [employees_in_departments] SET [department_id] = [DepartmentId], " +
+                "[position] = [PositionParam], [salary] = [SalaryParam], [contract_id] = [ContractId] " +
+                "WHERE [employee_id] = [EmployeeId]";
+            _command.Parameters.AddWithValue("@DepartmentId", employeeInfo.Department);
+            _command.Parameters.AddWithValue("@PositionParam", employeeInfo.Position);
+            _command.Parameters.Add(@"SalaryParam", OleDbType.Double).Value = employeeInfo.Salary;
+            _command.Parameters.AddWithValue("@ContractId", employeeInfo.Contract);
+            _command.Parameters.AddWithValue("@EmployeeId", employeeId);
+
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+            }
         }
 
         // Метод включения/отключения отпусков у сотрудников

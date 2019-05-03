@@ -11,7 +11,7 @@ namespace HR_Automation_System.Pages
         public EmployeesListPage()
         {
             InitializeComponent();
-            LoadDataGrid();
+            RefreshDataGrid();
         }
 
         // Добавление нового сотрудника
@@ -19,11 +19,11 @@ namespace HR_Automation_System.Pages
         {
             var window = new EmployeeProfileWindow();
             window.ShowDialog();
-            LoadDataGrid();
+            RefreshDataGrid();
         }
 
         // Обновление списка в таблице
-        private void LoadDataGrid()
+        private void RefreshDataGrid()
         {
             var employees = GlobalStaticParameters.Database.GetEmployeesRows();
             EmployeesList.ItemsSource = employees;
@@ -38,6 +38,8 @@ namespace HR_Automation_System.Pages
             var employee = EmployeesList.SelectedItem as BookClasses.EmployeeRow;
             var window = new EmployeeProfileWindow(employee.EmployeeId);
             window.ShowDialog();
+
+            RefreshDataGrid();
         }
     }
 }
