@@ -40,13 +40,14 @@ namespace HR_Automation_System.Classes
         {
             _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
-            _command.CommandText = "INSERT INTO employment_contracts (contract_number, start_date, document_name, end_date, leaving_reason) " +
-                "VALUES ([Contract_Number], [Start_Date], [Document_Name], [End_Date], [Leaving_Reason])";
+            _command.CommandText = "INSERT INTO employment_contracts (contract_number, start_date, document_name, end_date, leaving_reason, leaving_order) " +
+                "VALUES ([Contract_Number], [Start_Date], [Document_Name], [End_Date], [Leaving_Reason], [LeavingOrder])";
             _command.Parameters.AddWithValue("@Contract_Number", contractNumber);
             _command.Parameters.AddWithValue("@Start_Date", date.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@Document_Name", filename);
             _command.Parameters.AddWithValue("@End_Date", DateTime.MaxValue.ToString("dd/MM/yyyy")); // Т.к. сотрудник не увольняется, ставим максимальную дату
             _command.Parameters.AddWithValue("@Leaving_Reason", "-"); // И не заполняем причину увольнения
+            _command.Parameters.AddWithValue("@LeavingOrder", "-"); // приказ увольнения
             try
             {
                 _command.ExecuteNonQuery();
@@ -704,6 +705,23 @@ namespace HR_Automation_System.Classes
             return vacationInfo;
         }
 
+        // Получить contractId сотрудника
+        private int getEmployeeContractId(int employeeId)
+        {
+            int idx = -1;
+
+            _command.CommandText = string.Format("SELECT contract_id FROM employees WHERE employee_id = {0}", employeeId);
+            _dataReader = _command.ExecuteReader();
+
+            while (_dataReader.Read())
+            {
+                idx = int.Parse(_dataReader["contract_id"].ToString());
+            }
+            _dataReader.Close();
+
+            return idx;
+        }
+
         #region Запросы на получение данных для редактирования отпусков
         // Получение записи отпуска на редактирование
         public VacationData GetVacationRecord(int vacationId)
@@ -924,6 +942,31 @@ namespace HR_Automation_System.Classes
             {
                 MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
             }
+        }
+
+        // Метод увольнения сотрудника
+        public bool DismissEmployee(int employeeId, string orderNumber, string reason, DateTime leavingDate)
+        {
+            int contractId = getEmployeeContractId(employeeId);
+
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [employment_contracts] SET [end_date] = [EndDate], [leaving_reason] = [LeavingReason]," +
+                " [leaving_order] = [OrderNumber] WHERE [contract_id] = [ContractId]";
+            _command.Parameters.AddWithValue("@EndDate", leavingDate.ToString("dd/MM/yyyy"));            
+            _command.Parameters.AddWithValue("@LeavingReason", reason);
+            _command.Parameters.AddWithValue("@OrderNumber", orderNumber);
+            _command.Parameters.AddWithValue("@ContractId", contractId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+            return true;
         }
 
         // Метод включения/отключения отпусков у сотрудников

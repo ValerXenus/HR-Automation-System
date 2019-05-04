@@ -92,7 +92,7 @@ namespace HR_Automation_System.AdditionalWindows
 
             if (string.IsNullOrEmpty(FilenameTextBox.Text))
             {
-                errorText += "- Необходима выбрать фпйл трудового договора";
+                errorText += "- Необходима выбрать файл трудового договора";
             }
 
             if (!File.Exists(FilenameTextBox.Text))

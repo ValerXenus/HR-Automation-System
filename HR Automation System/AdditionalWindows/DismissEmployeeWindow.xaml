@@ -76,14 +76,14 @@
                 Width="135"
                 Height="25"
                 Content="Сохранить"
-                
+                Click="SaveButton_Click"
                 Style="{StaticResource ButtonDefaultStyle}"/>
             <Button
                 Margin="10, 0, 0, 0"
                 Width="135"
                 Height="25"
                 Content="Отмена"
-                
+                Click="CancelButton_Click"
                 Style="{StaticResource ButtonDefaultStyle}"/>
         </StackPanel>
     </Grid>

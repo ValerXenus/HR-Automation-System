@@ -157,6 +157,14 @@ namespace HR_Automation_System.Pages
             LoadVacationsInfo();
         }
 
+        // Метод увольнения сотрудника
+        private void DismissEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new DismissEmployeeWindow(_currentEmployeeId);
+            window.ShowDialog();
+            this.Close();
+        }
+
         #endregion
 
         private void SaveNewEmployee(int gender, int documentType, int contractId, int familyStatusId, int departmentId, double salary)
@@ -481,6 +489,6 @@ namespace HR_Automation_System.Pages
             return true;
         }
 
-        #endregion        
+        #endregion
     }
 }
