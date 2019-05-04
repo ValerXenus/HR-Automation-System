@@ -16,7 +16,7 @@
         </Setter>
     </Style>
 
-    <!--Стиль кнопки-->
+    <!--Стандартный стиль кнопки-->
     <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
     <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
     <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
@@ -38,7 +38,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" Background="#FF078CD1" BorderBrush="#FF078CD1">
+                    <Border x:Name="border" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" Background="#FF078CD1" BorderBrush="#FF078CD1" CornerRadius="4">
                         <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RenderTransformOrigin="0.5,0.5">
                             <ContentPresenter.RenderTransform>
                                 <TransformGroup>
@@ -93,6 +93,63 @@
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
 
+    <!--Белый стиль кнопки-->
+    <Style x:Key="ButtonWhiteStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" SnapsToDevicePixels="true" Background="White" BorderBrush="{x:Null}" CornerRadius="4">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RenderTransformOrigin="0.5,0.5">
+                            <ContentPresenter.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </ContentPresenter.RenderTransform>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDefaulted" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#FF74CCFF" Duration="0:0:0.3" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="White" Duration="0:0:0.3" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="White"/>
+                            <Setter Property="RenderTransform" TargetName="contentPresenter">
+                                <Setter.Value>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--Стиль для TabControl-->
     <Style x:Key="TabControlDefaultStyle" TargetType="{x:Type TabControl}">
         <Setter Property="Padding" Value="2"/>
@@ -123,6 +180,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--Стиль TabItem-->
     <Style x:Key="TabItemDefaultStyle" TargetType="{x:Type TabItem}">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background">
@@ -274,7 +333,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--Стиль для кнопки "Гамбургер на открытие/сворачивание" левого меню-->
     <Style x:Key="HamburgerButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -341,5 +400,151 @@
             </Setter.Value>
         </Setter>
         <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <!--Стиль и шаблон для TextBox-->
+    <Style x:Key="TextBoxDefaultStyle" TargetType="TextBox">
+        <Setter Property="Padding" Value="6, 0, 0, 0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+
+    <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
+        <Border x:Name="border"
+                BorderBrush="#FFB1B1B1"
+                BorderThickness="2"
+                Background="White"
+                SnapsToDevicePixels="True">
+            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF7EB4EA"/>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF569DE5"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--Стиль для DataGrid-->
+    <Style x:Key="DataGridDefaultSyle" TargetType="DataGrid">
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="CanUserResizeRows" Value="False"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+    </Style>
+
+    <!--Стиль ячейки DataGrid-->
+    <Style x:Key="DataGridCellDefaultStyle" TargetType="DataGridCell">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Стиль заголовка DataGrid-->
+    <SolidColorBrush x:Key="NormalBrush" Color="White"/>
+    <SolidColorBrush x:Key="NormalBorderBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="MouseOverBrush" Color="LightGray"/>
+    <Style x:Key="DataGridColumnHeaderDefaultStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="HoverOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Hover" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="HoverOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Hover" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <Grid Background='Transparent'>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width='Auto'/>
+                            <ColumnDefinition Width='Auto'/>
+                            <ColumnDefinition Width='*'/>
+                            <ColumnDefinition Width='Auto'/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle x:Name="BackgroundRectangle" Grid.ColumnSpan="4" Grid.RowSpan="2" 
+                                   Fill="{StaticResource NormalBrush}" Stretch="Fill"/>
+                        <Rectangle x:Name="Hover" Grid.ColumnSpan="4" Grid.RowSpan="2" Stretch="Fill" 
+                                   Fill="{StaticResource MouseOverBrush}" Opacity="0"/>
+                        <ContentPresenter 
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"  
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  
+                            Margin='{TemplateBinding Padding}'  
+                            Cursor="{TemplateBinding Cursor}"/>
+                        <Path HorizontalAlignment="Left"
+                              x:Name="SortArrow"
+                              VerticalAlignment="Center"
+                              Width="8"
+                              Opacity="0"
+                              RenderTransformOrigin=".5,.5"
+                              Grid.Column="2"
+                              Grid.RowSpan="2"
+                              Fill="#FF000000"
+                              Stretch="Uniform"
+                              Data="F1 M -5.215,6.099L 5.215,6.099L 0,0L -5.215,6.099 Z ">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX=".9"
+                                                    ScaleY=".9"
+                                                    x:Name="SortIconTransform"/>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="SortDirection" Value="Ascending">
+                            <Setter TargetName="SortArrow" Property="Opacity" Value="1"/>
+                            <Setter TargetName="SortArrow" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="180"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="BackgroundRectangle" Property="Opacity" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Descending">
+                            <Setter TargetName="SortArrow" Property="Opacity" Value="1"/>
+                            <Setter TargetName="BackgroundRectangle" Property="Opacity" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOff}"/>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

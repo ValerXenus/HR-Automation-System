@@ -11,6 +11,7 @@
         Height="540"
         Width="960"
         WindowStartupLocation="CenterScreen"
+        Closing="Application_Closing"
         FontFamily="/HR Automation System;component/Fonts/#Panton">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -26,13 +27,14 @@
         <StackPanel 
             x:Name="LeftHandMenu"
             Focusable="False"
-            Grid.Row="1"            
+            Grid.Row="1"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
             Background="#FF272828"
             Margin="-2,-2,0,-2"
             Orientation="Vertical">
             <!--Кнопки левого меню-->
             <RadioButton 
+                IsChecked="True"
                 x:Name="EmployeesButton"
                 Content="&#xE125;  Сотрудники"                
                 FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"                
@@ -42,7 +44,8 @@
                 FontSize="16"
                 Style="{DynamicResource MenuButtonStyle}"
                 ToolTip="Список сотрудников"
-                Foreground="White"/>
+                Foreground="White"
+                Click="EmployeesPageButton_Click"/>
             <RadioButton 
                 x:Name="DocumentsButton"
                 Content="&#xE1A5;  Документы"

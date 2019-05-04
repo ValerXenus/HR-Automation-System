@@ -53,19 +53,75 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AdditionalWindows\AddNewContract.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\AddNewMaternityLeave.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\AddNewSickLeave.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\AddNewVacation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\DismissEmployeeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\EmployeeFilterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AdditionalWindows\AddNewContract.xaml.cs">
+      <DependentUpon>AddNewContract.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\AddNewMaternityLeave.xaml.cs">
+      <DependentUpon>AddNewMaternityLeave.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\AddNewSickLeave.xaml.cs">
+      <DependentUpon>AddNewSickLeave.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\AddNewVacation.xaml.cs">
+      <DependentUpon>AddNewVacation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\DismissEmployeeWindow.xaml.cs">
+      <DependentUpon>DismissEmployeeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\EmployeeFilterWindow.xaml.cs">
+      <DependentUpon>EmployeeFilterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\BookClasses.cs" />
     <Compile Include="Classes\DatabaseUtility.cs" />
+    <Compile Include="Classes\EmployeeInfo.cs" />
+    <Compile Include="Classes\GlobalStaticParameters.cs" />
+    <Compile Include="Classes\MaternityLeaveData.cs" />
+    <Compile Include="Classes\SickLeaveData.cs" />
+    <Compile Include="Classes\VacationData.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\EmployeeProfileWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\EmployeesListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\LogInPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -76,6 +132,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\EmployeeProfileWindow.xaml.cs">
+      <DependentUpon>EmployeeProfileWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\EmployeesListPage.xaml.cs">
+      <DependentUpon>EmployeesListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\LogInPage.xaml.cs">
       <DependentUpon>LogInPage.xaml</DependentUpon>
     </Compile>
@@ -99,6 +161,7 @@
     <None Include="app.config" />
     <Resource Include="Fonts\Panton-Regular.otf" />
     <Resource Include="Fonts\seguisym.ttf" />
+    <Resource Include="Fonts\Panton-Bold.otf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

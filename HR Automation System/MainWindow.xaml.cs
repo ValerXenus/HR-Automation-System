@@ -1,6 +1,5 @@
 ﻿using HR_Automation_System.Classes;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media.Animation;
 
@@ -14,11 +13,10 @@ namespace HR_Automation_System
         private static bool isMenuOpen; // Признак, открыто ли меню или свернуто
 
         // Конструктор окна
-        public MainWindow(DatabaseUtility db, int userId)
+        public MainWindow()
         {
             InitializeComponent();
             LoadUiElements();
-            db.Disconnect();            
         }
 
         // Открыть/свернуть левое меню
@@ -41,6 +39,7 @@ namespace HR_Automation_System
         private void LoadUiElements()
         {
             isMenuOpen = true;
+            ChangePage("EmployeesListPage");
         }
 
         // Открыть левое меню
@@ -61,6 +60,25 @@ namespace HR_Automation_System
             anim_menu.To = 42;
             anim_menu.Duration = TimeSpan.FromSeconds(0.2);
             LeftHandMenu.BeginAnimation(WidthProperty, anim_menu);
+        }
+
+        // Смена страницы в главном окне
+        private void ChangePage(string page_name)  // Changes page on page viewer
+        {
+            string link = "/HR Automation System;component/Pages/" + page_name + ".xaml";
+            PageViewer.Source = new Uri(link, UriKind.Relative);
+        }
+
+        // Кнопка меню "Сотрудники"
+        private void EmployeesPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage("EmployeesListPage");
+        }
+
+        // Событие при закрытии главного окна приложения
+        private void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            GlobalStaticParameters.Database.Disconnect(); // Отключаем соединение с базой даннхы
         }
     }
 }
