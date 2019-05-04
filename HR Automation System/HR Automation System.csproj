@@ -73,6 +73,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AdditionalWindows\EmployeeFilterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -91,6 +95,9 @@
     </Compile>
     <Compile Include="AdditionalWindows\DismissEmployeeWindow.xaml.cs">
       <DependentUpon>DismissEmployeeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\EmployeeFilterWindow.xaml.cs">
+      <DependentUpon>EmployeeFilterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

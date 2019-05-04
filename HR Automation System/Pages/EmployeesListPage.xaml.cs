@@ -1,4 +1,5 @@
-﻿using HR_Automation_System.Classes;
+﻿using HR_Automation_System.AdditionalWindows;
+using HR_Automation_System.Classes;
 using System.Windows.Controls;
 
 namespace HR_Automation_System.Pages
@@ -40,6 +41,13 @@ namespace HR_Automation_System.Pages
             window.ShowDialog();
 
             RefreshDataGrid();
+        }
+
+        // Кнопка "Фильтр"
+        private void FilterButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var filterWindow = new EmployeeFilterWindow();
+            filterWindow.ShowDialog();
         }
     }
 }
