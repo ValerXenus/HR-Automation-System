@@ -91,7 +91,7 @@
                 Width="135"
                 Height="25"
                 Content="Поиск"
-                
+                Click="FilterButton_Click"
                 Style="{StaticResource ButtonDefaultStyle}"/>
             <Button
                 Margin="10, 0, 0, 0"

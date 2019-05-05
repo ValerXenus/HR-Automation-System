@@ -332,8 +332,8 @@ namespace HR_Automation_System.Classes
         // Получение сотрудников для DataGrid на EmployeeListPage
         public ObservableCollection<BookClasses.EmployeeRow> GetEmployeesRows()
         {
-            _command.CommandText = "SELECT [employees].[employee_id], [employees].[employee_name], [employees_in_departments].[position], " +
-                "[departments].[department_name] " +
+            _command.CommandText = "SELECT [employees].[employee_id], [employees].[employee_name], [employees].[birth_date], [employees_in_departments].[position], " +
+                "[employees_in_departments].[department_id], [departments].[department_name], [employment_contracts].[start_date] " +
                 "FROM ([employees] INNER JOIN ([departments] INNER JOIN [employees_in_departments] " +
                 "ON [departments].[department_id] = [employees_in_departments].[department_id]) " +
                 "ON [employees].[employee_id] = [employees_in_departments].[employee_id]) " +
@@ -350,15 +350,18 @@ namespace HR_Automation_System.Classes
                     {
                         EmployeeId = int.Parse(_dataReader["employee_id"].ToString()),
                         EmployeeName = _dataReader["employee_name"].ToString(),
+                        BirthDate = DateTime.Parse(_dataReader["birth_date"].ToString()),
                         Department = _dataReader["department_name"].ToString(),
-                        Position = _dataReader["position"].ToString()
+                        DepartmentId = int.Parse(_dataReader["department_id"].ToString()),
+                        Position = _dataReader["position"].ToString(),
+                        ContractDate = DateTime.Parse(_dataReader["start_date"].ToString())
                     });
                 }
                 _dataReader.Close();
 
                 return rows;
             }
-            catch
+            catch (Exception ex)
             {
                 _dataReader.Close();
                 return null; // Если таблица пустая

@@ -106,6 +106,7 @@
     <Compile Include="Classes\BookClasses.cs" />
     <Compile Include="Classes\DatabaseUtility.cs" />
     <Compile Include="Classes\EmployeeInfo.cs" />
+    <Compile Include="Classes\FilterParameters.cs" />
     <Compile Include="Classes\GlobalStaticParameters.cs" />
     <Compile Include="Classes\MaternityLeaveData.cs" />
     <Compile Include="Classes\SickLeaveData.cs" />

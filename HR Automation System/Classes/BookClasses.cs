@@ -48,10 +48,20 @@ namespace HR_Automation_System.Classes
         // Класс для отображения сотрудников в таблице
         public class EmployeeRow
         {
+            // Код сотрудника
             public int EmployeeId { get; set; }
+
+            // Дата рождения
+            public DateTime BirthDate { get; set; }
+
+            // Дата заключения трудового договора
+            public DateTime ContractDate { get; set; }
 
             // ФИО сотрудника
             public string EmployeeName { get; set; }
+
+            // Код отдела
+            public int DepartmentId { get; set; }
 
             // Должность
             public string Position { get; set; }
