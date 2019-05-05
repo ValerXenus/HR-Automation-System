@@ -136,20 +136,17 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <TextBox
-                        VerticalContentAlignment="Center"
                         FontSize="14"
                         Grid.Row="1"
                         HorizontalAlignment="Center"
-                        TextWrapping="Wrap"
                         VerticalAlignment="Center"
                         Width="250"
                         Name="LoginTextBox" 
                         Height="30"
-                        BorderBrush="#FFB1B1B1" 
-                        BorderThickness="2"
-                        FontWeight="Bold"
                         KeyDown="LoginTextBox_KeyDown"
-                        KeyUp="LoginTextBox_KeyDown"/>
+                        KeyUp="LoginTextBox_KeyDown"
+                        Template="{DynamicResource TextBoxBaseControlTemplate}"
+                        Style="{StaticResource TextBoxDefaultStyle}"/>
                     <TextBlock
                         x:Name="LoginWatermark"
                         IsHitTestVisible="False"
@@ -166,10 +163,11 @@
                         FontSize="14"
                         Grid.Row="2"
                         HorizontalAlignment="Center" 
-                        Width="250" 
+                        Width="250"
                         Name="PasswordTextBox"
                         BorderBrush="#FFB1B1B1"
                         BorderThickness="2"
+                        Padding="6,0,0,0"
                         KeyDown="PasswordTextBox_KeyDown"
                         KeyUp="PasswordTextBox_KeyDown"
                         ClipToBounds="True"/>

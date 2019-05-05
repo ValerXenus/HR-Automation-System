@@ -54,7 +54,9 @@ namespace HR_Automation_System.Pages
         // Авторизация пользователя и переход на главное окно программы
         private void userAuth(DatabaseUtility db, int userId)
         {
-            var window = new MainWindow(db, userId);
+            GlobalStaticParameters.Database = db;
+            GlobalStaticParameters.UserId = userId;
+            var window = new MainWindow();
             window.Show();
             this.Close();
         }
