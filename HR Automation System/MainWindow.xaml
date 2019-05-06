@@ -56,7 +56,8 @@
                 FontSize="16"
                 Style="{DynamicResource MenuButtonStyle}"
                 ToolTip="Кадровые документы"
-                Foreground="White"/>
+                Foreground="White"
+                Click="DocumentsPageButton_Click"/>
             <RadioButton 
                 x:Name="GraduationButton"
                 Content="&#xE1CE;  Аттестация"

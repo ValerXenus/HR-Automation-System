@@ -1,0 +1,122 @@
+﻿<Page x:Class="HR_Automation_System.Pages.HrDocuments"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:HR_Automation_System.Pages"
+      mc:Ignorable="d"      
+      d:DesignHeight="480"
+      d:DesignWidth="905"
+      FontFamily="/HR Automation System;component/Fonts/#Panton">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Line
+            Grid.Row="0"
+            Height="2"
+            Fill="Black"/>
+        <Rectangle
+            Grid.Row="0"
+            Grid.ColumnSpan="3"
+            Fill="WhiteSmoke" />
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Grid.Row="0">
+            <Button
+                Width="100"
+                Height="25"
+                FontSize="13"
+                Content="&#xE109;  Добавить"
+                Style="{StaticResource ButtonDefaultStyle}"
+                Margin="0,0,5,0"
+                Click="AddButton_Click"
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"/>
+            <!--<Button
+                Width="25"
+                Height="25"
+                FontSize="13"
+                Content="&#xE16E;"
+                Margin="0,0,5,0"
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol"
+                
+                Style="{StaticResource ButtonWhiteStyle}"/>-->
+        </StackPanel>
+
+        <DataGrid
+            x:Name="DocumentsList"
+            Grid.Row="1"
+            IsReadOnly="True"
+            ColumnHeaderHeight="40"
+            RowHeight="45"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderDefaultStyle}"
+            CellStyle="{StaticResource DataGridCellDefaultStyle}"
+            Style="{StaticResource DataGridDefaultSyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn                    
+                    Header="Id"     
+                    Visibility="Collapsed"
+                    Binding="{Binding Id}"/>
+                <DataGridTextColumn           
+                    Header="    Наименование документа"                    
+                    Binding="{Binding Name}"
+                    Width="600"/>
+                <DataGridTemplateColumn CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="30"
+                                    Cursor="Hand"
+                                    Height="30"
+                                    Content="&#xE104;"
+                                    Background="White"
+                                    FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol" ToolTip="Редактирование документа"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="Black"
+                                    FontSize="17"
+                                    Click="EditButton_Click"
+                                    Style="{DynamicResource ButtonWhiteStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="30"
+                                    Cursor="Hand"
+                                    Height="30"
+                                    Content="&#xE105;"
+                                    Background="White"
+                                    FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol" ToolTip="Сохранить документ"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="Black"
+                                    FontSize="17"
+                                    Click="SaveButton_Click"
+                                    Style="{DynamicResource ButtonWhiteStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="30"
+                                    Cursor="Hand"
+                                    Height="30"
+                                    Content="&#xE107;"
+                                    Background="White"
+                                    FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol" ToolTip="Удалить документ"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="Black"
+                                    FontSize="17"
+                                    Click="DeleteButton_Click"
+                                    Style="{DynamicResource ButtonWhiteStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Rectangle Fill="Gray" Height="1" Margin="0,40.585,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+    </Grid>
+</Page>

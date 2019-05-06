@@ -75,6 +75,12 @@ namespace HR_Automation_System
             ChangePage("EmployeesListPage");
         }
 
+        // Кнопка меню "Документы"
+        private void DocumentsPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage("HrDocuments");
+        }
+
         // Событие при закрытии главного окна приложения
         private void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
