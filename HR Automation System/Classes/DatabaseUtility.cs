@@ -207,6 +207,28 @@ namespace HR_Automation_System.Classes
             return true;
         }
 
+        // Добавление нового документа
+        public bool AddNewDocument(string documentName, string filename)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO hr_documents (document_name, document_link) " +
+                "VALUES ([DocumentName], [DocumentFilename])";
+            _command.Parameters.AddWithValue("@DocumentName", documentName);
+            _command.Parameters.AddWithValue("@DocumentFilename", filename);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Запросы на заполнение ComboBox
@@ -332,6 +354,7 @@ namespace HR_Automation_System.Classes
         // Получение сотрудников для DataGrid на EmployeeListPage
         public ObservableCollection<BookClasses.EmployeeRow> GetEmployeesRows()
         {
+            _command.Parameters.Clear();
             _command.CommandText = "SELECT [employees].[employee_id], [employees].[employee_name], [employees].[birth_date], [employees_in_departments].[position], " +
                 "[employees_in_departments].[department_id], [departments].[department_name], [employment_contracts].[start_date] " +
                 "FROM ([employees] INNER JOIN ([departments] INNER JOIN [employees_in_departments] " +
@@ -361,7 +384,7 @@ namespace HR_Automation_System.Classes
 
                 return rows;
             }
-            catch (Exception ex)
+            catch
             {
                 _dataReader.Close();
                 return null; // Если таблица пустая
@@ -473,6 +496,42 @@ namespace HR_Automation_System.Classes
                 }
                 _dataReader.Close();
                 return vacationData;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        // Запрос на получение списка кадровых документов
+        public ObservableCollection<BookClasses.HrDocument> GetHrDocumentsList()
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT * FROM [hr_documents]";
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var documentsList = new ObservableCollection<BookClasses.HrDocument>();
+
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        var document = new BookClasses.HrDocument
+                        {
+                            Id = int.Parse(_dataReader["document_id"].ToString()),
+                            Name = _dataReader["document_name"].ToString(),
+                            Filename = _dataReader["document_link"].ToString()
+                        };
+                        documentsList.Add(document);
+                    }
+                }
+                _dataReader.Close();
+                return documentsList;
             }
             catch (Exception ex)
             {
@@ -636,7 +695,7 @@ namespace HR_Automation_System.Classes
                 MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
                 return null;
             }
-        }        
+        }
 
         // Запрос на получении информации об отпуске
         public BookClasses.VacationDates GetVacationInfo(int employeeId)
@@ -723,6 +782,28 @@ namespace HR_Automation_System.Classes
             _dataReader.Close();
 
             return idx;
+        }
+
+        // Получить документ по Id
+        public BookClasses.HrDocument GetDocumentData(int documentId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandText = string.Format("SELECT * FROM hr_documents WHERE document_id = {0}", documentId);
+            _dataReader = _command.ExecuteReader();
+
+            BookClasses.HrDocument document = null;
+
+            while (_dataReader.Read())
+            {
+                document = new BookClasses.HrDocument
+                {
+                    Name = _dataReader["document_name"].ToString(),
+                    Filename = _dataReader["document_link"].ToString()
+                };
+            }
+            _dataReader.Close();
+
+            return document;
         }
 
         #region Запросы на получение данных для редактирования отпусков
@@ -874,7 +955,7 @@ namespace HR_Automation_System.Classes
             _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
             _command.CommandText = "UPDATE [maternity_leave] SET [start_date] = [StartDate], [end_date] = [EndDate]," +
-                " [order_number] = [OrderNumber] WHERE [ml_id] = [MaternityLeaveId]";            
+                " [order_number] = [OrderNumber] WHERE [ml_id] = [MaternityLeaveId]";
             _command.Parameters.AddWithValue("@StartDate", maternityLeave.StartDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@EndDate", maternityLeave.EndDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@OrderNumber", maternityLeave.OrderNumber);
@@ -956,10 +1037,32 @@ namespace HR_Automation_System.Classes
             _command.CommandType = CommandType.Text;
             _command.CommandText = "UPDATE [employment_contracts] SET [end_date] = [EndDate], [leaving_reason] = [LeavingReason]," +
                 " [leaving_order] = [OrderNumber] WHERE [contract_id] = [ContractId]";
-            _command.Parameters.AddWithValue("@EndDate", leavingDate.ToString("dd/MM/yyyy"));            
+            _command.Parameters.AddWithValue("@EndDate", leavingDate.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@LeavingReason", reason);
             _command.Parameters.AddWithValue("@OrderNumber", orderNumber);
             _command.Parameters.AddWithValue("@ContractId", contractId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+            return true;
+        }
+
+        // Метод сохранения отредактированного документа
+        public bool UpdateDocument(BookClasses.HrDocument document)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [hr_documents] SET [document_name] = [DocumentName], [document_link] = [DocumentLink]" +
+                " WHERE [document_id] = [DocumentId]";
+            _command.Parameters.AddWithValue("@DocumentName", document.Name);
+            _command.Parameters.AddWithValue("@DocumentLink", document.Filename);
+            _command.Parameters.AddWithValue("@DocumentId", document.Id);
             try
             {
                 _command.ExecuteNonQuery();
@@ -1014,6 +1117,28 @@ namespace HR_Automation_System.Classes
             {
                 MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
                 return;
+            }
+        }
+
+        #endregion
+
+        #region Запросы на удаление
+
+        // Метод сохранения отредактированного документа
+        public void RemoveDocument(int documentId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "DELETE FROM [hr_documents]" +
+                " WHERE [document_id] = [DocumentId]";
+            _command.Parameters.AddWithValue("@DocumentId", documentId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
             }
         }
 

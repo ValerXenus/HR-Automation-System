@@ -57,6 +57,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AdditionalWindows\AddNewDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AdditionalWindows\AddNewMaternityLeave.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -83,6 +87,9 @@
     </Page>
     <Compile Include="AdditionalWindows\AddNewContract.xaml.cs">
       <DependentUpon>AddNewContract.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\AddNewDocument.xaml.cs">
+      <DependentUpon>AddNewDocument.xaml</DependentUpon>
     </Compile>
     <Compile Include="AdditionalWindows\AddNewMaternityLeave.xaml.cs">
       <DependentUpon>AddNewMaternityLeave.xaml</DependentUpon>
@@ -123,6 +130,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\HrDocuments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\LogInPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -138,6 +149,9 @@
     </Compile>
     <Compile Include="Pages\EmployeesListPage.xaml.cs">
       <DependentUpon>EmployeesListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\HrDocuments.xaml.cs">
+      <DependentUpon>HrDocuments.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\LogInPage.xaml.cs">
       <DependentUpon>LogInPage.xaml</DependentUpon>

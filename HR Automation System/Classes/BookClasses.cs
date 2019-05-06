@@ -91,5 +91,18 @@ namespace HR_Automation_System.Classes
             // Код сотрудника
             public int EmployeeId { get; set; }
         }
+
+        // Класс для отображения кадровых документов
+        public class HrDocument
+        {
+            // Код документа
+            public int Id { get; set; }
+
+            // Наименование документа
+            public string Name { get; set; }
+
+            // Имя файла
+            public string Filename { get; set; }
+        }
     }
 }
