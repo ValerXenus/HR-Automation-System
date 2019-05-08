@@ -81,6 +81,12 @@ namespace HR_Automation_System
             ChangePage("HrDocuments");
         }
 
+        // Кнопка меню "Статистика"
+        private void StatisticsPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage("StatisticsPage");
+        }
+
         // Событие при закрытии главного окна приложения
         private void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

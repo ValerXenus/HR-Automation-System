@@ -80,6 +80,18 @@
                 Style="{DynamicResource MenuButtonStyle}"
                 ToolTip="Карьерный рост/перемещения сотрудников"
                 Foreground="White"/>
+            <RadioButton 
+                x:Name="StatisticsButton"
+                Content="&#xE148;  Статистика"
+                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"
+                Height="50"
+                GroupName="menuButton"
+                Width="200"
+                FontSize="16"
+                Style="{DynamicResource MenuButtonStyle}"
+                ToolTip="Статистика по сотрудникам"
+                Click="StatisticsPageButton_Click"
+                Foreground="White"/>
         </StackPanel>
         <Rectangle 
             Grid.Row="0"
