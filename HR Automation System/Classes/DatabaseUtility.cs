@@ -24,9 +24,9 @@ namespace HR_Automation_System.Classes
             {
                 _connection.Open(); // Подключение к БД
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Ошибка подключения к базе данных");
+                MessageBox.Show(string.Format("Ошибка подключения к базе данных.\n{0}", ex.Message));
             }
 
             _command = new OleDbCommand(); // Инициализация экземпляра для команд
@@ -688,6 +688,48 @@ namespace HR_Automation_System.Classes
                 }
                 _dataReader.Close();
                 return employeeInfo;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        // Запрос на получение данных для статистики
+        public BookClasses.Statistics GetStatistics()
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT a.employee_id, " +
+                "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
+                    "[employment_contracts].[contract_id] WHERE([employment_contracts].[leaving_reason] = '-')) AS[overall], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE([vacation_id] = -1) AND([sl_id] = -1) AND([ml_id] = -1)) AS[working], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([vacation_id] = -1)) AS[vacation], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([sl_id] = -1)) AS[sick], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([ml_id] = -1)) AS[maternity], " +
+                "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
+                    "[employment_contracts].[contract_id] WHERE NOT([employment_contracts].[leaving_reason] = '-')) AS[dismissed] " +
+                "FROM(SELECT DISTINCT employee_id FROM[employees]) a; ";
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var statistics = new BookClasses.Statistics();
+                while (_dataReader.Read())
+                {
+                    statistics = new BookClasses.Statistics
+                    {
+                        Overall = int.Parse(_dataReader["overall"].ToString()),
+                        Working = int.Parse(_dataReader["working"].ToString()),
+                        Vacation = int.Parse(_dataReader["vacation"].ToString()),
+                        Sick = int.Parse(_dataReader["sick"].ToString()),
+                        Maternity = int.Parse(_dataReader["maternity"].ToString()),
+                        Dismissed = int.Parse(_dataReader["dismissed"].ToString())
+                    };
+                }
+                _dataReader.Close();
+                return statistics;
             }
             catch (Exception ex)
             {

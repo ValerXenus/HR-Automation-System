@@ -104,5 +104,27 @@ namespace HR_Automation_System.Classes
             // Имя файла
             public string Filename { get; set; }
         }
+
+        // Класс для хранения данных статистики
+        public class Statistics
+        {
+            // Общее количество сотрудников
+            public int Overall { get; set; }
+
+            // Количество работающих сотрудников
+            public int Working { get; set; }
+
+            // Количество сотрудников в отпуске
+            public int Vacation { get; set; }
+
+            // Количество сотрудников на больничном
+            public int Sick { get; set; }
+
+            // Количество сотрудников в декретном отпуске
+            public int Maternity { get; set; }
+
+            // Количество уволенных сотрудников
+            public int Dismissed { get; set; }
+        }
     }
 }
