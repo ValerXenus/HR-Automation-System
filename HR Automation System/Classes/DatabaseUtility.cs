@@ -1192,7 +1192,7 @@ namespace HR_Automation_System.Classes
         public void Disconnect()
         {
             _dataReader.Close();
-            _connection.Close(); // Завершение подключения с БД            
+            _connection.Close(); // Завершение подключения с БД
         }
 
         // Проверка логина и пароля пользователя

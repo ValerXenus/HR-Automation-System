@@ -68,7 +68,8 @@
                 FontSize="16"
                 Style="{DynamicResource MenuButtonStyle}"
                 ToolTip="Аттестация сотрудников"
-                Foreground="White"/>
+                Foreground="White"
+                Click="GraduationPageButton_Click"/>
             <RadioButton 
                 x:Name="EmployeesMovingsButton"
                 Content="&#xE143;  Карьерный рост"
