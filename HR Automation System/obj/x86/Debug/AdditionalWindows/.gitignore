@@ -19,3 +19,6 @@
 /AddNewDocument.baml
 /AddNewDocument.g.cs
 /AddNewDocument.g.i.cs
+/SetGraduationWindow.g.i.cs
+/SetGraduationWindow.baml
+/SetGraduationWindow.g.cs

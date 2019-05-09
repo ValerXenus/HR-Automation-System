@@ -32,10 +32,10 @@ namespace HR_Automation_System.Classes
                 // Тема письма        
                 m.Subject = "Аттестация";
                 // Текст письма
-                m.Body = string.Format("<h2>Здравствуйте, {0}!\n\n " +
-                    "Вам назначена аттестация на {1}.\n\n" +
-                    "С Уважением,\n" +
-                    "Команда HR.</h2>", name, date);
+                m.Body = string.Format("Здравствуйте, {0}!<br><br> " +
+                    "Вам назначена аттестация на {1}.<br><br>" +
+                    "С Уважением,<br>" +
+                    "Команда HR.", name, date);
                 m.IsBodyHtml = true;            
                 _smtpClient.Send(m);
             }
@@ -47,6 +47,8 @@ namespace HR_Automation_System.Classes
                     MessageBoxImage.Error);
                 return false;
             }
+            MessageBox.Show("Письмо с уведомлением об аттестации успешно отправлено",
+                "Аттестация", MessageBoxButton.OK, MessageBoxImage.Information);
             return true;
         }
     }

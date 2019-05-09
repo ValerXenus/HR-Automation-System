@@ -68,6 +68,12 @@ namespace HR_Automation_System.Classes
 
             // Отдел
             public string Department { get; set; }
+
+            // Адрес электронной почты
+            public string Email { get; set; }
+
+            // Имя файла трудового договора
+            public string ContractFilename { get; set; }
         }
 
         // Класс для получения дат отпуска
