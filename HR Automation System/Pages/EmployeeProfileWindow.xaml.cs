@@ -284,7 +284,8 @@ namespace HR_Automation_System.Pages
         // Автозаполнение данных сотрудника из базы
         private void LoadDataFromDatabase()
         {
-            VacationsPanel.Visibility = Visibility.Visible; // Отображаем панель отпусков/больничных
+            VacationsPanel.Visibility =
+            DismissButton.Visibility = Visibility.Visible; // Отображаем панель отпусков/больничных
             var employeeInfo = GlobalStaticParameters.Database.GetEmployeeData(_currentEmployeeId);
 
             // Заполнение всех полей

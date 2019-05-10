@@ -602,6 +602,8 @@
             Visibility="Hidden"
             Content="В отпуске с 22.02.2019 по 22.03.2019"/>
         <Button
+            Visibility="Collapsed"
+            x:Name="DismissButton"
             Margin="0, 420, 600, 00"
             Width="150"
             Height="25"

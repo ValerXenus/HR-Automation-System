@@ -9,7 +9,7 @@
         MinHeight="540"
         MinWidth="960"
         Height="540"
-        Width="960"
+        Width="1020"
         WindowStartupLocation="CenterScreen"
         Closing="Application_Closing"
         FontFamily="/HR Automation System;component/Fonts/#Panton">
@@ -68,18 +68,8 @@
                 FontSize="16"
                 Style="{DynamicResource MenuButtonStyle}"
                 ToolTip="Аттестация сотрудников"
-                Foreground="White"/>
-            <RadioButton 
-                x:Name="EmployeesMovingsButton"
-                Content="&#xE143;  Карьерный рост"
-                FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"
-                Height="50"
-                GroupName="menuButton"
-                Width="200"
-                FontSize="16"
-                Style="{DynamicResource MenuButtonStyle}"
-                ToolTip="Карьерный рост/перемещения сотрудников"
-                Foreground="White"/>
+                Foreground="White"
+                Click="GraduationPageButton_Click"/>
             <RadioButton 
                 x:Name="StatisticsButton"
                 Content="&#xE148;  Статистика"

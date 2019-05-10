@@ -70,7 +70,7 @@
                 <DataGridTextColumn                    
                     Header="Отдел"                    
                     Binding="{Binding Department}"
-                    Width="250"/>
+                    Width="230"/>
                 <DataGridTemplateColumn CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -79,11 +79,48 @@
                                     Height="30"
                                     Content="&#xE104;"
                                     Background="White"
-                                    FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol" ToolTip="Просмотр личной карточки сотрудника/редактирование"
+                                    FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol" 
+                                    ToolTip="Просмотр личной карточки сотрудника/редактирование"
                                     BorderBrush="{x:Null}"
                                     Foreground="Black"
                                     FontSize="17"
                                     Click="EditEmployee_Click"
+                                    Style="{DynamicResource ButtonWhiteStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="30"
+                                    Cursor="Hand"
+                                    Height="30"
+                                    Content="&#xE136;"
+                                    Background="White"
+                                    FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol" 
+                                    ToolTip="Открыть трудовой договор"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="Black"
+                                    FontSize="17"
+                                    Click="OpenContract_Click"
+                                    Style="{DynamicResource ButtonWhiteStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="30"
+                                    Cursor="Hand"
+                                    Height="30"
+                                    Content="&#xE110;"
+                                    Background="White"
+                                    FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol" 
+                                    ToolTip="Назначить дату аттестации сотрудника"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="Black"
+                                    FontSize="17"
+                                    Click="SetGraduation_Click"
                                     Style="{DynamicResource ButtonWhiteStyle}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

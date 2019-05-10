@@ -16,7 +16,7 @@ namespace HR_Automation_System
         public MainWindow()
         {
             InitializeComponent();
-            LoadUiElements();
+            LoadUiElements();            
         }
 
         // Открыть/свернуть левое меню
@@ -85,6 +85,12 @@ namespace HR_Automation_System
         private void StatisticsPageButton_Click(object sender, RoutedEventArgs e)
         {
             ChangePage("StatisticsPage");
+        }
+
+        // Кнопка меню "Аттестация"
+        private void GraduationPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage("GraduationPage");
         }
 
         // Событие при закрытии главного окна приложения
