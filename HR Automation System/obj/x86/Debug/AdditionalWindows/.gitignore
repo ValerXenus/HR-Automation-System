@@ -22,3 +22,6 @@
 /SetGraduationWindow.g.i.cs
 /SetGraduationWindow.baml
 /SetGraduationWindow.g.cs
+*.g.i.cs
+/SetGraduationResult.baml
+/SetGraduationResult.g.cs

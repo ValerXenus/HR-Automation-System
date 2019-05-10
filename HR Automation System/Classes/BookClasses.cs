@@ -74,6 +74,12 @@ namespace HR_Automation_System.Classes
 
             // Имя файла трудового договора
             public string ContractFilename { get; set; }
+
+            // Код трудового договора
+            public int ContractId { get; set; }
+
+            // Код записи в таблице аттестации
+            public int GraduationId { get; set; }
         }
 
         // Класс для получения дат отпуска

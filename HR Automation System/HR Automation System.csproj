@@ -114,6 +114,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AdditionalWindows\SetGraduationResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AdditionalWindows\SetGraduationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +146,9 @@
     </Compile>
     <Compile Include="AdditionalWindows\EmployeeFilterWindow.xaml.cs">
       <DependentUpon>EmployeeFilterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\SetGraduationResult.xaml.cs">
+      <DependentUpon>SetGraduationResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="AdditionalWindows\SetGraduationWindow.xaml.cs">
       <DependentUpon>SetGraduationWindow.xaml</DependentUpon>
