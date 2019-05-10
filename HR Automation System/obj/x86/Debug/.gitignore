@@ -19,3 +19,4 @@
 /App.baml
 /App.g.cs
 /App.g.i.cs
+*.cache
