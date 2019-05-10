@@ -2,6 +2,9 @@
 using HR_Automation_System.Classes;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace HR_Automation_System.Pages
@@ -21,7 +24,7 @@ namespace HR_Automation_System.Pages
         }
 
         // Добавление нового сотрудника
-        private void AddNewEmployee_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void AddNewEmployee_Click(object sender, RoutedEventArgs e)
         {
             var window = new EmployeeProfileWindow();
             window.ShowDialog();
@@ -79,7 +82,7 @@ namespace HR_Automation_System.Pages
         }
 
         // Кнопка "Редактировать сотрудника"
-        private void EditEmployee_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void EditEmployee_Click(object sender, RoutedEventArgs e)
         {
             if (EmployeesList.SelectedIndex == -1) // Если не было выделено ни одной строки
                 return;
@@ -91,8 +94,51 @@ namespace HR_Automation_System.Pages
             RefreshDataGrid();
         }
 
+        // Кнопка "Открыть трудовой договор"
+        private void OpenContract_Click(object sender, RoutedEventArgs e)
+        {
+            if (EmployeesList.SelectedIndex == -1) // Если не было выделено ни одной строки
+                return;
+
+            var employee = EmployeesList.SelectedItem as BookClasses.EmployeeRow;
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Contracts", employee.ContractFilename);
+
+            if (!File.Exists(path))
+            {
+                MessageBox.Show("Файл трудового договора не найден",
+                    "Ошибка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            Process.Start(path); // Открываем файл трудового договора
+        }
+
+        // Кнопка "Назначить аттестацию"
+        private void SetGraduation_Click(object sender, RoutedEventArgs e)
+        {
+            if (EmployeesList.SelectedIndex == -1) // Если не было выделено ни одной строки
+                return;
+
+            var employee = EmployeesList.SelectedItem as BookClasses.EmployeeRow;
+            var window = new SetGraduationWindow(employee.EmployeeId, employee.EmployeeName, employee.Email);
+            window.ShowDialog();
+        }
+
+        // Кнопка "Карьерный рост/перемещения"
+        private void PromotionsEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            if (EmployeesList.SelectedIndex == -1) // Если не было выделено ни одной строки
+                return;
+
+            var employee = EmployeesList.SelectedItem as BookClasses.EmployeeRow;
+            var window = new PromotionHistory(employee.EmployeeId);
+            window.ShowDialog();
+        }
+
         // Кнопка "Фильтр"
-        private void FilterButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             var filterWindow = new EmployeeFilterWindow();
             filterWindow.ShowDialog();

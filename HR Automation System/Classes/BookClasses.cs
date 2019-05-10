@@ -68,6 +68,18 @@ namespace HR_Automation_System.Classes
 
             // Отдел
             public string Department { get; set; }
+
+            // Адрес электронной почты
+            public string Email { get; set; }
+
+            // Имя файла трудового договора
+            public string ContractFilename { get; set; }
+
+            // Код трудового договора
+            public int ContractId { get; set; }
+
+            // Код записи в таблице аттестации
+            public int GraduationId { get; set; }
         }
 
         // Класс для получения дат отпуска
@@ -103,6 +115,45 @@ namespace HR_Automation_System.Classes
 
             // Имя файла
             public string Filename { get; set; }
+        }
+
+        // Класс для хранения данных статистики
+        public class Statistics
+        {
+            // Общее количество сотрудников
+            public int Overall { get; set; }
+
+            // Количество работающих сотрудников
+            public int Working { get; set; }
+
+            // Количество сотрудников в отпуске
+            public int Vacation { get; set; }
+
+            // Количество сотрудников на больничном
+            public int Sick { get; set; }
+
+            // Количество сотрудников в декретном отпуске
+            public int Maternity { get; set; }
+
+            // Количество уволенных сотрудников
+            public int Dismissed { get; set; }
+        }
+
+        // Класс хранения записей о карьерном росте/перемещении сотрудника
+        public class EmployeeHistory
+        {
+            // Отдел
+            public string DepartmentName { get; set; }
+
+            // Должность
+            public string Position { get; set; }
+
+            // Оклад
+            public double Salary { get; set; }
+
+            // Дата
+            public DateTime Date { get; set; }
+
         }
     }
 }

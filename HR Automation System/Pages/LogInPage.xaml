@@ -35,6 +35,11 @@
             HorizontalAlignment="Center"
             Height="30"
             Width="180"/>
+        <Image 
+            Grid.Row="4"
+            Grid.Column="1"
+            Height="45"
+            Source="/HR Automation System;component/Images/logo.png"/>
         <TabControl
             Grid.Row="2"
             Grid.Column="1"

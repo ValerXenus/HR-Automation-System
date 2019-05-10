@@ -9,7 +9,8 @@
         WindowStartupLocation="CenterScreen"
         Height="200"
         ResizeMode="NoResize"
-        Width="420">
+        Width="420"
+        FontFamily="/HR Automation System;component/Fonts/#Panton">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

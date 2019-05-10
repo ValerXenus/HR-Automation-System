@@ -24,9 +24,9 @@ namespace HR_Automation_System.Classes
             {
                 _connection.Open(); // Подключение к БД
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Ошибка подключения к базе данных");
+                MessageBox.Show(string.Format("Ошибка подключения к базе данных.\n{0}", ex.Message));
             }
 
             _command = new OleDbCommand(); // Инициализация экземпляра для команд
@@ -100,20 +100,28 @@ namespace HR_Automation_System.Classes
                 return false;
             }
 
-            // Затем получаем Id добавленного сотрудника,
-            // и создаем запись в таблице "Сотрудники в департаментах"
+            // Получаем Id добавленного сотрудника
             var employeeId = getEmployeeByContractId(employeeInfo.Contract);
 
+            if (!AddNewEmployeeInDepartment(employeeInfo.Department, employeeId, employeeInfo.Position, employeeInfo.Salary, employeeInfo.Contract))
+                return false;
+
+            return true;
+        }
+
+        // Создание записи в таблице "Сотрудники в департаментах"
+        public bool AddNewEmployeeInDepartment(int departmentId, int employeeId, string position, double salary, int contractId)
+        {
             _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
-            _command.CommandText = "INSERT INTO [employees_in_departments] ([department_id], [employee_id], [position], [salary], [contract_id])" +
-                " VALUES ([Department_Id], [Employee_Id], [Position], [Salary], [Contract_Id])";
-            _command.Parameters.AddWithValue("@Department_Id", employeeInfo.Department);
+            _command.CommandText = "INSERT INTO [employees_in_departments] ([date], [department_id], [employee_id], [position], [salary], [contract_id])" +
+                " VALUES ([HistoryDate], [Department_Id], [Employee_Id], [Position], [Salary], [Contract_Id])";
+            _command.Parameters.AddWithValue("@HistoryDate", DateTime.Now.ToString("dd/MM/yyyy"));
+            _command.Parameters.AddWithValue("@Department_Id", departmentId);
             _command.Parameters.AddWithValue("@Employee_Id", employeeId);
-            _command.Parameters.AddWithValue("@Position", employeeInfo.Position);
-            _command.Parameters.Add(@"Salary", OleDbType.Double).Value = employeeInfo.Salary;
-            //_command.Parameters.AddWithValue("@Salary", salary);
-            _command.Parameters.AddWithValue("@Contract_Id", employeeInfo.Contract);
+            _command.Parameters.AddWithValue("@Position", position);
+            _command.Parameters.Add(@"Salary", OleDbType.Double).Value = salary;
+            _command.Parameters.AddWithValue("@Contract_Id", contractId);
             try
             {
                 _command.ExecuteNonQuery();
@@ -216,6 +224,29 @@ namespace HR_Automation_System.Classes
                 "VALUES ([DocumentName], [DocumentFilename])";
             _command.Parameters.AddWithValue("@DocumentName", documentName);
             _command.Parameters.AddWithValue("@DocumentFilename", filename);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        // Добавление записи об новой аттестации
+        public bool AddNewGraduaiotion(int employeeId, string date)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "INSERT INTO certification (cert_date, employee_id, result) " +
+                "VALUES ([@CertificationDate], [@EmployeeId], -1)";
+            // где -1 - это результат.            
+            _command.Parameters.AddWithValue("@CertificationDate", date);
+            _command.Parameters.AddWithValue("@EmployeeId", employeeId);            
             try
             {
                 _command.ExecuteNonQuery();
@@ -355,13 +386,15 @@ namespace HR_Automation_System.Classes
         public ObservableCollection<BookClasses.EmployeeRow> GetEmployeesRows()
         {
             _command.Parameters.Clear();
-            _command.CommandText = "SELECT [employees].[employee_id], [employees].[employee_name], [employees].[birth_date], [employees_in_departments].[position], " +
-                "[employees_in_departments].[department_id], [departments].[department_name], [employment_contracts].[start_date] " +
+            _command.CommandText = "SELECT DISTINCT [employees].[employee_id], [employees].[employee_name], [employees].[birth_date], " +
+                "[employees].[email], [employees_in_departments].[position], [employees_in_departments].[department_id], [departments].[department_name], " +
+                "[employment_contracts].[start_date], [employment_contracts].[document_name] " +
                 "FROM ([employees] INNER JOIN ([departments] INNER JOIN [employees_in_departments] " +
                 "ON [departments].[department_id] = [employees_in_departments].[department_id]) " +
                 "ON [employees].[employee_id] = [employees_in_departments].[employee_id]) " +
                 "INNER JOIN [employment_contracts] ON [employees].[contract_id] = [employment_contracts].[contract_id] " +
-                "WHERE [employment_contracts].[leaving_reason] = '-'";
+                "WHERE ([employment_contracts].[leaving_reason]='-') " +
+                "AND [record_id] = (SELECT MAX([record_id]) FROM [employees_in_departments] WHERE [employee_id] = [employees].[employee_id]);";
 
             try
             {
@@ -374,10 +407,58 @@ namespace HR_Automation_System.Classes
                         EmployeeId = int.Parse(_dataReader["employee_id"].ToString()),
                         EmployeeName = _dataReader["employee_name"].ToString(),
                         BirthDate = DateTime.Parse(_dataReader["birth_date"].ToString()),
+                        Email = _dataReader["email"].ToString(),
                         Department = _dataReader["department_name"].ToString(),
                         DepartmentId = int.Parse(_dataReader["department_id"].ToString()),
                         Position = _dataReader["position"].ToString(),
-                        ContractDate = DateTime.Parse(_dataReader["start_date"].ToString())
+                        ContractDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                        ContractFilename = _dataReader["document_name"].ToString()
+                    });
+                }
+                _dataReader.Close();
+
+                return rows;
+            }
+            catch
+            {
+                _dataReader.Close();
+                return null; // Если таблица пустая
+            }
+
+        }
+
+        // Получение сотрудников для DataGrid на EmployeeListPage
+        public ObservableCollection<BookClasses.EmployeeRow> GetEmployeesRowsGraduation()
+        {
+            _command.Parameters.Clear();
+            _command.CommandText = "SELECT [employees].[employee_id], [employees].[employee_name], [employees].[birth_date], [employees].[email], " +
+                "[employees_in_departments].[position], [employees_in_departments].[department_id], [departments].[department_name], " +
+                "[employment_contracts].[contract_id], [employment_contracts].[start_date], [certification].[cert_id] " +
+                "FROM(([employees] INNER JOIN([departments] INNER JOIN[employees_in_departments] " +
+                "ON[departments].[department_id] = [employees_in_departments].[department_id]) ON[employees].[employee_id] = [employees_in_departments].[employee_id]) " +
+                "INNER JOIN[employment_contracts] ON[employees].[contract_id] = [employment_contracts].[contract_id]) " +
+                "INNER JOIN[certification] ON[employees].[employee_id] = [certification].[employee_id] " +
+                "WHERE([employment_contracts].[leaving_reason] = '-') AND ([certification].[result] = -1) " +
+                "AND [record_id] = (SELECT MAX([record_id]) FROM [employees_in_departments] WHERE [employee_id] = [employees].[employee_id]); ";
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var rows = new ObservableCollection<BookClasses.EmployeeRow>();
+                while (_dataReader.Read())
+                {
+                    rows.Add(new BookClasses.EmployeeRow
+                    {
+                        EmployeeId = int.Parse(_dataReader["employee_id"].ToString()),
+                        EmployeeName = _dataReader["employee_name"].ToString(),
+                        BirthDate = DateTime.Parse(_dataReader["birth_date"].ToString()),
+                        Email = _dataReader["email"].ToString(),
+                        Department = _dataReader["department_name"].ToString(),
+                        DepartmentId = int.Parse(_dataReader["department_id"].ToString()),
+                        Position = _dataReader["position"].ToString(),
+                        ContractDate = DateTime.Parse(_dataReader["start_date"].ToString()),
+                        GraduationId = int.Parse(_dataReader["cert_id"].ToString()),
+                        ContractId = int.Parse(_dataReader["contract_id"].ToString())
                     });
                 }
                 _dataReader.Close();
@@ -541,6 +622,46 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        // Запрос на получение списка истории карьерного роста сотрудника
+        public ObservableCollection<BookClasses.EmployeeHistory> GetEmployeeHistory(int employeeId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT [departments].[department_name], [employees_in_departments].[position], [employees_in_departments].[salary], [employees_in_departments].[date] " +
+                "FROM [departments] INNER JOIN [employees_in_departments] ON [departments].[department_id] = [employees_in_departments].[department_id] " +
+                "WHERE [employees_in_departments].[employee_id] = [@EmployeeId]";
+            _command.Parameters.Add("@EmployeeId", OleDbType.Integer).Value = employeeId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var historyList = new ObservableCollection<BookClasses.EmployeeHistory>();
+
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        var history = new BookClasses.EmployeeHistory
+                        {
+                            DepartmentName = _dataReader["department_name"].ToString(),
+                            Position = _dataReader["position"].ToString(),
+                            Salary = double.Parse(_dataReader["salary"].ToString()),
+                            Date = DateTime.Parse(_dataReader["date"].ToString())
+                        };
+                        historyList.Add(history);
+                    }
+                }
+                _dataReader.Close();
+                return historyList;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
         #endregion
 
         #region Запросы на получение
@@ -688,6 +809,48 @@ namespace HR_Automation_System.Classes
                 }
                 _dataReader.Close();
                 return employeeInfo;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        // Запрос на получение данных для статистики
+        public BookClasses.Statistics GetStatistics()
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT a.employee_id, " +
+                "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
+                    "[employment_contracts].[contract_id] WHERE([employment_contracts].[leaving_reason] = '-')) AS[overall], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE([vacation_id] = -1) AND([sl_id] = -1) AND([ml_id] = -1)) AS[working], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([vacation_id] = -1)) AS[vacation], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([sl_id] = -1)) AS[sick], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([ml_id] = -1)) AS[maternity], " +
+                "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
+                    "[employment_contracts].[contract_id] WHERE NOT([employment_contracts].[leaving_reason] = '-')) AS[dismissed] " +
+                "FROM(SELECT DISTINCT employee_id FROM[employees]) a; ";
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var statistics = new BookClasses.Statistics();
+                while (_dataReader.Read())
+                {
+                    statistics = new BookClasses.Statistics
+                    {
+                        Overall = int.Parse(_dataReader["overall"].ToString()),
+                        Working = int.Parse(_dataReader["working"].ToString()),
+                        Vacation = int.Parse(_dataReader["vacation"].ToString()),
+                        Sick = int.Parse(_dataReader["sick"].ToString()),
+                        Maternity = int.Parse(_dataReader["maternity"].ToString()),
+                        Dismissed = int.Parse(_dataReader["dismissed"].ToString())
+                    };
+                }
+                _dataReader.Close();
+                return statistics;
             }
             catch (Exception ex)
             {
@@ -1120,6 +1283,27 @@ namespace HR_Automation_System.Classes
             }
         }
 
+        // Установить результат аттестации сотрудника
+        public bool SetGraduationResult(int graduationId, int resultId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "UPDATE [certification] SET [result] = [@ResultId] " +
+                "WHERE [cert_id] = [@GraduationId]";
+            _command.Parameters.AddWithValue("@ResultId", resultId);
+            _command.Parameters.AddWithValue("@GraduationId", graduationId);
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось выполнить запрос\n" + ex.Message);
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         #region Запросы на удаление
@@ -1150,7 +1334,7 @@ namespace HR_Automation_System.Classes
         public void Disconnect()
         {
             _dataReader.Close();
-            _connection.Close(); // Завершение подключения с БД            
+            _connection.Close(); // Завершение подключения с БД
         }
 
         // Проверка логина и пароля пользователя
@@ -1187,6 +1371,22 @@ namespace HR_Automation_System.Classes
             }
 
             return true;
+        }
+
+        // Метод на получение информации об уже существующей записи на аттестацию
+        public bool CheckGraduation(int employeeId)
+        {
+            _command.CommandText = string.Format("SELECT cert_id FROM certification WHERE (employee_id = {0}) AND (result = -1)", employeeId);
+            _dataReader = _command.ExecuteReader();
+
+            if (_dataReader.HasRows)
+            {
+                _dataReader.Close();
+                return true;
+            }
+
+            _dataReader.Close();
+            return false;
         }
 
         #endregion

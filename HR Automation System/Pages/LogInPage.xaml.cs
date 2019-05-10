@@ -1,5 +1,4 @@
 ﻿using HR_Automation_System.Classes;
-using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -38,17 +37,24 @@ namespace HR_Automation_System.Pages
             }
 
             // Вызываем объект для подключения к БД
-            var db = new DatabaseUtility();
-            int userId = db.CheckUserAuth(LoginTextBox.Text, PasswordTextBox.Password); // Запрос на поиск сочетания логина и пароля
-
-            if (userId == -1)
+            try
             {
-                db.Disconnect();
-                MessageBox.Show("Логин или пароль введены неверно!", "Ошибка");
-                return;
-            }
+                var db = new DatabaseUtility();
+                int userId = db.CheckUserAuth(LoginTextBox.Text, PasswordTextBox.Password); // Запрос на поиск сочетания логина и пароля
 
-            userAuth(db, userId);
+                if (userId == -1)
+                {
+                    db.Disconnect();
+                    MessageBox.Show("Логин или пароль введены неверно!", "Ошибка");
+                    return;
+                }
+
+                userAuth(db, userId);
+            }
+            catch
+            {
+
+            }
         }
 
         // Авторизация пользователя и переход на главное окно программы

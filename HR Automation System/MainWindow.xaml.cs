@@ -1,4 +1,5 @@
 ﻿using HR_Automation_System.Classes;
+using HR_Automation_System.Pages;
 using System;
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -16,7 +17,7 @@ namespace HR_Automation_System
         public MainWindow()
         {
             InitializeComponent();
-            LoadUiElements();
+            LoadUiElements();            
         }
 
         // Открыть/свернуть левое меню
@@ -32,7 +33,22 @@ namespace HR_Automation_System
             }
             isMenuOpen = !isMenuOpen;
         }
-        
+
+        // Кнопка "Выход из личного кабинета"
+        private void LogOutButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Вы действительно выйти из личного кабинета?",
+                "Внимание",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+            {
+                var window = new LogInPage();
+                window.Show();
+                GlobalStaticParameters.Database.Disconnect();
+                this.Close(); // Закрываем текущее окно
+            }
+        }
+
         // UI методы
 
         // Метод, загружающий UI элементы
@@ -79,6 +95,18 @@ namespace HR_Automation_System
         private void DocumentsPageButton_Click(object sender, RoutedEventArgs e)
         {
             ChangePage("HrDocuments");
+        }
+
+        // Кнопка меню "Статистика"
+        private void StatisticsPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage("StatisticsPage");
+        }
+
+        // Кнопка меню "Аттестация"
+        private void GraduationPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage("GraduationPage");
         }
 
         // Событие при закрытии главного окна приложения
