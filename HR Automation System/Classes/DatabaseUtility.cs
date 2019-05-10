@@ -438,7 +438,8 @@ namespace HR_Automation_System.Classes
                 "ON[departments].[department_id] = [employees_in_departments].[department_id]) ON[employees].[employee_id] = [employees_in_departments].[employee_id]) " +
                 "INNER JOIN[employment_contracts] ON[employees].[contract_id] = [employment_contracts].[contract_id]) " +
                 "INNER JOIN[certification] ON[employees].[employee_id] = [certification].[employee_id] " +
-                "WHERE([employment_contracts].[leaving_reason] = '-') AND([certification].[result] = -1); ";
+                "WHERE([employment_contracts].[leaving_reason] = '-') AND ([certification].[result] = -1) " +
+                "AND [record_id] = (SELECT MAX([record_id]) FROM [employees_in_departments] WHERE [employee_id] = [employees].[employee_id]); ";
 
             try
             {
@@ -1370,6 +1371,22 @@ namespace HR_Automation_System.Classes
             }
 
             return true;
+        }
+
+        // Метод на получение информации об уже существующей записи на аттестацию
+        public bool CheckGraduation(int employeeId)
+        {
+            _command.CommandText = string.Format("SELECT cert_id FROM certification WHERE (employee_id = {0}) AND (result = -1)", employeeId);
+            _dataReader = _command.ExecuteReader();
+
+            if (_dataReader.HasRows)
+            {
+                _dataReader.Close();
+                return true;
+            }
+
+            _dataReader.Close();
+            return false;
         }
 
         #endregion

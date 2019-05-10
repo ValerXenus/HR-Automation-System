@@ -66,7 +66,6 @@ namespace HR_Automation_System.AdditionalWindows
         {
             var resultList = new List<Result>
             {
-                new Result {Id = -1, Name = "Результат не выбран"},
                 new Result {Id = 1, Name = "Аттестация пройдена"},
                 new Result {Id = 0, Name = "Аттестация не пройдена"},
             };

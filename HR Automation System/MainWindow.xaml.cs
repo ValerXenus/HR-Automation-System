@@ -44,6 +44,7 @@ namespace HR_Automation_System
             {
                 var window = new LogInPage();
                 window.Show();
+                GlobalStaticParameters.Database.Disconnect();
                 this.Close(); // Закрываем текущее окно
             }
         }
