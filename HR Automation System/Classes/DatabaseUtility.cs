@@ -666,28 +666,32 @@ namespace HR_Automation_System.Classes
 
         #region Запросы на получение
 
-        // Получить индекс последней добавленной записи в таблице
-        private int getLastIndex(string tableName, string fieldName)
+        // Получить данные трудового договора по имени файла
+        public BookClasses.Contract GetContractDataByFilename(string filename)
         {
-            _command.CommandText = string.Format("SELECT LAST({0}) AS return_value FROM {1}", fieldName, tableName);
+            _command.CommandText = string.Format("SELECT [employment_contracts].[contract_id], [employment_contracts].[contract_number] " +
+                "FROM [employment_contracts] " +
+                "WHERE [employment_contracts].[document_name] = '{0}'", filename);
             _dataReader = _command.ExecuteReader();
 
-            int idx = -1;
+            var contract = new BookClasses.Contract();
 
             try
-            {
+            {                
                 while (_dataReader.Read())
                 {
-                    idx = int.Parse(_dataReader["return_value"].ToString());
+                    contract = new BookClasses.Contract
+                    {
+                        ContractId = int.Parse(_dataReader["contract_id"].ToString()),
+                        ContractNumber = _dataReader["contract_number"].ToString()
+                    };
                 }
             }
             catch
-            {
-                // Если записей нет в таблице, то вернется -1
-            }
+            { }
             _dataReader.Close();
 
-            return idx;
+            return contract;
         }
 
         // Получить индекс последней добавленной записи по условию в таблице
@@ -768,16 +772,14 @@ namespace HR_Automation_System.Classes
         {
             _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
-            _command.CommandText = "SELECT [employees].[employee_name], [employees].[gender]," +
-                " [employees].[birth_date], [employees].[inn], [employees].[snils]," +
-                " [employees].[document_type], [employees].[document_number], [employees].[address]," +
-                " [employees].[phone_number], [employees].[email], [employees].[photograph_link]," +
-                " [employees].[empl_book_number], [employees].[family_status]," +
-                " [employees].[contract_id], [employees_in_departments].[department_id]," +
-                " [employees_in_departments].[position], [employees_in_departments].[salary]" +
-                " FROM [employees]" +
-                " INNER JOIN [employees_in_departments] ON [employees].[employee_id] = [employees_in_departments].[employee_id]" +
-                " WHERE [employees].[employee_id] = [EmployeeId]";
+            _command.CommandText = "SELECT [employees].[employee_name], [employees].[gender], [employees].[birth_date], [employees].[inn], " +
+                "[employees].[snils], [employees].[document_type], [employees].[document_number], [employees].[address], [employees].[phone_number], " +
+                "[employees].[email], [employees].[photograph_link], [employees].[empl_book_number], [employees].[family_status], " +
+                "[employees].[contract_id], [employees_in_departments].[department_id], [employees_in_departments].[position], " +
+                "[employees_in_departments].[salary], [employment_contracts].[document_name] " +
+                "FROM ([employees] INNER JOIN [employees_in_departments] ON [employees].[employee_id] = [employees_in_departments].[employee_id]) " +
+                "INNER JOIN [employment_contracts] ON [employees].[contract_id] = [employment_contracts].[contract_id] " +
+                "WHERE employees.employee_id = [EmployeeId];";
             _command.Parameters.Add(@"EmployeeId", OleDbType.Integer).Value = employeeId;
 
             try
@@ -804,7 +806,8 @@ namespace HR_Automation_System.Classes
                         Department = int.Parse(_dataReader["department_id"].ToString()),
                         Position = _dataReader["position"].ToString(),
                         Salary = double.Parse(_dataReader["salary"].ToString()),
-                        ImageName = _dataReader["photograph_link"].ToString()
+                        ImageName = _dataReader["photograph_link"].ToString(),
+                        ContractFilename = _dataReader["document_name"].ToString()
                     };
                 }
                 _dataReader.Close();
@@ -825,14 +828,16 @@ namespace HR_Automation_System.Classes
             _command.CommandType = CommandType.Text;
             _command.CommandText = "SELECT a.employee_id, " +
                 "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
-                    "[employment_contracts].[contract_id] WHERE([employment_contracts].[leaving_reason] = '-')) AS[overall], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE([vacation_id] = -1) AND([sl_id] = -1) AND([ml_id] = -1)) AS[working], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE NOT([vacation_id] = -1)) AS[vacation], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE NOT([sl_id] = -1)) AS[sick], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE NOT([ml_id] = -1)) AS[maternity], " +
+                    "[employment_contracts].[contract_id] WHERE([employment_contracts].[leaving_reason] = '-')) AS [overall], " +
                 "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
-                    "[employment_contracts].[contract_id] WHERE NOT([employment_contracts].[leaving_reason] = '-')) AS[dismissed] " +
-                "FROM(SELECT DISTINCT employee_id FROM[employees]) a; ";
+                    "[employment_contracts].[contract_id] " +
+                    "WHERE ([vacation_id] = -1) AND ([sl_id] = -1) AND ([ml_id] = -1) AND ([employment_contracts].[leaving_reason] = '-')) AS [working], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([vacation_id] = -1)) AS [vacation], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([sl_id] = -1)) AS [sick], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([ml_id] = -1)) AS [maternity], " +
+                "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON [employees].[contract_id] = " +
+                    "[employment_contracts].[contract_id] WHERE NOT([employment_contracts].[leaving_reason] = '-')) AS [dismissed] " +
+                "FROM(SELECT DISTINCT employee_id FROM [employees]) a; ";
             try
             {
                 _dataReader = _command.ExecuteReader();

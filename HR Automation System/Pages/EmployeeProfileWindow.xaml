@@ -334,16 +334,14 @@
                             <Label
                                 VerticalAlignment="Center"
                                 Content="Трудовой договор"/>
-                            <ComboBox
-                                x:Name="ContractsComboBox"
-                                IsTextSearchEnabled="True"
-                                Height="23"
-                                SelectedIndex="-1"
+                            <TextBox
+                                x:Name="ContractTextBox"
                                 Margin="5, 0, 0, 0"
                                 Width="200"
-                                DisplayMemberPath="ContractNumber"
-                                SelectedValuePath="ContractId"
-                                MaxDropDownHeight="150"/>
+                                Template="{DynamicResource TextBoxBaseControlTemplate}"
+                                Style="{StaticResource TextBoxDefaultStyle}"
+                                Height="23"
+                                IsReadOnly="True"/>
                         </StackPanel>
                     </StackPanel>
                     <Button
@@ -354,7 +352,7 @@
                         FontSize="13"
                         Content="&#xE1E2;  Добавить"
                         Style="{StaticResource ButtonDefaultStyle}"
-                        Click="AddNewContract_Click"
+                        Click="AddNewContract_Click"                        
                         FontFamily="/HR Automation System;component/Fonts/#Segoe UI Symbol, /HR Automation System;component/Fonts/#Panton"/>
                 </Grid>
             </TabItem>

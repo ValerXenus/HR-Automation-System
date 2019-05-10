@@ -16,9 +16,11 @@ namespace HR_Automation_System.Pages
     {
         private int _currentEmployeeId; // Код получаемого сотрудника
         private byte[] _imageBytes; // Байты фотографии сотрудника
-        private string _imagePath;
-        private string _imageExtension;
+        private string _imagePath; // путь к картинке
+        private string _imageExtension; // Расширение изображение
         private string _imageFilename; // Имя файла картинки
+        private int _contractId; // Код трудового договора
+        private string _contractNumber; // номер трудового договора
 
         public EmployeeProfileWindow(int employeeId = -1)
         {
@@ -57,7 +59,7 @@ namespace HR_Automation_System.Pages
             int familyStatusId = (int)FamilyStatusesComboBox.SelectedValue;
             int documentType = (int)DocumentTypesComboBox.SelectedValue;
             int departmentId = (int)DepartmentsComboBox.SelectedValue;
-            int contractId = (int)ContractsComboBox.SelectedValue;
+            int contractId = _contractId;
 
             double salary = Convert.ToDouble(SalaryTextBox.Text);
 
@@ -83,8 +85,13 @@ namespace HR_Automation_System.Pages
             var newContractWindow = new AddNewContract();
             newContractWindow.ShowDialog();
 
-            ContractsComboBox.ItemsSource = GlobalStaticParameters.Database.GetContractsList();
-            ContractsComboBox.SelectedIndex = 0; // Выбираем первый элемент из списка
+            if (!(bool)newContractWindow.DialogResult)
+                return;
+
+            _contractId = newContractWindow.ContractId;
+            _contractNumber = newContractWindow.ContractNumber;
+
+            ContractTextBox.Text = _contractNumber;
         }
 
         // Кнопка "Отмена"
@@ -278,7 +285,6 @@ namespace HR_Automation_System.Pages
             FamilyStatusesComboBox.ItemsSource = GlobalStaticParameters.Database.GetFamilyStatuses();
             DocumentTypesComboBox.ItemsSource = GlobalStaticParameters.Database.GetDocumentTypes();
             DepartmentsComboBox.ItemsSource = GlobalStaticParameters.Database.GetDepartmentsList();
-            ContractsComboBox.ItemsSource = GlobalStaticParameters.Database.GetContractsList();
         }
 
         // Автозаполнение данных сотрудника из базы
@@ -287,6 +293,10 @@ namespace HR_Automation_System.Pages
             VacationsPanel.Visibility =
             DismissButton.Visibility = Visibility.Visible; // Отображаем панель отпусков/больничных
             var employeeInfo = GlobalStaticParameters.Database.GetEmployeeData(_currentEmployeeId);
+
+            var contract = GlobalStaticParameters.Database.GetContractDataByFilename(employeeInfo.ContractFilename);
+            _contractId = contract.ContractId;
+            _contractNumber = contract.ContractNumber;
 
             // Заполнение всех полей
             NameTextBox.Text = employeeInfo.Name;
@@ -309,7 +319,7 @@ namespace HR_Automation_System.Pages
             FamilyStatusesComboBox.SelectedValue = employeeInfo.FamilyStatus;
             DocumentTypesComboBox.SelectedValue = employeeInfo.DocumentType;
             DepartmentsComboBox.SelectedValue = employeeInfo.Department;
-            ContractsComboBox.SelectedValue = employeeInfo.Contract;
+            ContractTextBox.Text = _contractNumber;
 
             _imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", employeeInfo.ImageName); // Получаем директорию хранения картинки
             _imageFilename = employeeInfo.ImageName;
@@ -441,6 +451,11 @@ namespace HR_Automation_System.Pages
                 errorText += "- Не заполнено поле \"Должность\"\n";
             }
 
+            if (string.IsNullOrEmpty(ContractTextBox.Text))
+            {
+                errorText += "- Не выбран трудовой договор";
+            }
+
             if (string.IsNullOrEmpty(SalaryTextBox.Text))
             {
                 errorText += "- Не заполнено поле \"Оклад\"\n";
@@ -466,11 +481,6 @@ namespace HR_Automation_System.Pages
             if (DepartmentsComboBox.SelectedIndex == -1)
             {
                 errorText += "- Не выбран отдел";
-            }
-
-            if (ContractsComboBox.SelectedIndex == -1)
-            {
-                errorText += "- Не выбран трудовой договор";
             }
 
             if (string.IsNullOrEmpty(_imagePath))
