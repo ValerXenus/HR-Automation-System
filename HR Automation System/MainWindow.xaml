@@ -82,6 +82,12 @@
                 ToolTip="Статистика по сотрудникам"
                 Click="StatisticsPageButton_Click"
                 Foreground="White"/>
+            <Image
+                Margin="0, 230, 0, 0"
+                Grid.Row="4"
+                Grid.Column="1"
+                Height="30"
+                Source="/HR Automation System;component/Images/logo_white.png"/>
         </StackPanel>
         <Rectangle 
             Grid.Row="0"

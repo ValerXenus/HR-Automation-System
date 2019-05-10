@@ -100,7 +100,7 @@ namespace HR_Automation_System.Classes
                 return false;
             }
 
-            // Затем получаем Id добавленного сотрудника,            
+            // Получаем Id добавленного сотрудника
             var employeeId = getEmployeeByContractId(employeeInfo.Contract);
 
             if (!AddNewEmployeeInDepartment(employeeInfo.Department, employeeId, employeeInfo.Position, employeeInfo.Salary, employeeInfo.Contract))
