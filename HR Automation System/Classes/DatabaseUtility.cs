@@ -828,14 +828,16 @@ namespace HR_Automation_System.Classes
             _command.CommandType = CommandType.Text;
             _command.CommandText = "SELECT a.employee_id, " +
                 "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
-                    "[employment_contracts].[contract_id] WHERE([employment_contracts].[leaving_reason] = '-')) AS[overall], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE([vacation_id] = -1) AND([sl_id] = -1) AND([ml_id] = -1)) AS[working], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE NOT([vacation_id] = -1)) AS[vacation], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE NOT([sl_id] = -1)) AS[sick], " +
-                "(SELECT COUNT(*) FROM[employees] WHERE NOT([ml_id] = -1)) AS[maternity], " +
+                    "[employment_contracts].[contract_id] WHERE([employment_contracts].[leaving_reason] = '-')) AS [overall], " +
                 "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON[employees].[contract_id] = " +
-                    "[employment_contracts].[contract_id] WHERE NOT([employment_contracts].[leaving_reason] = '-')) AS[dismissed] " +
-                "FROM(SELECT DISTINCT employee_id FROM[employees]) a; ";
+                    "[employment_contracts].[contract_id] " +
+                    "WHERE ([vacation_id] = -1) AND ([sl_id] = -1) AND ([ml_id] = -1) AND ([employment_contracts].[leaving_reason] = '-')) AS [working], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([vacation_id] = -1)) AS [vacation], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([sl_id] = -1)) AS [sick], " +
+                "(SELECT COUNT(*) FROM[employees] WHERE NOT([ml_id] = -1)) AS [maternity], " +
+                "(SELECT COUNT(*) FROM[employees] INNER JOIN[employment_contracts] ON [employees].[contract_id] = " +
+                    "[employment_contracts].[contract_id] WHERE NOT([employment_contracts].[leaving_reason] = '-')) AS [dismissed] " +
+                "FROM(SELECT DISTINCT employee_id FROM [employees]) a; ";
             try
             {
                 _dataReader = _command.ExecuteReader();
