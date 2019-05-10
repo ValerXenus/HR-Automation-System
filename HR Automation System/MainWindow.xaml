@@ -115,6 +115,7 @@
                 BorderBrush="{x:Null}"
                 FontSize="20"
                 ToolTip="Выйти из личного кабинета"
+                Click="LogOutButton_Click"
                 Style="{DynamicResource HamburgerButtonStyle}"/>
         </StackPanel>
         <Frame 
