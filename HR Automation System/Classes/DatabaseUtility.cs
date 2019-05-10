@@ -114,8 +114,9 @@ namespace HR_Automation_System.Classes
         {
             _command.Parameters.Clear();
             _command.CommandType = CommandType.Text;
-            _command.CommandText = "INSERT INTO [employees_in_departments] ([department_id], [employee_id], [position], [salary], [contract_id])" +
-                " VALUES ([Department_Id], [Employee_Id], [Position], [Salary], [Contract_Id])";
+            _command.CommandText = "INSERT INTO [employees_in_departments] ([date], [department_id], [employee_id], [position], [salary], [contract_id])" +
+                " VALUES ([HistoryDate], [Department_Id], [Employee_Id], [Position], [Salary], [Contract_Id])";
+            _command.Parameters.AddWithValue("@HistoryDate", DateTime.Now.ToString("dd/MM/yyyy"));
             _command.Parameters.AddWithValue("@Department_Id", departmentId);
             _command.Parameters.AddWithValue("@Employee_Id", employeeId);
             _command.Parameters.AddWithValue("@Position", position);
@@ -611,6 +612,46 @@ namespace HR_Automation_System.Classes
                 }
                 _dataReader.Close();
                 return documentsList;
+            }
+            catch (Exception ex)
+            {
+                _dataReader.Close();
+                MessageBox.Show(string.Format("Произошла ошибка при получении данных сотрудника: {0}", ex.Message));
+                return null;
+            }
+        }
+
+        // Запрос на получение списка истории карьерного роста сотрудника
+        public ObservableCollection<BookClasses.EmployeeHistory> GetEmployeeHistory(int employeeId)
+        {
+            _command.Parameters.Clear();
+            _command.CommandType = CommandType.Text;
+            _command.CommandText = "SELECT [departments].[department_name], [employees_in_departments].[position], [employees_in_departments].[salary], [employees_in_departments].[date] " +
+                "FROM [departments] INNER JOIN [employees_in_departments] ON [departments].[department_id] = [employees_in_departments].[department_id] " +
+                "WHERE [employees_in_departments].[employee_id] = [@EmployeeId]";
+            _command.Parameters.Add("@EmployeeId", OleDbType.Integer).Value = employeeId;
+
+            try
+            {
+                _dataReader = _command.ExecuteReader();
+                var historyList = new ObservableCollection<BookClasses.EmployeeHistory>();
+
+                if (_dataReader.HasRows)
+                {
+                    while (_dataReader.Read())
+                    {
+                        var history = new BookClasses.EmployeeHistory
+                        {
+                            DepartmentName = _dataReader["department_name"].ToString(),
+                            Position = _dataReader["position"].ToString(),
+                            Salary = double.Parse(_dataReader["salary"].ToString()),
+                            Date = DateTime.Parse(_dataReader["date"].ToString())
+                        };
+                        historyList.Add(history);
+                    }
+                }
+                _dataReader.Close();
+                return historyList;
             }
             catch (Exception ex)
             {

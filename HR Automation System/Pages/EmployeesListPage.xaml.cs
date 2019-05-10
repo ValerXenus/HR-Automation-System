@@ -126,6 +126,17 @@ namespace HR_Automation_System.Pages
             window.ShowDialog();
         }
 
+        // Кнопка "Карьерный рост/перемещения"
+        private void PromotionsEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            if (EmployeesList.SelectedIndex == -1) // Если не было выделено ни одной строки
+                return;
+
+            var employee = EmployeesList.SelectedItem as BookClasses.EmployeeRow;
+            var window = new PromotionHistory(employee.EmployeeId);
+            window.ShowDialog();
+        }
+
         // Кнопка "Фильтр"
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {

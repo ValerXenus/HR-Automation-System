@@ -25,3 +25,5 @@
 *.g.i.cs
 /SetGraduationResult.baml
 /SetGraduationResult.g.cs
+/PromotionHistory.baml
+/PromotionHistory.g.cs

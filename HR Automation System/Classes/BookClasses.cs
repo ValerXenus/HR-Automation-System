@@ -138,5 +138,22 @@ namespace HR_Automation_System.Classes
             // Количество уволенных сотрудников
             public int Dismissed { get; set; }
         }
+
+        // Класс хранения записей о карьерном росте/перемещении сотрудника
+        public class EmployeeHistory
+        {
+            // Отдел
+            public string DepartmentName { get; set; }
+
+            // Должность
+            public string Position { get; set; }
+
+            // Оклад
+            public double Salary { get; set; }
+
+            // Дата
+            public DateTime Date { get; set; }
+
+        }
     }
 }
