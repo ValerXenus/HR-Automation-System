@@ -12,6 +12,9 @@ namespace HR_Automation_System.AdditionalWindows
     /// </summary>
     public partial class AddNewContract : Window
     {
+        public int ContractId; // Код трудового договора
+        public string ContractNumber; // Номер трудового договора
+
         public AddNewContract()
         {
             InitializeComponent();
@@ -68,6 +71,10 @@ namespace HR_Automation_System.AdditionalWindows
                 return;
 
             File.Copy(FilenameTextBox.Text, Path.Combine(currecntDirectory, "Contracts", guid));
+
+            var contract = GlobalStaticParameters.Database.GetContractDataByFilename(guid);
+            ContractId = contract.ContractId;
+            ContractNumber = contract.ContractNumber;
 
             this.DialogResult = true; // Указываем, что результат успешен
             this.Close();

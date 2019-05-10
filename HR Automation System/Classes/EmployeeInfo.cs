@@ -35,6 +35,8 @@ namespace HR_Automation_System.Classes
         public string Position { get; set; }
         // Код трудового договора
         public int Contract { get; set; }
+        // Имя файла трудового договора
+        public string ContractFilename { get; set; }
         // Оклад
         public double Salary { get; set; }
         // Название картинки в папке Images
